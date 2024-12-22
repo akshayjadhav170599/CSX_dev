@@ -1,0 +1,59 @@
+<template>
+	<template if:true={invalidStatus}>
+		<lightning-card>
+			<div class="slds-align_absolute-center">
+				<p style="color: red;">{errorMessage}</p>
+			</div>
+		</lightning-card>
+	</template>
+	<template if:false={invalidStatus}>
+		<lightning-card>
+			<div class="slds-var-p-horizontal_small">
+				<h2 slot="title"
+					class="slds-text-heading_small slds-var-p-horizontal_small slds-text-align_center slds-text-title_bold">
+					Simulate Business Rule</h2>
+			</div>
+
+			<div class="slds-grid slds-gutters">
+				<div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+					<div class="slds-var-p-horizontal_small">
+						<template if:true={displayLDRRecordPicker}>
+							<lightning-record-picker label="L&D Report #" value={selectedCaseId}
+								object-api-name="CSX_CMP_LD_Report__c" required="true" filter={filter}
+								onchange={handleChange}>
+							</lightning-record-picker>
+						</template>
+						<template if:false={displayLDRRecordPicker}>
+							<lightning-record-picker label="Claim #" value={selectedCaseId} object-api-name="Case"
+								required="true" filter={filter} onchange={handleChange}>
+							</lightning-record-picker>
+						</template>
+					</div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+					<div class="slds-m-top_medium slds-text-align_center">
+						<lightning-button label="Simulate" onclick={handleClick}></lightning-button>
+					</div>
+				</div>
+				<div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+
+				</div>
+			</div>
+
+			<template if:true={result}>
+				<div class="slds-align_absolute-center slds-m-top_medium">
+					<p style="color: green;">{result}</p>
+				</div>
+			</template>
+			<template if:true={error}>
+				<div class="slds-align_absolute-center slds-m-top_small">
+					<p style="color: red;">{error}</p>
+				</div>
+			</template>
+		</lightning-card>
+
+	</template>
+</template>

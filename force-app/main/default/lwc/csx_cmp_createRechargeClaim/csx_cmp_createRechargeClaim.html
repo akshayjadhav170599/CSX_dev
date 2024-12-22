@@ -1,0 +1,29 @@
+<template>
+    <lightning-quick-action-panel header="My action">
+        <template if:true={showSpinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <template if:false={showSpinner}>
+            <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                    <label for="rechargeReason" class="slds-text-title_bold slds-text-heading_small">Recharge
+                        Reason</label>
+                    <lightning-textarea id="rechargeReason" name="rechargeReason" label="Recharge Reason"
+                        value={rechargeReason} variant="label-hidden" required
+                        onchange={handleInputChange}></lightning-textarea>
+                </div>
+            </div>
+
+            <div slot="footer">
+                <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small">
+                    <div class="slds-col slds-var-p-bottom_small slds-float_left">
+                        <lightning-button label="Submit" variant="brand" class="slds-var-p-right_large"
+                            onclick={createRechargeClaim}></lightning-button>
+                        <lightning-button label="Cancel" class="slds-var-p-left_large"
+                            onclick={closeModal}></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </lightning-quick-action-panel>
+</template>

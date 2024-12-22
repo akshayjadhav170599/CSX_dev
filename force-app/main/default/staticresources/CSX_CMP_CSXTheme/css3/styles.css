@@ -1,0 +1,67 @@
+/*******************************************************
+* CSS override for CSX
+********************************************************/
+      
+.fsm-normal-text {
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.fsm-bold-text {
+  font-weight:bold;
+}
+
+.fsm-inputWidth{
+  width: 30px;
+} 
+
+.slds-modal__container{
+  position:relative; 
+  
+}
+
+.fsm-slds-box{
+  --sds-c-input-radius-border: 18px;
+  border: 0.25px solid #c9c9c9;
+  border-radius: 3px;
+}
+
+.fsm-rounded {
+  border-radius: 5px;
+}
+/* do not add fsm here in the begining */
+.slds-page-header.header.flexipageHeader {
+    display: none;
+}
+
+.fsm-mandatory{
+  content:'*';
+  color:red;
+} 
+
+lightning-primitive-cell-factory >  span > div > lightning-primitive-cell-button > lightning-button >button {
+  width: 80px;
+  height: 15px;   /*height: 18.77;*/
+  --lwc-borderWidthThin: 0px;
+}
+
+.csx-cmp-border-left{
+  border-left: 1px solid lightgray; 
+  border-top: 1px solid lightgray;
+}
+
+.csx-cmp-border-right-top{
+  border-right: 1px solid lightgray; 
+  border-left: 1px solid lightgray;
+  border-top: 1px solid lightgray;
+}
+
+.csx-cmp-border-right{
+  border-right: 1px solid lightgray; 
+  border-top: 1px solid lightgray;
+}
+
+/*
+.slds-form-element__help{
+  display: none;
+}*/

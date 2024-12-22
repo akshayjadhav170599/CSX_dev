@@ -1,0 +1,6 @@
+<apex:page showHeader="true" sidebar="true" showQuickActionVfHeader="false" renderAs="PDF">
+  <apex:include id="Abstract" pageName="CSX_CMP_AbstractPDFReport" />
+  <div style="page-break-after: always">
+      <apex:include id="Distribution" pageName="CSX_CMP_DistributionPDFReport" />
+  </div>    
+</apex:page>

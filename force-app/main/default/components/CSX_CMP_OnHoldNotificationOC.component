@@ -1,0 +1,88 @@
+<apex:component controller="CSX_CMP_OnHoldNotificationController" access="global">
+    <apex:attribute name="claimId" type="string" description="Id of the claim" assignTo="{!caseId}" access="global"/>
+    <apex:attribute name="callFrom" type="string" description="called from which email template" access="global"/>
+    <html>
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <table border="0" style="width: 100%;">
+                <tr> 
+                    <td>
+                        <div>
+                            <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!csxLogo}"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        <div>
+                            <br/><br/>
+                            Dear Claimant,
+                        </div><br/>
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        <div>
+                                Your claim payment is on hold due to delinquent AR balances being greater than {!percentage} of total undisputed AR balances.
+                        </div>
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        <div>
+                            To view your Account balance, please log into ShipCSX and click on <a href="{!$Label.CSX_CMP_ShipCSX}">ShipCX</a> Tools > PAY > Account Invoices.								
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+
+            <table  border="0" style="width: 40%;">
+                <tbody>
+                    <tr>
+                        <td>CSX Claim # </td>
+                        <td>
+                            : {!objCase.CaseNumber}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Claimant # </td>
+                        <td>
+                            : {!objCase.CSX_CMP_Supplier_Claimant_Num__c}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Claim Amount</td>
+                        <td>
+                            <apex:outputText value="{0, number, $}">
+                                : <apex:param value="{!objCase.CSX_CMP_Claim_Amount__c}" />
+                            </apex:outputText>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Claim Date</td>
+                        <td>
+                            <apex:outputText value="{0, date, dd-MM-yyyy}">
+                                : <apex:param value="{!objCase.CSX_CMP_Claim_Date__c}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                            <td>Customer Name </td>
+                        <td>
+                            : {!objCase.CSX_CMP_Customer__r.Name}
+                        </td>
+                    </tr>
+                </tbody>
+            </table><br/> 
+            <div style="text-align: center;">
+                You can <B>Reply All</B> to this email for any questions.
+            </div>
+        </body>
+    </html>
+</apex:component>

@@ -1,0 +1,90 @@
+<template>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">Upload
+            Instructions
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-6 slds-large-size_6-of-6">
+            <lightning-formatted-rich-text value={label.uploadInstructions}></lightning-formatted-rich-text>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">Download Template
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-vertical_small">
+        <div class="slds-col slds-text-heading_xx-small">
+            <lightning-button label="Download" onclick={getdownloadTemplate} variant="brand"></lightning-button>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">Upload Shipment details
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-vertical_small">
+        <span>
+            <div class="slds-col ">
+                <span>
+                    <lightning-input type="file" label={uploadedFileName} accept=".csv"
+                        onchange={handleFilesChange}></lightning-input>
+                </span>
+            </div>
+
+        </span>
+    </div>
+
+    <c-csx_cmp_excelexport></c-csx_cmp_excelexport>
+
+    <div class="slds-grid slds-gutters slds-var-m-horizontal_x-large">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-6 slds-large-size_6-of-6 
+                     slds-box slds-box_x-small">
+            <div if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </div>
+            <div if:false={showSpinner}>
+                <div if:true={shipmentCheck} class="slds-text-color_error">One Shipment is required</div>
+                <div class="slds-grid slds-gutters slds-var-p-vertical_small slds-var-m-left_x-small">
+                    <div class="slds-col">
+                        <c-csx_cmp_pagination if:true={recordsToDisplay} table-title={dataTableTitle}
+                            records={recordsToDisplay} total-records={recordsToDisplay.length}
+                            onpaginatorchange={handleHeaderRecordsDisplay}>
+                        </c-csx_cmp_pagination>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-gutters slds-var-p-vertical_small slds-var-m-left_x-small">
+                    <div class="slds-col slds-scrollable_x">
+                        <lightning-datatable key-field="rowNumber" data={dataDisplayedOnDatatable}
+                            columns={datatableColumns} oncellchange={handleCellChange}
+                            suppress-bottom-bar={isSuppressbottom} hide-checkbox-column>
+                        </lightning-datatable>
+                    </div>
+                </div>
+                <div class="slds-col">
+                    <div if:true={noClaimAmount} class="slds-text-color_error">{label.claimAmountErr}</div>
+                </div>
+
+
+                <div class="slds-grid slds-grid_align-end slds-size_1-of-1  slds-medium-size_8-of-8 slds-large-size_8-of-8 
+                    slds-var-m-left_x-small slds-var-p-vertical_small">
+                    <div class="slds-col slds-text-heading_x-small fsm-bold-text">
+                        Total Claim Amount :
+                    </div>
+                    <div class="slds-col">
+                        <lightning-formatted-number value={totalClaimAmount} format-style="currency"
+                            currency-code="USD">
+                        </lightning-formatted-number>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>

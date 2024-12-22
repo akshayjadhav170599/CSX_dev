@@ -1,0 +1,47 @@
+<template>
+    <lightning-card class="slds-card_border" title="" variant="Narrow">
+        <template if:true={displaycontainer}>
+        <div class="slds-text-align_center slds-border_bottom slds-var-p-vertical_small">
+            <h1 class="slds-text-heading_medium slds-text-title_bold">Cancel Invoice</h1>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-p-around_x-small slds-m-left_xxx-small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                You are trying to cancel Invoice # {currentInvoiceNumber}. Do you want to proceed?, If so, please provide the cancellation reason details and click Submit Button.
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-text-title_bold slds-m-left_small">
+                Cancellation Reason
+            </div>
+            <div class="slds-col slds-size_2-of-4 slds-medium-size_2-of-4 slds-large-size_2-of-4">
+              <!-- <lightning-input formatter="Number" type="Number" value={cancellationReason}
+                    onchange={handleAddReason} variant="label-hidden"></lightning-input> --> 
+              <lightning-input variant="label-hidden" value={cancellationReason} onchange={handleAddReason}></lightning-input>    
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-text-title_bold slds-m-left_small"></div>
+        </div>
+            <div class="slds-grid slds-gutters slds-grid_align-end slds-var-p-around_x-small">
+                <div class="slds-col">
+                    <lightning-button label="Submit" variant="brand" onclick={submitRequest}
+                        class="slds-var-p-right_large"></lightning-button>
+                   <!-- <lightning-button label="No" onclick={closeQuickAction}
+                        class="slds-var-p-left_large slds-m-right_x-small"></lightning-button> -->
+    
+                </div>
+            </div>
+        </template>
+        <template if:true={displayErrorContainer}>
+            <div class="slds-grid slds-gutters slds-var-p-around_x-small slds-m-left_xxx-small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+            AR Invoice status should not be update to Cancelled, if Status is {currentStatus}.
+        </div>
+    </div>
+    <div class="slds-grid slds-gutters slds-grid_align-end slds-var-p-around_x-small">
+        <div class="slds-col">
+            <lightning-button label="Ok" variant="brand" onclick={closeQuickAction}
+                class="slds-var-p-right_large"></lightning-button>
+        </div>
+    </div>
+    </template>
+    </lightning-card>
+</template>

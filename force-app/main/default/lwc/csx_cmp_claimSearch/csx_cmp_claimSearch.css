@@ -1,0 +1,12 @@
+.backgroundColor {
+  --sds-c-button-brand-color-background: #bb00ff;
+  --sds-c-button-text-color: #f4f7f9;
+}
+
+.highlight {
+  --slds-c-input-color-border: rgb(249, 160, 27);
+  --slds-c-input-shadow:0 0 5px #F9A01B;
+}
+:host {
+  --slds-c-button-brand-color-background-hover:#014486;
+}

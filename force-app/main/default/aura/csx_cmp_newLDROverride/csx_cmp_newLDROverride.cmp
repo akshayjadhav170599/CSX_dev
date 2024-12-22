@@ -1,0 +1,3 @@
+<aura:component implements="lightning:actionOverride,force:lightningQuickAction" access="global" >
+	<c:csx_cmp_ldrTypeSelection></c:csx_cmp_ldrTypeSelection>
+</aura:component>

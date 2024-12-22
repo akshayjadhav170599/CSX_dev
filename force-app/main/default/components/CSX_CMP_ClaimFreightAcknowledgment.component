@@ -1,0 +1,140 @@
+<apex:component controller="CSX_CMP_ClaimSummaryEmailController" access="global">
+    <apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global" />
+    <html>  
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+    <body>        
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                </td>
+            </tr>
+        </table>
+        <div> 
+            Your {!claimWrapper.recordType} claim request has been successfully submitted.
+        </div>
+        <div>
+            Your CSX claim number is {!claimWrapper.claimNumber} Please reference this claim number on your future correspondence.
+        </div>
+        <br/>
+        <br/>
+        <div >
+            <td> Please find below the claim summary.</td>
+            <div>
+                <span >
+                    <b style="font-size: 14px;">&nbsp;Claim Summary</b>
+                </span>
+            </div>
+            <table style="width: 70%;">
+                <tr>
+                    <td width="140">
+                        <b> Claimant Number</b>
+                    </td>
+                    <td>: {!claimWrapper.claimantNumber} </td>
+                </tr>
+                <tr>
+                    <td width="140">
+                        <b> Company Name</b>
+                    </td>
+                    <td>: {!claimWrapper.claimantName} </td>
+                </tr>
+
+                <tr>
+                    <td width="140">
+                        <b> Claim Date</b>
+                    </td>
+                    <td>: {!claimWrapper.claimDate} </td>
+                </tr>
+
+                <tr>
+                    <td width="140">
+                        <b>Amount</b>
+                    </td>
+                    <td>
+                        <apex:outputText value="{0, number, currency}">
+                           :&nbsp; <apex:param value="{!claimWrapper.claimAmount}" />
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="140">
+                        <b> Equipment ID</b>
+                    </td>
+                    <td>: {!claimWrapper.claimLines[0].equipmentInitial}{!claimWrapper.claimLines[0].equipmentNumber} </td>
+                </tr>
+
+                <tr>
+                    <td width="140">
+                        <b> Date Shipped</b>
+                    </td>
+                    <td>: {!claimWrapper.claimLines[0].waybillDate} </td>
+                </tr>
+
+                <!--   <tr>
+                        <td> <b> VIN:</b> </td>
+                        <td> {!claimWrapper.productWrapper.vin} </td>
+                    </tr> -->
+                <tr>
+                    <td width="140">
+                        <b> VIN</b>
+                    </td>
+                    <td>
+                        <apex:repeat value="{!claimWrapper.productList1}" var="product">
+                           : {!product.vin}
+                        </apex:repeat>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="140">
+                        <b> Claim Reason</b>
+                    </td>
+                    <td>: {!claimWrapper.claimReason} </td>
+                </tr>
+                <!--     <tr>
+                        <td> <b> Claim Description:</b> </td>
+                        <td> {!claimWrapper.comment} </td>
+                    </tr> -->
+                <tr>
+                    <td>
+                        <b> Claim Description</b>
+                    </td>
+                    <apex:repeat value="{!claimNotesWrappers}" var="claimNote">
+                        <td width="140">: {!claimNote.note}</td>
+                    </apex:repeat>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+        </div>
+        <div >
+            <td>To check the status of your claim or upload additional supporting documents please visit
+                <a href="http://www.ShipCSX.com" target="_blank">www.ShipCSX.com</a>.</td>
+        </div>
+        <br/>
+        <div >
+            <td>In order to process your claim as quickly as possible, we must receive supporting documentation, this includes:</td>
+        </div>
+        <div >
+            <div>Certified copy of original invoice or signed stock transfer,</div>
+            <div>Break-down of claimed amount,</div>
+            <div>Other applicable paid invoices,Bill of lading (for intermodal claims only),</div>
+            <div>Damage reports, photos,</div>
+            <div>Other supporting documentation.</div>
+        </div>
+        <br/>
+        <div >
+            <td>All claims are processed in the order which they are received. Please allow a minimum of 30 days to check your
+                claim for status updates.</td>
+            <br/>
+            <td>You may
+                <b>Reply All</b> to this email for any future correspondence regarding this claim.</td>
+        </div>      
+    </body>
+
+    </html>
+</apex:component>

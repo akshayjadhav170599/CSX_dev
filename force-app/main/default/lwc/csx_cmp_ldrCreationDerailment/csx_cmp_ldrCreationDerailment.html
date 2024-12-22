@@ -1,0 +1,122 @@
+<template>
+
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <div class="slds-grid slds-gutters slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-text-heading_medium slds-var-m-left_small slds-var-p-bottom_small fsm-bold-text">L&D
+            Details
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox label="L&D Type" name="reportType" placeholder="Select an Option" options={typeOptions}
+                value={derailment.reportType} required onchange={handleInputChange} disabled>
+            </lightning-combobox>
+        </div>
+    </div>
+
+    <c-csx_cmp_shipment-Search onsendshipments={handleShipmentsReceived} display-vin=true></c-csx_cmp_shipment-Search>
+    <!-- select-multiple-rows=true -->
+
+    <!-- Code change begined by Subodh to accomodate multiple different shipments selection-->
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small slds-var-m-horizontal_x-large">
+
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-6 slds-large-size_6-of-6 
+                        slds-box slds-box_x-small">
+            <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+                <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Selected Shipments
+                </div>
+            </div>
+
+            <div class="slds-grid slds-gutters slds-var-m-left_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1 ">
+                    <lightning-datatable data={selectedShipments} columns={columns} key-field="Id"
+                        onrowselection={handleRowSelection}>
+                    </lightning-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Code change ended by Subodh to accomodate multiple different shipments selection-->
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Incident Location
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-record-edit-form object-api-name="CSX_CMP_LD_Report__c">
+                <label for="incidentLocation">Location</label>
+                <div class="slds-var-p-top_x-small">
+                    <lightning-input-field field-name="CSX_CMP_Incident_Location__c" onchange={handleInputChange}
+                        name="incidentLocation" variant="label-hidden" id="incidentLocation">
+                    </lightning-input-field>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+        <div if:false={derailment.incidentLocation}
+            class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-input type="text" label="Region" disabled></lightning-input>
+        </div>
+        <div if:true={derailment.incidentLocation}
+            class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-record-edit-form record-id={derailment.incidentLocation}
+                object-api-name="CSX_CMP_City_State_Master__c">
+                <label for="Region">Region</label>
+                <div class="slds-var-p-top_x-small">
+                    <lightning-input-field field-name="CSX_CMP_Operating_Region__c" variant="label-hidden" id="Region"
+                        disabled></lightning-input-field>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Incident Data
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox name="damageReason" label="Issue" placeholder="Select an Option" options={issueOptions}
+                value={derailment.damageReason} required onchange={handleInputChange}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox name="cause" label="Cause" placeholder="Select an Option" options={causeOptions}
+                value={derailment.cause} required onchange={handleInputChange} disabled>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox name="incidentAction" label="Action" placeholder="Select an Option"
+                options={actionOptions} value={derailment.incidentAction} required
+                onchange={handleInputChange}></lightning-combobox>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Comments
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4 slds-large-size_3-of-4 ">
+            <lightning-textarea name="incidentComments" value={derailment.incidentComments} onchange={handleInputChange}
+                label="Incident Comments"></lightning-textarea>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+            <lightning-button label={label.submit} variant="brand" onclick={submit}
+                class="slds-var-p-left_large"></lightning-button>
+        </div>
+        <div class="slds-col slds-var-p-bottom_small slds-float_right">
+            <lightning-button label={label.reset} onclick={resetPage} class="slds-var-p-right_large"></lightning-button>
+        </div>
+    </div>
+
+</template>

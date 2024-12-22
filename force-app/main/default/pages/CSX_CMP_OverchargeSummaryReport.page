@@ -1,0 +1,123 @@
+<!--
+  
+-->
+<apex:page renderAs="PDF" controller="CSX_CMP_ClaimSummaryEmailController"  >
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <body>
+        <div style="margin:5px;font-size:small">
+            <div style="text-align: center;width:100%;font-size: 150% ">
+                <b>{!claimWrapper.claimNumber} Claim Summary</b>  
+            </div><br/><br/>
+            <div>
+                <b>Summary:</b>&nbsp;{!claimWrapper.claimDetails}
+            </div><br/>
+            <div>
+                <b>Claim Information:</b>
+            </div><br/>
+            <table border='0' style="width: 100%; border-collapse: collapse; border:none;">
+                <tr >
+                    <th style=" width: 20%; align:right; vertical-align: top;">Claim Status</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimStatus}</td>
+                    <th style="width: 20%; align:right;">Claim Amount</th>
+                    <td style="width: 30%; align:right;">:&nbsp;
+                        <apex:outputText value="{0, number, currency}">
+                        <apex:param value="{!claimWrapper.claimAmount}"/> 
+                        </apex:outputText>
+                    </td>
+                    
+                                                                                                
+                </tr>
+                <tr>                    
+                    <th style="width: 20%; align:right;vertical-align: top;">Claimant Name</th>                   
+                    <td style="width: 30%; align:right;vertical-align: top;">:&nbsp;{!claimWrapper.claimantName}</td>
+                    <th style="width: 20%; align:right; vertical-align: top;">Claim Type</th>
+                    <td style="width: 30%; align:right;vertical-align: top;">:&nbsp;{!claimWrapper.claimType}</td>                                  
+                </tr>
+                <tr>
+                    <th style="width: 20%; align:right;vertical-align: top;">Company Name</th>
+                    <td style="width: 30%; align:right;vertical-align: top;">:&nbsp;{!claimWrapper.companyName}</td>
+                    <th style="width: 20%; align:right;">Submission Date</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.submissionDate}</td>                                                       
+                </tr>
+                <tr>
+                    <th style=" width: 20%; align:right; vertical-align: top;">Payment Address</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.paymentAddress}</td>
+                    
+                    <th style="width: 20%; align:right; vertical-align: top;">Payment Method</th>
+                    <td style="width: 30%; align:right;vertical-align: top;">:&nbsp;{!claimWrapper.paymentMethod}</td>                 
+                </tr>
+                <tr>
+                    
+                    
+                                  
+                </tr>
+                <tr>
+                    <th style=" width: 20%; align:right; vertical-align: top;">Customer National Account #</th>
+                    <td style="width: 30%; align:right;vertical-align: top;">:&nbsp;{!claimWrapper.nationalAccountNumber}</td>                                                  
+                </tr>
+                
+            </table><br/>
+            <div>
+                <b>Claim Line Information:</b>
+            </div><br/>
+            <table border="1" style="border-right:2px;border-bottom:2px;width: 100%; border-collapse: collapse;">
+
+
+                <tr style="width: 100%;text-align: center;">
+                    <th>Invoice #</th>
+                    <th>Lead Equipment</th>
+                    <th>Waybill #</th>   
+                    <th>Waybill Date</th>                                      
+                    <th>STCC</th>
+                    <th>Original Amount</th>
+                    <th>Claim Amount</th>                    
+                </tr>
+    
+    
+                <apex:repeat value="{!claimWrapper.claimLines}" var="claimLine">
+                    <tr>
+                        <td style="text-align: center;">{!claimLine.invoice}</td>
+                        <td style="text-align: center;">{!claimLine.equipmentInitial} {!claimLine.equipmentNumber}</td>
+                        <td style="text-align: center;">{!claimLine.waybillNumber}</td>
+                        <td style="text-align: center;">{!claimLine.wayBillDate}</td>                                               
+                        <td style="text-align: center;">{!claimLine.stcc}</td>                       
+                        <td style="text-align: center;">
+                            <apex:outputText value="{0, number, currency}">
+                                <apex:param value="{!claimLine.amountPaid}" />
+                            </apex:outputText>
+                        </td>   
+                       <td style="text-align: center;">
+                            <apex:outputText value="{0, number, currency}">
+                                <apex:param value="{!claimLine.claimAmounts}" />
+                            </apex:outputText>
+                        </td>                        
+                    </tr>
+                </apex:repeat>
+    
+            </table><br/>
+            <div>
+                <b>Comments:</b>
+            </div><br/>
+            <table border='0' style="border:none; width: 100%; border-collapse: collapse; ">
+
+                <tr>
+                    <th style="text-align: center; "></th>
+                    <th style="text-align: center; "></th>
+                </tr>
+
+                <apex:repeat value="{!claimNotesWrappers}" var="claimNote">
+                    <tr>
+                        <!-- <td>{!TEXT(DATEVALUE(claimNote.creationDate))}</td> -->
+                        <td style="padding-right:5px; ">{!TEXT(MONTH(DATEVALUE(claimNote.creationDate))) & '/' & TEXT(DAY(DATEVALUE(claimNote.creationDate)))
+                            & '/' & TEXT(YEAR(DATEVALUE(claimNote.creationDate)))}</td>
+
+                        <td style="padding-left:10px;width:100%; ">{!claimNote.note}</td>
+                    </tr>
+                </apex:repeat>
+            </table><br/><br/>
+            <div style="text-align: center; "><b>For internal CSX purposes only.</b></div>
+            </div>
+            </body>
+            </apex:page>

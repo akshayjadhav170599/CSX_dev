@@ -1,0 +1,9 @@
+/* added this css to adjust modal size for simulate business rule specifically, if we add this on static resource it will change for all modals */
+.slds-modal__container {
+    max-width: 80rem !important;
+    width: 80% !important;
+}
+
+:host {
+    width : 100px;
+}

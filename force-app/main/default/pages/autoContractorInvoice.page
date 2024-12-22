@@ -1,0 +1,3 @@
+<apex:page Controller="CSX_CMP_AutoContractorEmailWrapper" renderAs="PDF" >
+    <c:CSX_CMP_AutoContractorInvoiceEmail arId="{!arSettlementId}"/>
+</apex:page>

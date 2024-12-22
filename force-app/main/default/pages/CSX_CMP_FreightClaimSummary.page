@@ -1,0 +1,310 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_ClaimSummaryEmailController">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <body>
+        <div style="margin:5px;font-size:small">
+            <div style="text-align: center;width:100%;font-size: 150% ">
+                <b>{!claimWrapper.claimNumber} Claim Summary</b>
+            </div>
+            <br/>
+            <br/>
+            <div>
+                <b>Summary:</b>&nbsp;{!claimWrapper.claimDetails}
+            </div>
+            <br/>
+            <div>
+                <b>Claim Information:</b>
+            </div>
+            <br/>
+            <table border='0' style="width: 100%; border-collapse: collapse; border:none;">
+                <tr>
+                    <th style="width: 20%; align:right;">Claim Status</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimStatus}</td>
+                    <th style="width: 20%;vertical-align: top;">
+                        {!IF (claimWrapper.type == 'Transflo Claim','Terminal','Desk')}
+                    </th>
+                    <td style="width: 30%;vertical-align: top;">
+                        <apex:outputPanel rendered="{!claimWrapper.type == 'Transflo Claim'}">:&nbsp;{!claimWrapper.terminal}</apex:outputPanel>
+                        <apex:outputPanel rendered="{!claimWrapper.type != 'Transflo Claim'}">:&nbsp;{!claimWrapper.desk}</apex:outputPanel>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 20%; align:right;">Claim Amount</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimAmount}</td>
+
+                    <th style="width: 20%; align:right;">Claim Date</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimDate}</td>
+                </tr>
+                <tr>
+                    <th style="width: 20%; align:right;">Claim Type</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimType}</td>
+                </tr>
+                <tr>
+
+                    <th style="width: 20%; align:right;">Equipment ID</th>
+                    <td style="width: 30%; align:right;">:&nbsp; {!claimWrapper.claimLines[0].equipmentInitial}{!claimWrapper.claimLines[0].equipmentNumber}</td>
+                    <th style="width: 20%; align:right;">L&amp;D #</th>
+                    <td style="width: 30%; align:right;">:
+                        <apex:repeat value="{!claimWrapper.ldrNumbers}" var="ldr">
+                            {!ldr}</apex:repeat>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 20%; align:right;vertical-align: top;">Claimant</th>
+                    <td style="width: 30%; align:right;vertical-align: top;">:&nbsp;{!claimWrapper.claimantName}</td>
+                    <th style="width: 20%;vertical-align: top;">
+                        {!IF (claimWrapper.type == 'Transflo Claim','Desk','')}
+                    </th>
+                    <td style="width: 30%;vertical-align: top;">
+
+                        <apex:outputPanel rendered="{!claimWrapper.type == 'Transflo Claim'}">:&nbsp;{!claimWrapper.desk}</apex:outputPanel>
+                    </td>
+
+                </tr>
+                <tr>
+                    <!-- <th style="width: 20%; align:right; vertical-align: top;">Shipper</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.shipper}</td>
+                    <th style=" width: 20%; align:right; vertical-align: top;">Consignee</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.consignee}</td> -->
+                </tr>
+                <tr>
+                    <th style=" width: 20%; align:right; vertical-align: top;">Waybill Origin</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimLines[0].origin},{!claimWrapper.claimLines[0].originState}</td>
+
+                    <th style="width: 20%; align:right;">Waybill Destination</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimLines[0].destination},{!claimWrapper.claimLines[0].destinationState}</td>
+
+                </tr>
+                <tr>
+                    <th style="width: 20%; align:right;">Waybill Number</th>
+                    <!--   <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.waybillNumber}</td> -->
+                    <td style="width: 30%; align:right;">:
+                        <a href="{!claimWrapper.claimLines[0].waybillNumberURL}" target="_blank" style="text-decoration: none;">{!claimWrapper.claimLines[0].waybillNumber}</a>
+                    </td>
+                    <th style="width: 20%; align:right;">Waybill Date</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimLines[0].waybillDate}</td>
+
+                </tr>
+
+                <tr>
+                    <th style="width: 20%; align:right;vertical-align: top;">Route</th>
+                    <td style="width: 30%; align:right;vertical-align: top;">:
+                        <!-- <apex:repeat value="{!claimWrapper.codes}" var="code">
+                            {!code}</apex:repeat> -->
+                        {!claimWrapper.claimLines[0].route}
+                    </td>
+
+                    <th style=" width: 20%; align:right; vertical-align: top;">Commodity</th>
+                    <td style="width: 30%; align:right;">:&nbsp;{!claimWrapper.claimLines[0].stcc},{!claimWrapper.claimLines[0].stccDescription}</td>
+                </tr>
+
+
+            </table>
+            <br/>
+            <br/>
+            <div>
+                <b>Product Information:</b>
+            </div>
+            <br/>
+            <apex:outputPanel rendered="{!claimWrapper.type == 'Contractor Claim' || claimWrapper.type == 'Lawsuit Claim' }">
+                <div>See invoice in Documents</div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!(claimWrapper.isDescription == true) && (claimWrapper.type == 'FC Customer Claim' ||   claimWrapper.type == 'Transflo Claim' ||
+                                    claimWrapper.type == 'Recharges Inbound Claim' || claimWrapper.type == 'FC RR Inbound Claim')}">
+                <table border='2' style="border:2px solid black; align:center; width: 100%;border-collapse: collapse;margin:0 auto;">
+                    <tr>
+                        <th style="text-align: center;border-bottom: 1px solid black;">Product Description</th>
+                        <th style="text-align: center;border-bottom: 1px solid black;">Quantity</th>
+                        <th style="text-align: center;border-bottom: 1px solid black;">UOM</th>
+                        <th style="text-align: center;border-bottom: 1px solid black;">Unit Price</th>
+                        <th style="text-align: center;border-bottom: 1px solid black;">Product Amt</th>
+                    </tr>
+                    <apex:repeat value="{!claimWrapper.productList}" var="pro">
+
+                        <!-- <apex:outputPanel rendered="{!NOT(ISBLANK(pro.productDescription))}" layout="block" style="text-align:center;">-->
+                        <tr rendered="{!NOT(ISBLANK(pro.productDescription))}" layout="block" style="text-align:center;">
+                            <td style="text-align: center;">{!pro.productDescription}</td>
+                            <td style="text-align: center;">{!pro.quantity}</td>
+                            <td style="text-align: center;">{!pro.uom}</td>
+                            <td style="text-align: center;">{!pro.unitPrice}</td>
+                            <td style="text-align: center;">{!pro.productAmount}</td>
+                        </tr>
+                        <!-- </apex:outputPanel> -->
+                    </apex:repeat>
+
+                    <tr>
+                        <td colspan="4" style="text-align:right;padding-right: 15px">
+                            <b>Total Amount</b>
+                        </td>
+                        <td style="text-align: center;border-top: 1px solid black;border-left: 1px solid black;">
+                            <b>{!claimWrapper.totalAmt}</b>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </apex:outputPanel>
+            <br/>
+            <apex:outputPanel rendered="{!(claimWrapper.vinAvailable == true) && (claimWrapper.type == 'FC Customer Automobile Claim' ||  
+                                    claimWrapper.type == 'Recharges Inbound Claim' || claimWrapper.type == 'FC RR Inbound Claim')}">
+                <table style="width: 100%; border: 2px solid black;">
+
+                    <tr>
+                        <th style="text-align: center;"></th>
+                        <th style="text-align: center;">Customer Damage</th>
+                        <th style="text-align: center;">Inspection Damage</th>
+                    </tr>
+
+                    <tr>
+                        <td style="padding-right: none;">
+                            <table style=" border: none;width: 100%;">
+                                <tr>
+                                    <td style="text-align: center;">VIN</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="vertical-align: middle; padding-right: none;">
+                            <table style="border: none;width: 90%;">
+
+                                <tr>
+                                    <td style="border-right: none;width: 25%;text-align: center;">Amount</td>
+                                    <td style="border-right: none;width: 25%;text-align: center;">Area</td>
+                                    <td style="border-right: none;width: 25%;text-align: center;">Type</td>
+                                    <td style="text-align: center;">Sev</td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <table style="border: none;width: 100%;">
+
+                                <tr>
+                                    <td style="border-right: none;width: 20%;text-align: center;">Type</td>
+                                    <td style="border-right: none;width: 20%;text-align: center;">Area</td>
+                                    <td style="border-right: none;width: 20%;text-align: center;">Type</td>
+                                    <td style="border-right: none;width: 20%;text-align: center;">Sev</td>
+                                    <td style="width: 20%;text-align: center;">Source</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <apex:repeat value="{!claimWrapper.productList1}" var="product">
+
+                        <tr rendered="{!NOT(ISBLANK(product.vin))}">
+                            <td style="padding-right: none;">
+                                <table>
+                                    <tr>
+                                        <td style="border-right: 1px solid black;border-left: 1px solid black;border-top: 1px solid black;border-bottom: 1px solid black;width: 150px;text-align: center;">{!product.vin}</td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <td style="vertical-align: middle; padding-right: 10px;">
+                                <apex:repeat value="{!product.customerDamageList}" var="customerDamage">
+                                    <table style="border-right: 1px solid black;border-left: 1px solid black;border-top: 1px solid black;border-bottom: 1px solid black;width: 100%;">
+
+                                        <tr>
+                                            <td style="width: 25%;text-align: center;">{!customerDamage.amount}</td>
+                                            <td style="width: 25%;text-align: center;">{!customerDamage.areaCustomer}</td>
+                                            <td style="width: 25%;text-align: center;">{!customerDamage.typeCustomer}</td>
+                                            <td style="width: 25%;text-align: center;">{!customerDamage.sevCustomer}</td>
+                                        </tr>
+
+                                    </table>
+                                </apex:repeat>
+                            </td>
+
+                            <td style="vertical-align: middle;">
+                                <apex:repeat value="{!product.inspectionDamageList}" var="inspectionDamage">
+                                    <table style="border-right: 1px solid black;border-left: 1px solid black;border-top: 1px solid black;border-bottom: 1px solid black;width: 100%;">
+
+                                        <tr>
+                                            <td style="width: 20%;text-align: center;">{!inspectionDamage.typeInspection}</td>
+                                            <td style="width: 20%;text-align: center;">{!inspectionDamage.areaInspection}</td>
+                                            <td style="width: 20%;text-align: center;">{!inspectionDamage.reportTypeInspection}</td>
+                                            <td style="width: 20%;text-align: center;">{!inspectionDamage.sevInspection}</td>
+                                            <td style="width: 20%;text-align: center;">{!inspectionDamage.sourceInspection}</td>
+                                        </tr>
+
+                                    </table>
+                                </apex:repeat>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+
+                    <tr>
+
+                        <td></td>
+                        <td style="padding-right: 10px;">
+                            <div style="border-right: 1px solid black;border-left: 1px solid black;border-top: 1px solid black;border-bottom: 1px solid black; padding-left : 10px;">
+                                <span style="text-align:left;">
+                                    <b>{!claimWrapper.totalCustomerDamageAmount}</b>
+                                </span>
+                                <span style="text-align:right; padding-left:20px">
+                                    <b>Total Amount</b>
+                                </span>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </apex:outputPanel>
+
+            <br/>
+            <br/>
+            <div>
+                <b>Research:</b>
+                <br/>
+                <ul>
+                    <li>
+                        <a href="{!claimWrapper.claimInformation} " target="_blank " style="text-decoration: none; ">Claim Information</a>
+                    </li>
+                    <li>
+                        <a href="{!claimWrapper.documents} " target="_blank " style="text-decoration: none; ">Documents</a>
+                    </li>
+                     <li>
+                        <a href="{!claimWrapper.claimLines[0].trace} " target="_blank " style="text-decoration: none; ">ShipCSX Trace</a>
+                    </li>
+                    <!--        <li>
+                        <a href="{!claimWrapper.mti} " target="_blank " style="text-decoration: none; ">MTI</a>
+                    </li> -->
+                     <li>
+                        <a href="{!claimWrapper.claimLines[0].umler} " target="_blank " style="text-decoration: none; ">UMLER</a>
+                    </li>
+                    <li>
+                        <a href="{!claimWrapper.caseUrl} " target="_blank " style="text-decoration: none; ">Related Cases</a>
+                    </li>
+                </ul>
+            </div>
+            <br/>
+
+
+            <div>
+                <b>Comments:</b>
+            </div>
+            <table border='0' style="border:none; width: 100%; border-collapse: collapse; ">
+
+                <tr>
+                    <th style="text-align: center; "></th>
+                    <th style="text-align: center; "></th>
+                </tr>
+
+                <apex:repeat value="{!claimNotesWrappers}" var="claimNote">
+                    <tr>
+                        <td style="padding-right:5px; ">{!TEXT(MONTH(DATEVALUE(claimNote.creationDate))) & '/' & TEXT(DAY(DATEVALUE(claimNote.creationDate)))
+                            & '/' & TEXT(YEAR(DATEVALUE(claimNote.creationDate)))}</td>
+
+                        <td style="padding-left:10px;width:100%; ">{!claimNote.comment}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+
+
+        </div>
+
+    </body>
+</apex:page>

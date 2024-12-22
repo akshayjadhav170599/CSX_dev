@@ -1,0 +1,105 @@
+<template>
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">
+            Shipment Information
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <fieldset class="slds-form-element">
+                <span class="slds-form-element__label slds-var-p-bottom_small">Search By</span>
+                <div class="slds-form-element__control slds-list_horizontal">
+                    <div for:each={searchOptions} for:item="item" key={item.value}>
+                        <span class="slds-radio ">
+                            <input class="slds-input" type="radio" id={item.value} name="searchBy" value={item.value}
+                                onchange={handleRadioChange} checked={item.checked} />
+                            <label class="slds-radio__label" for={item.value}>
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">{item.label}</span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <template if:false={showStartDate}>
+                <lightning-input label="Search Criteria" name="searchCriteria" value={shipmentCriteria.searchCriteria}
+                    type="Text" maxlength="17" pattern="[a-zA-z0-9 ]+"
+                    message-when-pattern-mismatch="Special Characters not allowed" onchange={handleInputChange}
+                    required></lightning-input>
+            </template>
+            <template if:true={showStartDate}>
+                <lightning-input label="Search Criteria" name="searchCriteria" value={shipmentCriteria.searchCriteria}
+                    type="Text" minlength="3" maxlength="11" pattern="[A-Za-z]{2,4}[ ]{0,1}[0-9]{1,6}"
+                    message-when-pattern-mismatch="Invalid Equipment Id" onchange={handleInputChange}
+                    required></lightning-input>
+            </template>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <template if:true={showStartDate}>
+                <lightning-input type="date" label="Waybill Date" name="startDate" value={shipmentCriteria.startDate}
+                    date-style="short" placeholder="MM/DD/YYYY" max={maximumDate} onchange={handleInputChange} required
+                    data-id="startDate"></lightning-input>
+            </template>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-vertical_small">
+        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+            <lightning-button label={label.reset} onclick={resetPage} class="slds-var-p-right_large"></lightning-button>
+            <lightning-button label={label.search} variant="brand" onclick={handleSearch}
+                class="slds-var-p-left_large"></lightning-button>
+            <lightning-spinner if:true={isSubmitting}></lightning-spinner>
+        </div>
+    </div>
+
+    <!--  <template if:true={showTableData}> -->
+    <div class="slds-grid slds-gutters slds-var-m-horizontal_x-large">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-6 slds-large-size_6-of-6 
+                    slds-box slds-box_x-small">
+            <div if:true={shipmentCheck} class="slds-text-color_error">{label.mandatoryClaimant}</div>
+            <div class="slds-grid slds-gutters slds-var-p-vertical_small slds-var-m-left_x-small">
+                <div class="slds-col">
+                    <c-csx_cmp_pagination if:true={recordsToDisplay} records={recordsToDisplay}
+                        table-title={datatableTitle} total-records={recordsToDisplay.length}
+                        onpaginatorchange={handleShipmentRecordsDisplay}>
+                    </c-csx_cmp_pagination>
+                </div>
+            </div>
+
+            <div if:false={selectMultipleRows}>
+                <div class="slds-grid slds-gutters slds-var-p-vertical_small slds-var-m-left_x-small">
+                    <div class="slds-col slds-scrollable_x">
+                        <lightning-datatable max-row-selection="1" key-field="waybillNumber" data={records}
+                            columns={shipmentResultColumns} selected-rows={selectedRows}
+                            onrowselection={handleRowSelection}>
+                        </lightning-datatable>
+                    </div>
+                </div>
+                <div class="slds-col">
+                    <div if:true={noResults} class="slds-text-color_error">{label.notFound}</div>
+                    <div if:true={errorFetchingShipment} class="slds-text-color_error">{label.error}</div>
+                </div>
+            </div>
+
+            <div if:true={selectMultipleRows}>
+                <div class="slds-grid slds-gutters slds-var-p-vertical_small slds-var-m-left_x-small">
+                    <div class="slds-col slds-scrollable_x">
+                        <lightning-datatable key-field="waybillNumber" data={records} columns={shipmentResultColumns}
+                            onrowselection={handleMultipleRowSelection} selected-rows={selectedRows}>
+                        </lightning-datatable><!--selected-rows={selectedRows}-->
+                    </div>
+                </div>
+                <div class="slds-col">
+                    <div if:true={noResults} class="slds-text-color_error">{label.notFound}</div>
+                    <div if:true={errorFetchingShipment} class="slds-text-color_error">{label.error}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- </template> -->
+</template>

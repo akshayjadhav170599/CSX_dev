@@ -1,0 +1,126 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_DeclineLetterController"  showHeader="false" standardStylesheets="false" sidebar="false"  docType="html-5.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <body>
+        
+        
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                   </td>
+                
+            </tr>
+        </table>
+        <br/><br/>
+        
+        <table style="width: 70%;">
+            
+            <tr>
+                <td width="180">Date</td>
+                <td>: {!claimWrapper.emailDate}</td>
+            </tr> <br/><br/>
+            
+            <tr>
+                <td width="180">Claim Number</td>
+                <td>: {!claimWrapper.csxClaimNumber}</td>
+            </tr>
+            <tr>
+                <td width="140">Submission Date</td>
+                <td>: {!claimWrapper.submissionDate}</td>
+                
+            </tr>
+            <tr>
+                <td width="140">Claim Amount</td>
+                <td>:&nbsp; <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!claimWrapper.claimAmount}"/>
+                    </apex:outputText>
+                </td>
+            </tr>
+            <tr>
+                <td width="140">Claimant Claim Number</td>
+                <td>: {!claimWrapper.claimantClaimNumber}</td>
+                
+            </tr>
+            <tr>
+                <td width="140">Reason</td>
+                <td>: {!claimWrapper.reason}</td>
+            </tr>
+        </table> <br/>
+        
+        <table style="width: 100%;">
+            <tr>
+                <td width="180" style="vertical-align: top;">Company Name</td>
+                <td>: {!claimWrapper.claimantName}</td>
+            </tr>
+            <tr>
+                <td width="180">Contact Name</td>
+                <td>: {!claimWrapper.contactName}</td>
+            </tr>
+            <tr>
+                <td width="180">Contact Phone</td>
+                <td>: {!claimWrapper.contactPhone}</td>
+            </tr>
+            <tr>
+                <td width="180">Address Line 1</td>
+                <td>: {!claimWrapper.address1}</td>  
+            </tr>
+            <tr>
+                <td width="180">Address Line 2</td>
+                <td>: {!claimWrapper.address2}</td>  
+            </tr>
+            <tr style="vertical-align: top;">
+                <td width="140">City/State/Zip</td>
+                <td>: {!claimWrapper.cityStateZip}</td>  
+            </tr>
+                 
+        <!--   <tr>
+                <td width="180">Email Address</td>
+                <td>:  <apex:repeat value="{!claimWrapper.contactEmail}" var="email">
+                    {!email} 
+                    </apex:repeat>
+                </td> 
+            </tr> -->
+            
+            <tr>
+                <td width="180">Company Filling Claim</td>
+                <td>: {!claimWrapper.companyFilingClaim}</td>  
+            </tr>
+            <tr>
+					<td width="180">Email Address </td>
+					<td style="overflow-wrap: anywhere;">: {!claimWrapper.contactEmail}</td>  
+			</tr>
+            
+        </table> 
+        <br/><br/>
+        <div>
+            Dear Claimant,
+        </div><br/>
+        <div>
+            We have completed our review and are declining your over charge claim request. Our research indicates the <br/>
+            shipments were correctly billed.
+        </div><br/>
+         
+         <div>
+            Comment:{!claimWrapper.declineNotes}
+        </div> <br/>
+        <div>
+            To resubmit the claim with additional documentation, please login to the Overcharge claims application in your ShipCSX account.<br/>           
+        </div><br/>
+        <br/>
+        <div>
+            Sincerely,
+        </div>
+        <div>
+            {!claimWrapper.owner}
+        </div>
+        <div>
+            {!claimWrapper.title}
+            
+        </div>
+        <div>
+            <apex:outputText value="{!$Label.CSX_CMP_Overcharge_Claim_Email_Address}" escape="false" />
+        </div>               
+    </body>
+</apex:page>

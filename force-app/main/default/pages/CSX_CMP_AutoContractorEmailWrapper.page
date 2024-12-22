@@ -1,0 +1,87 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_AutoContractorEmailWrapper" >   
+     <html>
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                    <!--    <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50"/> -->
+                     <!--   <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!$Label.CSX_CMP_CSX_Logo}"/> -->
+                        <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!csxLogo}"/>
+                    </td>
+                </tr>
+            </table>
+            <br/><br/>
+            <div>
+                The following  invoice has been issued today:
+            </div><br/>
+            
+            <table border="1" id="myTable" style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th>Company Name</th>
+                    <th>Customer No</th>
+                    <th>Invoice Number</th>
+                    <th>Claim Number</th>
+                    <th>Status</th>
+                    <th>Incident Location</th>
+                    <th>VIN #</th>
+                    <th>Invoice Date</th>
+                    <th>Due Date</th>
+                    <th>Orig Bill Amount</th>                    
+                </tr>
+                    <tr>
+                        <td style="text-align: center;">{!arWrapper.customerName}</td>
+                        <td style="text-align: center;">{!arWrapper.customerNumber}</td>
+                        <td style="text-align: center;">{!arWrapper.invoiceNumber}</td>                       
+                        <td style="text-align: center;">{!arWrapper.claimNumber}</td>   
+                        <td style="text-align: center;">{!arWrapper.status}</td>
+                        <td style="text-align: center;">{!arWrapper.incidentLocation}</td>
+                        <td style="text-align: center;">{!arWrapper.vinNumber}</td>
+                        <td style="text-align: center;">{!arWrapper.billDate}</td>
+                        <td style="text-align: center;">{!arWrapper.dueDate}</td>
+                        <td style="text-align: center;">{!arWrapper.origBillAmount}</td>                     
+                    </tr>
+                
+            </table> <br/>
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var table = document.getElementById('myTable');
+                var rows = table.querySelectorAll('tr');
+                
+                rows.forEach(function(row) {
+                    var cells = row.querySelectorAll('td');
+                    cells.forEach(function(cell) {
+                        if (cell.textContent.trim() === '') {
+                            var columnIndex = Array.from(row.children).indexOf(cell);
+                            var headerCell = table.querySelector('th:nth-child(' + (columnIndex + 1) + ')');
+                            if (headerCell) {
+                                headerCell.style.display = 'none';
+                                cell.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+            </script>
+            <div>
+                <td> Payment of these claims are expected upon receipt and considered past due after 15 days and turned over to collections.</td><br/>
+                <td> To view invoice see attached.To see supporting documents, please login at <a href="http://www.ShipCSX.com" target="_blank">www.ShipCSX.com.</a> </td><br/>
+                
+            </div> <br/>
+            <div>
+                <td>You may <b>Reply All</b> to this email for any future correspondence regarding this claim.</td>
+            </div><br/>
+			<div>
+    			Sincerely,
+            </div>
+            <div>
+               CSX Freight Claims and Damage Prevention  
+            </div>
+                        
+         </body>
+    </html>
+</apex:page>

@@ -1,0 +1,61 @@
+<apex:component controller="CSX_CMP_FreightProjectEmailController"  access="global">
+    <apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global"/>
+    <html>
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                  <!--      <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50"/> -->
+                      <!--   <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!$Label.CSX_CMP_CSX_Logo}"/>  -->
+                         <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!csxLogo}"/>
+                    </td>
+              </tr>
+            </table>     
+            
+            <br/><br/>
+            <div>
+                             
+                <table style="width: 70%;">
+                    <tr>
+                        <td width="140"> <b> Project Number</b> </td>
+                        <td>:&nbsp;{!claimWrapper.projectNumber} </td>
+                    </tr>
+                    <tr>
+                        <td width="140"> <b> Invoice Amount</b> </td>
+                        <td>:&nbsp;{!claimWrapper.projectAmount} </td>
+                    </tr>
+                     
+                      <tr>
+                         <td width="140"> <b> Invoice Number</b> </td>
+                         <td>:&nbsp;{!claimWrapper.claimNumber} </td>
+                     </tr>
+                     
+                    <tr>
+                        <td width="140"> <b> Cost Center</b> </td>
+                        <td>:&nbsp;{!claimWrapper.Claimant} </td>
+                    </tr>
+                    <tr>
+                        <td width="140"> <b> WBS Element</b> </td>
+                        <td>:&nbsp;{!claimWrapper.task} </td>
+                    </tr>
+                   
+                     <tr>
+                        <td width="140"> <b> GL Account</b> </td>
+                        <td>:&nbsp;{!claimWrapper.expendType} </td>
+                    </tr>                                         
+                </table> 
+                <br/><br/>
+            </div>
+            <div>
+                 
+                <td>Note: Email to be send to SAP mailbox informing project #:{!claimWrapper.projectNumber} and amount to the ReadytoBill@CSX.com</td>
+            </div> 
+            <br/>            
+        </body>
+    </html> 
+</apex:component>

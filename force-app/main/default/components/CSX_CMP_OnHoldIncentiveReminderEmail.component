@@ -1,0 +1,23 @@
+<apex:component controller="CSX_CMP_OnHoldIncentiveEmailController" access="global">
+<apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global"/>
+    <html>
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <div>Dear Claimant,</div><br/>
+            <div>Claim  <a href="{!claimWrapper.claimInformation} " target="_blank " style="text-decoration: none; ">{!claimWrapper.claimNumber}</a> for amount &nbsp; <apex:outputText value="{0, number, currency}">
+                                                                <apex:param value="{!claimWrapper.claimAmount}" />
+                                                                </apex:outputText> remains On-Hold as past terms AR balance is not within CSX refund guidelines.
+                Account balances can be viewed and paid in <a href="http://www.ShipCSX.com" target="_blank">ShipCSX</a> Account Invoices.
+            </div><br/>
+            <div>
+                 <td>
+                    You may <b>Reply All</b> to this email for any questions.
+                </td>
+            </div>
+        </body>
+    </html>
+</apex:component>

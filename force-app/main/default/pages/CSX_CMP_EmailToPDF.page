@@ -1,0 +1,32 @@
+<apex:page renderAs="pdf" contentType="application/pdf" standardController="EmailMessage" extensions="CSX_CMP_EmailToPDFController">
+    <html>
+        <head>
+            <style>
+                body {font-family: Arial, sans-serif;}
+                h1 {font-size: 18px;}
+                p {font-size: 14px;}
+                hr {border-top: 1px solid #ccc;}
+            </style>
+        </head>
+        
+        <body>
+            
+            <h4>{!email[0].Subject}</h4>
+            <p><b>From:</b>{!email[0].FromAddress}</p>
+            <p><b>To:</b>{!email[0].ToAddress}</p>
+            <p><b>Cc:</b>{!email[0].CcAddress}</p>
+            <p><b>Date:</b>{!email[0].CreatedDate}</p>
+            
+            <apex:outputPanel rendered="{!if(email[0].Attachments.size > 0,true,false)}" >
+             <p><b>Attachments:</b>
+                 <apex:repeat value="{!email[0].Attachments}" var="att">
+                    <p>{!att.name}</p>
+                 </apex:repeat>
+              </p>
+            </apex:outputPanel> 
+            <hr/>
+            <apex:outputText escape="false" value="{!email[0].HTMLBody}"/>
+        </body>
+    </html>
+    
+</apex:page>

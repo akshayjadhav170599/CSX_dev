@@ -1,0 +1,44 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+            <div class="slds-col slds-text-heading_medium slds-var-m-left_xxx-small slds-var-p-bottom_large">Lost or
+                Damaged
+                Freight Report Submission Confirmation
+
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                {label.confirmation} <a onclick={redirectToRecord}>{ldrNo}</a>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                <lightning-formatted-text value={label.ecmRedirection}></lightning-formatted-text>
+                <br>
+                <br>
+                <span style="color: blue; cursor:pointer" onclick={redirectToECM}> Upload Supporting Documents </span>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                {initialText} &nbsp; <a onclick={redirectToRecord}>{ldrNo}</a> &nbsp; {endText}
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                Click link to navigate back to L&D search screen &nbsp;
+                <a href="">L&D Search</a>
+            </div>
+        </div>
+
+        <template if:true={decReasonee}>
+            <c-csx_cmp_document-upload-view record-id={ldrId}></c-csx_cmp_document-upload-view>
+        </template>
+
+    </lightning-card>
+</template>

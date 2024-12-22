@@ -1,0 +1,296 @@
+<apex:page standardController="CSX_CMP_Equipment__c" renderAs="PDF" showHeader="true" sidebar="true" showQuickActionVfHeader="false" extensions="CSX_CMP_EquipmentSummaryReport" >
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <head>
+    </head>
+
+    <body>
+
+        <div style="margin:5px;font-size:small">
+            <table style="width: 100%;" padding="50px;">
+                <tr>
+                    <td style="width:55%">
+                    <!--    <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50" /> -->
+                         <apex:image id="theImage"  width="120px" value="{!csxLogo}"/>
+                        <br/>
+                    </td>
+
+                    <td style="text-align: right;vertical-align: top; width:45% ">
+                        <apex:outputText style="font-size:small" value="{!$Label.CSX_CMP_Equipment_Summary_Report_Static}" escape="false"></apex:outputText>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-1" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row1">
+                    <td class="row1-col-1" style="">&nbsp;&nbsp;
+                        <b>EQUIPMENT ID</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.equipment.Name}" />
+                    </td>
+
+                    <td class="row1-col-2" style="">&nbsp;&nbsp;
+                        <b>WAYBILL #</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Waybill_Num__c}" />
+                    </td>
+                    <td class="row1-col-3" style="">&nbsp;&nbsp;
+                        <b>WAYBILL DATE</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Waybill_Date__c}" />
+                    </td>
+
+                    <td class="row1-col-4">&nbsp;&nbsp;
+                        <b>REPORT #</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.Name}" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-2" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row2">
+
+                    <td class="row2-col-1" style="vertical-align: top; width:30%">&nbsp;
+                        <b>SHIPPER</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Shipper__c}" />
+                    </td>
+
+                    <td class="row2-col-2" style="vertical-align: top; width:20%">&nbsp;
+                        <b>ORIGIN</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Act_Origin_City__c}" />,
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Act_Origin_State__c}" />
+                    </td>
+
+                    <td class="row2-col-3" style="vertical-align: top; width:20%">&nbsp;
+                        <b>DESTINATION</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Act_Destination_City__c}" />,
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Act_Destination_State__c}" />
+                    </td>
+
+                    <td class="row2-col-4" style="vertical-align: top; width:30%">&nbsp;
+                        <b>CONSIGNEE</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_Consignee__c}" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-3" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row3">
+                    <td class="row3-col-1" style="width:15%;vertical-align: top;">&nbsp;&nbsp;
+                        <b>STCC</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_STCC__c}" />
+                    </td>
+
+                    <td class="row3-col-2" style="vertical-align: top;">&nbsp;
+                        <b>DESCRIPTION</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.equipment.CSX_CMP_STCC_Description__c}" />
+                    </td>
+                    <td class="row3-col-3" style="vertical-align: top;  width:30%">&nbsp;
+                        <b>INCIDENT MANAGER</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputText value="{!wrapper.incidentManagerName}" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-4" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row4">
+
+                    <td class="row4-col-1" style="vertical-align: top; width:15%">&nbsp;
+                        <b>REPORTED BY</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Reported_By__c}" />
+                    </td>
+
+                    <td class="row4-col-2" style="vertical-align: top; width:30%">&nbsp;&nbsp;
+                        <b>LOCATION</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputText value="{!wrapper.cityname}" />
+                    </td>
+
+                    <td class="row4-col-3" style="vertical-align: top; width:15%">&nbsp;&nbsp;
+                        <b>REPORTED DATE</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Incident_Date__c}" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-5" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr>
+                    <td>
+                        <b>INCIDENT COMMENTS</b>
+                        <br/>
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Incident_Comments__c}" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-6" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row5">
+
+                    <td class="row5-col-1" style="">&nbsp;&nbsp;
+                        <b>REASON</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Damage_Reason__c}" />
+                    </td>
+
+                    <td class="row5-col-2" style="">&nbsp;&nbsp;
+                        <b>CAUSE</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Cause__c}" />
+                    </td>
+
+                    <td class="row5-col-3" style="">&nbsp;&nbsp;
+                        <b>INCIDENT ACTION</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Incident_Action__c}" />
+                    </td>
+
+                    <td class="row5-col-4" style="">&nbsp;&nbsp;
+                        <b>INCIDENT DATE</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Incident_Date__c}" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table-7" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row5">
+
+                    <td class="row-col-1" style="width:40%">&nbsp;&nbsp;
+                        <b>PRODUCT CONDITION</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Product_Condition__c}" />
+                    </td>
+                    <td class="row-col-2" style="width:25%">&nbsp;&nbsp;
+                        <b>DISPOSITION</b>
+                        <br/> &nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Disposition__c}" />
+                    </td>
+
+                    <td class="row-col-3" style="vertical-align: top;">&nbsp;
+                        <b>DAMAGE LOCATION</b>
+                        <br/> &nbsp;&nbsp;
+                        <apex:outputField value="{!wrapper.ldReport.CSX_CMP_Damage_Location__c}" />
+                    </td>
+                </tr>
+            </table>
+            <br/>
+
+            <table class="table-8" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row9">
+                    <th style="text-align: center;">PRODUCTS</th>
+                </tr>
+            </table>
+
+            <table class="table-9" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row7">
+                    <th class="row7-col-1" style="text-align: center">&nbsp;&nbsp;IDENTIFIER </th>
+                    <th class="row7-col-2" style="text-align: center">&nbsp;&nbsp;DESCRIPTION </th>
+                    <th class="row7-col-3" style="text-align: center">&nbsp;&nbsp;QUANTITY </th>
+                    <th class="row7-col-4" style="text-align: center">&nbsp;&nbsp;UOM </th>
+                    <th class="row7-col-5" style="text-align: center">&nbsp;&nbsp;UNIT PRICE </th>
+                    <th class="row7-col-6" style="text-align: center">&nbsp;&nbsp;AMOUNT </th>
+                </tr>
+
+                <apex:repeat value="{!wrapper.relatedProducts}" var="product">
+                    <tr class="row7">
+                        <td class="looprow-col" style="text-align: left">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!product.CSX_CMP_VIN__c }" />
+                        </td>
+                        <td class="looprow-col" style="text-align: left">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!product.CSX_CMP_Product_Description__c}" />
+                        </td>
+                        <td class="looprow-col" style="text-align: center">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!product.CSX_CMP_Quantity__c}" />
+                        </td>
+                        <td class="looprow-col" style="text-align: left">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!product.CSX_CMP_UOM__c}" />
+                        </td>
+
+                        <td class="looprow-col" style="text-align: center;">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!product.CSX_CMP_Unit_Price__c}" />
+                        </td>
+                        <td class="looprow-col" style="text-align: center;">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!product.CSX_CMP_Product_Amount__c}" />
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+            <br/>
+
+            <table class="table-8" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row9">
+                    <th style="text-align: center;">TRANSFER CAR</th>
+                </tr>
+            </table>
+
+            <table class="table-9" border="0.25px;" style="width:100%;border-collapse: collapse">
+                <tr class="row7">
+                    <th class="row7-col-1" style="text-align: center;width:50%;">&nbsp;&nbsp;TRANSFER EQUIPEMENT ID </th>
+                    <th class="row7-col-2" style="text-align: center">&nbsp;&nbsp;SEAL NO </th>                   
+                </tr>
+
+                <apex:repeat value="{!wrapper.transferEquipment}" var="equipment">
+                    <tr class="row7">
+                        <td style="text-align: center">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!equipment.CSX_CMP_Transfer_Equipment_Initia__c}"/> &nbsp;
+                            <apex:outputField value="{!equipment.CSX_CMP_Transfer_Equipment_Number__c}"/>
+                        </td>
+                        <td style="text-align: center">
+                            &nbsp;&nbsp;
+                            <apex:outputField value="{!equipment.CSX_CMP_Transfer_Seal_Number__c }" />
+                        </td>                       
+                    </tr>
+                </apex:repeat>
+            </table>
+            <br/>
+
+            <table class="table-12" border="0.25px;" style="border-right:none;border-left:none;border-bottom:none;width:100%;border-collapse: collapse">
+                <tr class="row9">
+                    <th style="text-align: center;">NOTES</th>
+                </tr>
+            </table>
+
+            <table class="table-13" border="0.25px;" style="border:none;width:100%;border-collapse: collapse;">
+                <tr class="row10">
+                    <th class="row10-col-1" style="text-align: center;">&nbsp;&nbsp;DATE</th>
+                    <th class="row10-col-2" style="text-align: center;">&nbsp;&nbsp;CREATED BY</th>
+                    <th class="row10-col-3" style="width:60%;text-align: center;">&nbsp;&nbsp;NOTES</th>
+                </tr>
+                <apex:repeat value="{!wrapper.finalnotes}" var="notes">
+                    <tr class="row7">
+                        <td style="text-align: center;">
+                            <apex:outputField value="{!notes.CreatedDate}" />
+                        </td>
+
+                        <td style="text-align: center;">
+                            <apex:outputField value="{!notes.createdby.Name}" />
+                        </td>
+                        <td style="">
+                            <apex:outputField value="{!notes.CSX_CMP_Notes__c}" />
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </div>
+        <br/>
+    </body>
+</apex:page>

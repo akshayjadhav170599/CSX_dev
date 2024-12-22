@@ -1,0 +1,28 @@
+<apex:page controller="DataDictionaryExportController" readOnly="true" showHeader="false" contentType="application/vnd.ms-excel#DataDictionaryExport.xls" cache="true">
+
+    <table style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">object Label</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Object Name</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Field Label</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Field Name</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Type</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Foreign Key</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Length</td>
+            <td style="background-color: #1797c0;color: white; font-weight: bold;border: 1px solid black;" class="field-detail-header">Is Required?</td>
+        </tr>
+        <apex:repeat value="{!objInfos}" var="obj">
+            <tr>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.label}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.Name}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.fieldLabel}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.fieldName}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.fieldType_x}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.referencedObject}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse; text-align:right;"><apex:outputText value="{!obj.fieldLength}" escape="false" /></td>
+                <td style="border: 1px solid black;border-spacing: 0;border-collapse: collapse;"><apex:outputText value="{!obj.fieldIsReq}" escape="false" /></td>
+            </tr>
+        </apex:repeat>
+        <tr> </tr>
+    </table>
+</apex:page>

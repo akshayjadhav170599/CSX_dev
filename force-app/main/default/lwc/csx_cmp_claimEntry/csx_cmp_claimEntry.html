@@ -1,0 +1,20 @@
+<template>
+    <lightning-card>
+        <div class="slds-var-p-horizontal_medium">
+            <div class="slds-col">
+                
+                <template if:true={isClaimSearch}>
+                     <c-csx_cmp_claim-search onopenmodal={openModal}></c-csx_cmp_claim-search>
+                </template>
+            </div>
+            <!--10 May change | Start-->
+            
+                <template if:true={isModelOpen}>
+                    <c-csx_cmp_claim-rec-type-selection onclosesearch={overlapSearch} is-claim-search={isClaimSearch}></c-csx_cmp_claim-rec-type-selection> 
+                        <!--is-modal-open={isModelOpen}-->
+                </template>
+           
+            <!--10 May change | End-->
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,236 @@
+<template>
+    <div class="slds-grid">
+        <div class="slds-p-vertical_small slds-col slds-size_2-of-6 slds-text-heading_medium">Claim Search</div>
+        <div class="slds-col slds-size_1-of-6 slds-col_bump-right slds-p-bottom_x-small">
+            <lightning-combobox label="Search Layout" placeholder="Select an Option" options={claimSelectOptions}
+                value={claimdefaultSelectVal} onchange={handleClaimSelection}>
+            </lightning-combobox>
+        </div>
+        <div if:true={displayCreateClaim}
+            class=" slds-p-left_xx-small slds-p-bottom_medium slds-col slds-p-top_large slds-size_1-of-8 slds-col_bump-left">
+            <lightning-button class="button" label="Create a New Claim" onclick={openModal}></lightning-button>
+        </div>
+    </div>
+    <div class="slds-box slds-p-around_none slds-scrollable_y">
+        <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                <lightning-input label="Claim #" maxlength="9" name="claimNumber" value={claimData.claimNumber}
+                    type="text" onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                <lightning-combobox label="Claim Type" placeholder="Select an Option" options={claimTypes}
+                    name="claimType" value={claimData.claimType} onkeypress={handleEnter} onchange={handleInputChange}
+                    required={requiredOnLayout.claimType}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                <c-csx_cmp_multi-select-dropdown options={statusOptions} onvaluechange={handleStatusValueChange}
+                    name="statusValues" label="Claim Status" placeholder="Select an Option"
+                    value={claimData.statusValues} onkeypress={handleEnter}>
+                </c-csx_cmp_multi-select-dropdown>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-combobox label="Potential Duplicate" options={UnreadEmailOptions} name="potentialDuplicate"
+                    value={claimData.potentialDuplicate} onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-combobox label="Unread Email" options={UnreadEmailOptions} name="unreadEmail"
+                    value={claimData.unreadEmail} onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-combobox label="Claim Priority" options={claimPriorityOptions} name="claimPriority"
+                    value={claimData.claimPriority} onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-combobox>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="date" name="claimFromDate" value={claimData.claimFromDate}
+                    onchange={handleInputChange} label="Claim Date From" date-style="short" placeholder="MM/DD/YYYY"
+                    data-id="Start_Date" onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="date" name="claimToDate" value={claimData.claimToDate} label="Claim Date To"
+                    date-style="short" placeholder="MM/DD/YYYY" data-id="End_Date" onchange={handleInputChange}
+                    onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 myclass">
+                <lightning-input type="number" maxlength="5" data-id="ageFrom" name="ageFrom" value={claimData.ageFrom}
+                    onchange={handleInputChange} label="Age From" onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="number" maxlength="5" data-id="ageTo" name="ageTo" value={claimData.ageTo}
+                    onchange={handleInputChange} label="Age To" onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <div class="slds-p-top_xx-small">
+                    <label for="deskOwner">Assigned To</label>
+                    <lightning-record-edit-form object-api-name="CSX_CMP_Desk__c">
+                        <lightning-input-field variant="label-hidden" id="deskOwner" field-name="CSX_CMP_Desk_Owner__c"
+                            value={claimData.assignedTo} name="assignedTo" onchange={handleInputChange}
+                            onkeypress={handleEnter}>
+                        </lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                <lightning-record-edit-form object-api-name="Case">
+                    <lightning-input-field field-name="CSX_CMP_Desk_Name__c" name="deskName" value={claimData.deskName}
+                        onchange={handleInputChange} onkeypress={handleEnter}>
+                    </lightning-input-field>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="number" formatter="currency" step="0.01" label="Claim Amount From"
+                    data-id="claimAmountFrom" onchange={handleInputChange} name="claimAmountFrom"
+                    onkeypress={handleEnter} value={claimData.claimAmountFrom}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="number" formatter="currency" step="0.01" label="Claim Amount To"
+                    data-id="claimAmounTo" onchange={handleInputChange} name="claimAmountTo" onkeypress={handleEnter}
+                    value={claimData.claimAmountTo}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+                <lightning-record-edit-form object-api-name="Case">
+                    <lightning-input-field field-name="CSX_CMP_Supplier_Claimant__c" name="supplierClaimantName"
+                        value={claimData.supplierClaimantName} onchange={handleInputChange} onkeypress={handleEnter}>
+                    </lightning-input-field>
+                </lightning-record-edit-form>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-record-edit-form object-api-name="Case">
+                    <lightning-input-field field-name="CSX_CMP_Customer__c" name="customerName"
+                        value={claimData.customerName} onchange={handleInputChange} onkeypress={handleEnter}>
+                    </lightning-input-field>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+        <template if:true={Freight}>
+            <c-csx_cmp_claim-search-freight onbuttondisplay={handleDisplayOfButton} onpaymentchange={handlePayment}
+                ontypechange={handleFreightClaimType} oninvoicechange={handleInvoice}
+                onsearchchange={handlerSearchValue} onvaluechange={handleResetValues} claimval={claimdefaultSelectVal}
+                onvalidateinput={validateInput}></c-csx_cmp_claim-search-freight>
+        </template>
+        <template if:true={RevenueRailroad}>
+            <c-csx_cmp_claim-search-rev-r-r onbuttondisplay={handleDisplayOfButton} onpaymentchange={handlePayment}
+                ontypechange={handleClaimType} oninvoicechange={handleInvoice} onsearchchange={handlerSearchValue}
+                onvaluechangerevrr={handleResetValues}
+                claimval={claimdefaultSelectVal}></c-csx_cmp_claim-search-rev-r-r>
+        </template>
+        <template if:true={RevenueContractRefunds}>
+            <c-csx_cmp_claim-search-rev-contract onbuttondisplay={handleDisplayOfButton} onpaymentchange={handlePayment}
+                onsearchchange={handlerSearchValue} onvaluechangerevcontract={handleResetValues}
+                claimval={claimdefaultSelectVal}></c-csx_cmp_claim-search-rev-contract>
+        </template>
+        <template if:true={RevenueOvercharge}>
+            <c-csx_cmp_claim-search-rev-overcharge onbuttondisplay={handleDisplayOfButton}
+                onpaymentchange={handlePayment} onsearchchange={handlerSearchValue}
+                onvaluechangeovercharge={handleResetValues}
+                claimval={claimdefaultSelectVal}></c-csx_cmp_claim-search-rev-overcharge>
+        </template>
+        <template if:true={openExcelComponentPayment}>
+            <c-csx_cmp_excelexport header-list={xlsHeaderPayment} filename={excelFileNamePayment}
+                worksheet-name-list={workSheetNameListPayment} sheet-data={xlsDataPayment}
+                onlibraryloaded={excelLibraryLoadedPayment}></c-csx_cmp_excelexport>
+        </template>
+        <template if:true={openExcelComponentInvoice}>
+            <c-csx_cmp_excelexport header-list={xlsHeaderInvoice} filename={excelFileNameInvoice}
+                worksheet-name-list={workSheetNameListInvoice} sheet-data={xlsDataInvoice}
+                onlibraryloaded={excelLibraryLoadedInvoice}></c-csx_cmp_excelexport>
+        </template>
+        <div class="total-count-label  slds-var-p-top_x-small">
+            <div class="slds-grid slds-text-align_center slds-var-p-vertical_large ">
+                <template if:true={showDetailButton}>
+                    <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-8 slds-large-size_1-of-8">
+                        <lightning-button label="View Payments" onclick={handlePayments} variant="brand"
+                            class="slds-var-m-left_x-small">
+                        </lightning-button>
+                    </div>
+                    <template if:true={invoiceButton}>
+                        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-8 slds-large-size_1-of-8">
+                            <lightning-button variant="brand" label="View Invoices" onclick={handleInvoices}
+                                class="slds-var-m-left_x-small" style="margin-left: 3px;">
+                            </lightning-button>
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+        <template if:true={showPayment}>
+            <div class="slds-p-bottom_small slds-var-p-top_x-small">
+                <div class="slds-box  fsm-slds-theme_backgroundColor-lightblue slds-box_xx-small">
+                    <div
+                        class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">
+                        Payment Details</div>
+                    <div class="slds-var-m-bottom_small">
+                        <lightning-button label="Export" title="Export" onclick={donwnloadPaymentRecord} variant="brand"
+                            class="slds-float_right">
+                        </lightning-button>
+                    </div>
+                    <div class="slds-var-p-bottom_x-small">
+                        <template if:false={searchresultPayment}>
+                            <c-csx_cmp_pagination records={paymentRecordToDisplay}
+                                total-records={paymentRecordToDisplay.length}
+                                onpaginatorchange={handlePaymentRecordsDisplay}>
+                            </c-csx_cmp_pagination>
+                        </template>
+                        <template if:true={searchresultPayment}>
+                            <c-csx_cmp_pagination records={paymentRecordToDisplay}
+                                total-records={paymentRecordToDisplay.length}
+                                onpaginatorchange={handlePaymentRecordsDisplay}>
+                            </c-csx_cmp_pagination>
+                        </template>
+                    </div>
+                    <lightning-datatable hide-checkbox-column="true" key-field="Id" data={paymentRecordToDisplay}
+                        columns={paymentColumns} sorted-by={sortByPayment} sorted-direction={sortDirection}
+                        onsort={doSortingPayment}>
+                    </lightning-datatable>
+                </div>
+            </div>
+        </template>
+        <template if:true={showInvoice}>
+            <div class="slds-p-top_large">
+                <div class="slds-box  fsm-slds-theme_backgroundColor-lightblue slds-box_xx-small">
+                    <div
+                        class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">
+                        Invoice Details
+                    </div>
+                    <div class="slds-var-m-bottom_small">
+                        <lightning-button label="Export" title="Export" onclick={donwnloadInvoiceRecord} variant="brand"
+                            class="slds-float_right">
+                        </lightning-button>
+                    </div>
+                    <div class="slds-var-p-bottom_x-small">
+                        <template if:false={searchresultInvoice}>
+                            <c-csx_cmp_pagination records={invoiceRecordToDisplay}
+                                total-records={invoiceRecordToDisplay.length}
+                                onpaginatorchange={handleInvoiceRecordsDisplay}>
+                            </c-csx_cmp_pagination>
+                        </template>
+                        <template if:true={searchresultInvoice}>
+                            <c-csx_cmp_pagination records={invoiceRecordToDisplay}
+                                total-records={invoiceRecordToDisplay.length}
+                                onpaginatorchange={handleInvoiceRecordsDisplay}>
+                            </c-csx_cmp_pagination>
+                        </template>
+                    </div>
+                    <lightning-datatable hide-checkbox-column="true" key-field="Id" data={invoiceRecordToDisplay}
+                        columns={InvoiceColumns} sorted-by={sortByInvoice} sorted-direction={sortDirection}
+                        onsort={doSortingInvoice}>
+                    </lightning-datatable>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,46 @@
+<template>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">Search for a
+            Shipment
+        </div>
+    </div>
+
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-textarea label="URRWIN #/s" value={shipmentSearch.urrwinNumber} name="urrwinNumber"
+                onchange={handleUrrwinChange} disabled={disableUrrwinNumber} pattern="[a-zA-z0-9]+"
+                style="height: 100px;" autocomplete="off"></lightning-textarea>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-input label="Equipment ID" value={shipmentSearch.equipmentId} onchange={handleInputChange}
+                pattern="[a-zA-z0-9 ]+" maxlength="11" name="equipmentId" disabled={disableEquipmentId}
+                autocomplete="off"></lightning-input>
+            <br>
+            <lightning-input label="Waybill Number" value={shipmentSearch.waybillNumber} name="waybillNumber"
+                maxlength="6" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Please enter valid number"
+                formatter="decimal" onchange={handleInputChange} disabled={disableWaybillNumber}
+                autocomplete="off"></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-align-middle">
+            <lightning-input type="Date" label="Waybill Date" value={shipmentSearch.startDate} name="startDate"
+                date-style="short" placeholder="MM/DD/YYYY" onchange={handleInputChange} disabled={disableWaybillDate}
+                required={waybillDateReq} autocomplete="off"></lightning-input>
+        </div>
+    </div>
+    <div class="slds-grid slds-gutters slds-var-m-left_small">
+        <div class="slds-col">
+            <div if:true={nosearchCriteria} class="slds-text-color_error">Please enter atleast one search criteria</div>
+        </div>
+    </div>
+    <div class="slds-grid slds-gutters slds-var-m-left_small">
+        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+            <lightning-button label={label.reset} onclick={reset} class="slds-var-p-right_large"></lightning-button>
+            <lightning-button label="Add Shipment" variant="brand" onclick={addShipment}
+                class="slds-var-p-left_large"></lightning-button>
+            <lightning-spinner if:true={isSubmitting}></lightning-spinner>
+        </div>
+    </div>
+
+</template>

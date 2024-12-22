@@ -1,0 +1,106 @@
+<template>
+
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+        class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+
+            <div class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                    <lightning-icon size="small" icon-name="utility:close" variant="inverse"
+                        onclick={closeModal}></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Add New Shipment</h1>
+            </div>
+
+            <div class="slds-modal__content" id="modal-content-id-1">
+                <lightning-card>
+                    <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="URRWIN Number" name="urrwinNumber"
+                                onchange={handleInputChange}  pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Please enter valid number" 
+                                formatter="decimal" min="0" maxlength="9" value={newShipment.urrwinNumber}  
+                                message-when-too-long="URRWIN Number must 9 characters or less"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="URRWIN Date" name="urrwinDate" onchange={handleInputChange}
+                                value={newShipment.urrwinDate} type="Date" max={maximumDate} placeholder="MM/DD/YYYY"
+                                date-style="short"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Commodity Number" name="stcc" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Please enter valid number" 
+                            formatter="decimal" min="0" onchange={handleInputChange} maxlength="7"
+                            value={newShipment.stcc} message-when-too-long="Commodity Number must 10 characters or less"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Description" name="description"
+                                onchange={handleInputChange} type="Text" maxlength="255" value={newShipment.description}
+                                message-when-too-long="Description must 255 characters or less"></lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Equipment Initial" required name="equipmentInitial"
+                                value={newShipment.equipmentInitial} onchange={handleInputChange} type="Text" pattern="[a-zA-z]+" message-when-pattern-mismatch="Please enter valid data"
+                                minlength="2" maxlength="4"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Equipment Number" required name="equipmentNumber" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Please enter valid number" 
+                            formatter="decimal" min="0" value={newShipment.equipmentNumber} onchange={handleInputChange} 
+                                maxlength="6"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Waybill Number" required name="waybillNumber" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Please enter valid number" 
+                            formatter="decimal" min="0"  maxlength="6" value={newShipment.waybillNumber} onchange={handleInputChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Waybill Date" required name="waybillDate" 
+                                value={newShipment.waybillDate} onchange={handleInputChange} type="Date" max={maximumDate}
+                                date-style="short" placeholder="MM/DD/YYYY"></lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Claim Amount" required name="claimAmount"
+                                value={newShipment.claimAmount} onchange={handleInputChange} type="Number"
+                                formatter="Currency" step="any"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                            <lightning-input label="Total Cars" required name="totalCars" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Please enter valid number" 
+                            formatter="decimal" min="0" max="9999" onchange={handleInputChange} value={newShipment.totalCars}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_2-of-4 slds-medium-size_2-of-4 slds-large-size_2-of-4">
+                            <c-csx_cmp_display-city-state city-label="Origin City" state-label="Origin State"
+                                is-state-required=true is-city-required=true onselectedcity={handleCityChange}
+                                onselectedstate={handleStateChange}></c-csx_cmp_display-city-state>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                        <div
+                            class="slds-col slds-size_2-of-4 slds-medium-size_2-of-4 slds-large-size_2-of-4 slds-var-m-top_x-small">
+                            <c-csx_cmp_display-city-state city-label="Destination City" state-label="Destination State"
+                                is-state-required=true is-city-required=true onselectedcity={handleCityChange}
+                                onselectedstate={handleStateChange}></c-csx_cmp_display-city-state>
+                        </div>
+                    </div>
+                </lightning-card>
+            </div>
+
+            <div class="slds-modal__footer">
+                <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small">
+                    <div class="slds-col slds-var-p-bottom_small slds-float_left">
+                        <lightning-button label="Reset" onclick={resetForm}
+                            class="slds-var-p-right_large"></lightning-button>
+                        <lightning-button label="Add to Claim" variant="brand" onclick={addToClaim}
+                            class="slds-var-p-left_large"></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+
+</template>

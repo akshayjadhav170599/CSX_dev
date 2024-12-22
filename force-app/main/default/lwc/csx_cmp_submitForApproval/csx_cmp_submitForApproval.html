@@ -1,0 +1,61 @@
+<template>
+	<!-- modal header start -->
+	<header class="slds-modal__header">
+		<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Claim Approval Process.</h2>
+	</header>
+
+	<!-- modal body start -->
+	<div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+		<div class="slds-align_absolute-left slds-p-left_xx-large">
+			<ul class="slds-list_dotted">
+				<template for:each={qualifiedData} for:item="qdata">
+					<div key={qdata.strKey}>
+						<li class="slds-text-color_success">{qdata.strValue}</li>
+					</div>
+				</template>
+				<template for:each={unQualifiedData} for:item="uqdata">
+					<div key={uqdata.strKey}>
+						<li class="slds-text-color_error">{uqdata.strValue}</li>
+						<ul>
+							<li class="slds-text-color_error slds-text-body_small">
+								<i>({uqdata.strErrorMessage})</i>
+							</li>
+						</ul>
+					</div>
+				</template>
+			</ul>
+		</div>
+	</div>
+
+	<footer class="slds-modal__footer">
+		<template if:true={isOnHold}>
+			<div>
+				<h1 class="slds-text-heading_medium slds-hyphenate slds-show_inline-block slds-m-right_medium">
+					Keep the claim on hold ?
+				</h1>
+
+				<lightning-button
+					label="Yes"
+					onclick={keepClaimOnHold}
+					class="slds-var-p-right_x-large slds-button_neutral"
+				>
+				</lightning-button>
+
+				<lightning-button
+					variant="brand"
+					label="No"
+					onclick={callAutoApprovalProcess}
+					class="slds-var-p-right_x-large"
+				>
+				</lightning-button>
+			</div>
+		</template>
+		<template if:true={checkIfFailed}>
+			<div class="slds-text-color_error slds-text-heading_small">	
+				<h1>
+					Kindly address the errors and submit for approval again.
+				</h1>
+			</div>
+		</template>
+	</footer>
+</template>

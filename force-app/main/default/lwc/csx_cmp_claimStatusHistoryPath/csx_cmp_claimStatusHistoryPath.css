@@ -1,0 +1,9 @@
+.ulClass {
+    width: 100%;
+    list-style: none;
+}
+
+.liClass {
+    text-align: center;
+    width: 150px;
+}

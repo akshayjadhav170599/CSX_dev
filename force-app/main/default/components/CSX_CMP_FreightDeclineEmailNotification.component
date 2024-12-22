@@ -1,0 +1,41 @@
+<apex:component controller="CSX_CMP_DeclineLetterController" access="global">
+    <apex:attribute name="claimId" type="Id" description="CaseId of Decline letter" assignTo="{!caseId}" access="global"/>
+    <html>
+        <style>
+            body, td, div, span, b {
+            font-size: 12px;
+            }         
+        </style>
+        
+        <body>
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                     <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                    </td>
+                    
+                </tr>
+            </table>
+            <br/><br/>            
+            
+            <div>
+                Dear Claimant,
+            </div><br/>
+            <div>
+                Please find attached regarding {!claimWrapper.csxClaimNumber}.
+            </div><br/>
+            
+            <apex:outputPanel rendered="{!claimWrapper.recordType != 'Railroad Revenue'}">
+            <div>
+                You can <b>Reply All</b> to this email for any questions.
+            </div><br/>
+			</apex:outputPanel>
+
+         <!--   <div>
+                You can <b>Reply All</b> to this email for any questions.
+            </div><br/> -->
+            <br/>
+            
+        </body>
+    </html>
+</apex:component>

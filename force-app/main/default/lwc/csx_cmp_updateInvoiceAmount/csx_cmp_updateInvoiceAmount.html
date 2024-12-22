@@ -1,0 +1,59 @@
+<template>
+    
+    <lightning-card class="slds-card_border" title="" variant="Narrow">
+        <template if:true={displaycontainer}>
+        <div class="slds-text-align_center slds-border_bottom slds-var-p-vertical_small">
+            <h1 class="slds-text-heading_medium slds-text-title_bold">Update Invoice Amount</h1>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-p-around_x-small">
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-text-title_bold slds-m-left_x-small">
+                Invoice #
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                {currentInvoiceNumber}
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-p-around_x-small">
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-text-title_bold slds-m-left_x-small">
+                Current Invoice Amount
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-formatted-number value={currentInvoiceAmount} currency-code="USD"
+                    format-style="currency"></lightning-formatted-number>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-p-around_x-small">
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-text-title_bold slds-m-left_x-small">
+                New Invoice Amount
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input formatter="currency" type="number" value={newInvoiceAmount}
+                    onchange={handleInvoiceAmountChange} variant="label-hidden"></lightning-input>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-grid_align-end slds-var-p-around_x-small">
+            <div class="slds-col">
+                <lightning-button label="Submit" variant="brand" onclick={handelSubmit}
+                    class="slds-var-p-right_large"></lightning-button>
+                <lightning-button label="Cancel" onclick={closeQuickAction}
+                    class="slds-var-p-left_large slds-m-right_x-small"></lightning-button>
+
+            </div>
+        </div>
+    </template>
+    <template if:true={displayErrorContainer}>
+            <div class="slds-grid slds-gutters slds-var-p-around_x-small slds-m-left_xxx-small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+            AR Invoice Amount should not be updated if Status is {currentStatus}.
+        </div>
+    </div>
+    <div class="slds-grid slds-gutters slds-grid_align-end slds-var-p-around_x-small">
+        <div class="slds-col">
+            <lightning-button label="Ok" variant="brand" onclick={closeQuickAction}
+                class="slds-var-p-right_large"></lightning-button>
+        </div>
+    </div>
+    </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,150 @@
+<template>
+
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <div class="slds-grid slds-gutters slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-text-heading_medium slds-var-m-left_small slds-var-p-bottom_small fsm-bold-text">L&D
+            Details
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox label="L&D Type" name="reportType" placeholder="Select an Option" options={typeOptions}
+                value={inTransit.reportType} required onchange={handleInputChange} disabled>
+            </lightning-combobox>
+        </div>
+
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-var-p-top_xx-large">
+            <lightning-input name="noWaybillFlag" label="No Waybill" value={inTransit.noWaybillFlag} type="checkbox"
+                onchange={handleInputChange}></lightning-input>
+        </div>
+    </div>
+
+    <div if:false={hidenoWaybill}>
+        <c-csx_cmp_shipment-Search onsendshipments={handleShipmentsReceived}
+            display-vin=true></c-csx_cmp_shipment-Search>
+    </div>
+
+    <template if:true={hidenoWaybill}>
+        <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input data-id="equipNo" name="equipNo" label="Equipment ID" type="Text" maxlength="11"
+                    minlength="3" autocomplete="off" value={inTransit.equipNo} onchange={handleInputChange}
+                    required={equipNoRequired}></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input name="vin" label="VIN" value={inTransit.vin} maxlength="17" minlength="17"
+                    autocomplete="off" onchange={handleInputChange} required={vinRequired} data-id="vin">
+                </lightning-input>
+            </div>
+        </div>
+    </template>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Incident Location
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-record-edit-form object-api-name="CSX_CMP_LD_Report__c">
+                <label for="incidentLocation">Location</label>
+                <div class="slds-var-p-top_x-small">
+                    <lightning-input-field field-name="CSX_CMP_Incident_Location__c" onchange={handleInputChange}
+                        name="incidentLocation" variant="label-hidden" id="incidentLocation">
+                    </lightning-input-field>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+        <div if:false={inTransit.incidentLocation}
+            class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-input type="text" label="Region" disabled></lightning-input>
+        </div>
+        <div if:true={inTransit.incidentLocation}
+            class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-record-edit-form record-id={inTransit.incidentLocation}
+                object-api-name="CSX_CMP_City_State_Master__c">
+                <label for="Region">Region</label>
+                <div class="slds-var-p-top_x-small">
+                    <lightning-input-field field-name="CSX_CMP_Operating_Region__c" variant="label-hidden" id="Region"
+                        disabled></lightning-input-field>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Incident Data
+        </div>
+    </div>
+
+    <template if:false={isRecoveryType}>
+        <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox name="damageReason" label="Issue" placeholder="Select an Option"
+                    options={issueOptions} value={inTransit.damageReason} required onchange={handleInputChange}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox name="cause" label="Cause" placeholder="Select an Option" options={causeOptions}
+                    value={inTransit.cause} required onchange={handleInputChange}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox name="incidentAction" label="Action" placeholder="Select an Option"
+                    options={actionOptions} value={inTransit.incidentAction} required
+                    onchange={handleInputChange}></lightning-combobox>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={isRecoveryType}>
+        <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox name="damageReason" label="Issue" placeholder="Select an Option"
+                    options={issueOptions} value={inTransit.damageReason} required onchange={handleInputChange}
+                    disabled>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox name="cause" label="Cause" placeholder="Select an Option" options={causeOptions}
+                    value={inTransit.cause} required onchange={handleInputChange} disabled>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox name="incidentAction" label="Action" placeholder="Select an Option"
+                    options={actionOptions} value={inTransit.incidentAction} required onchange={handleInputChange}
+                    disabled></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-input name="recoveryAmount" label="Recovery Amount" type="number" formatter="currency"
+                    step="any" onchange={handleInputChange} value={inTransit.recoveryAmount}></lightning-input>
+            </div>
+        </div>
+    </template>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">Comments
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4 slds-large-size_3-of-4 ">
+            <lightning-textarea name="incidentComments" value={inTransit.incidentComments} onchange={handleInputChange}
+                label="Incident Comments"></lightning-textarea>
+        </div>
+    </div>
+    <div class="slds-grid slds-gutters slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+            <lightning-button label={label.submit} variant="brand" onclick={submit}
+                class="slds-var-p-left_large"></lightning-button>
+        </div>
+        <div class="slds-col slds-var-p-bottom_small slds-float_right">
+            <lightning-button label={label.reset} onclick={resetPage} class="slds-var-p-right_large"></lightning-button>
+        </div>
+    </div>
+
+</template>

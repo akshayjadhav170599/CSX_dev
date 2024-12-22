@@ -1,0 +1,25 @@
+<template>
+    <lightning-card>
+        <div class="slds-var-p-horizontal_medium">
+            <c-csx_cmp_ldr-create-type-selection-popup is-modal-open={displayModal} onclosemodal={closeModal}
+                onmodalapply={openSelectedType}></c-csx_cmp_ldr-create-type-selection-popup>
+
+            <template if:true={displayCustomer}>
+                <c-csx_cmp_ldr-creation-customer selected-type={selectedOption.value} 
+                    oncreation={sendtoConfirmation}></c-csx_cmp_ldr-creation-customer><!--onbacktosearch={backToSearch}-->
+            </template>
+            <template if:true={displayIntransit}>
+                <c-csx_cmp_ldr-creation-in-transit selected-type={selectedOption.value} 
+                    oncreation={sendtoConfirmation}></c-csx_cmp_ldr-creation-in-transit><!--onbacktosearch={backToSearch}-->
+            </template>
+            <template if:true={displayDerailment}>
+                <c-csx_cmp_ldr-creation-derailment selected-type={selectedOption.value} 
+                    oncreation={sendtoConfirmation}></c-csx_cmp_ldr-creation-derailment><!--onbacktosearch={backToSearch}-->
+            </template>
+            <template if:true={ldrNumber}>
+                <c-csx_cmp_ldr-creation-confirmation ldr-no={ldrNumber} ecm-link={ecmLink}
+                    ldr-id={ldrId}></c-csx_cmp_ldr-creation-confirmation>
+            </template>
+        </div>
+    </lightning-card>
+</template>

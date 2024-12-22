@@ -1,0 +1,210 @@
+<template>
+
+    <div class="slds-var-p-horizontal_medium">
+        <div class="slds-grid">
+            <div class="slds-p-top_small slds-col slds-size_2-of-6 slds-text-heading_medium slds-var-p-bottom_medium">
+                L&D Reports
+            </div>
+            <template if:true={displayCreateNew}>
+                <div class="slds-p-bottom_medium slds-col slds-p-top_large slds-size_1-of-6 slds-col_bump-left">
+                    <lightning-button class="slds-float_right" label="New L&D Report" onclick={openModal}
+                        variant="Brand">
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+
+
+        <div class="slds-p-left_small slds-box">
+            <div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_small ">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input value={lndData.reportNumber} label="L&D Report #" name="reportNumber" type="text"
+                        onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                    <lightning-combobox label="L&D Type" placeholder="Select an Option" options={typeOptions}
+                        value={lndData.reportType} name="reportType" onchange={handleInputChange}
+                        onkeypress={handleEnter}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input type="date" name="startDate" label="Incident Date From" placeholder="MM/DD/YYY"
+                        onchange={handleInputChange} value={lndData.startDate} date-style="short" data-id="Start_Date">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input disabled={showEndDate} type="date" label="Incident Date To" name="endDate"
+                        placeholder="MM/DD/YYYY" onchange={handleInputChange} value={lndData.endDate} date-style="short"
+                        data-id="End_Date">
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-record-edit-form object-api-name="CSX_CMP_LD_Report__c">
+                        <lightning-input-field field-name="CSX_CMP_Incident_Location__c"
+                            value={lndData.incidentLocation} onchange={handleInputChange} name="incidentLocation">
+                        </lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                    <lightning-combobox label="Incident State" placeholder="Select a State" options={stateOptions}
+                        value={lndData.state} name="state" onchange={handleInputChange} onkeypress={handleEnter}>
+                    </lightning-combobox>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_small ">
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                    <c-csx_cmp_multi-select-dropdown options={statusOptions} onvaluechange={handleStatusValueChange}
+                        name="status" label="L&D Status" placeholder="Select an Option" value={lndData.status}
+                        onkeypress={handleEnter}>
+                    </c-csx_cmp_multi-select-dropdown>
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input value={lndData.equipmentInitial} maxlength="4" name="equipmentInitial"
+                        label="Equipment Initial" type="text" onchange={handleInputChange} data-id="equipInitial">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input value={lndData.equipmentNumber} maxlength="6" name="equipmentNumber"
+                        label="Equipment Number" type="text" onchange={handleInputChange} data-id="equipNumber">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input value={lndData.vinNumber} name="vinNumber" minlength="8" maxlength="17"
+                        data-id="vinNumber" label="VIN #" type="text" onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+                <div if:false={isLoaded} class="spinner-container">
+                    <lightning-spinner alternative-text="Loading..." variant="brand">
+                    </lightning-spinner>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input type="text" label="Shipper" value={lndData.shipper} onchange={handleInputChange}
+                        name="shipper" onkeypress={handleEnter}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6  ">
+                    <lightning-combobox label="Incident Region" placeholder="Select a Region" options={regionOptions}
+                        value={lndData.region} name="region" onchange={handleInputChange} onkeypress={handleEnter}>
+                    </lightning-combobox>
+                </div>
+
+            </div>
+            <div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_small ">
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-combobox label="Salvage?" options={salvageOptions} name="salvage" value={lndData.salvage}
+                        onchange={handleInputChange} onkeypress={handleEnter}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-record-edit-form object-api-name="CSX_CMP_Salvage__c">
+                        <lightning-input-field field-name="CSX_CMP_Salvor_Name__c" value={lndData.salvorName}
+                            onchange={handleInputChange} onkeypress={handleEnter} name="salvorName">
+                        </lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input type="number" formatter="currency" step="0.01" label="Salvage Amount (From)"
+                        name="salvageAmountFrom" onchange={handleInputChange} onkeypress={handleEnter}
+                        value={lndData.salvageAmountFrom} data-id="salvage_amount_from">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input type="number" formatter="currency" step="0.01" label="Salvage Amount (To)"
+                        name="salvageAmountTo" onchange={handleInputChange} onkeypress={handleEnter}
+                        value={lndData.salvageAmountTo} data-id="salvage_amount_to">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input type="text" label="STCC" value={lndData.stcc} onchange={handleInputChange}
+                        name="stcc" onkeypress={handleEnter}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-record-edit-form object-api-name="CSX_CMP_LD_Report__c">
+                        <lightning-input-field field-name="CSX_CMP_Incident_Manager__c" value={lndData.incidentMgr}
+                            onchange={handleInputChange} onkeypress={handleEnter} name="incidentMgr">
+                        </lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+
+            </div>
+            <div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_small ">
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <lightning-input value={lndData.rarNumber} name="rarNumber" maxlength="17" label="RAR #" type="text"
+                        onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-text-align_center slds-var-p-vertical_large ">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                <lightning-button disabled={disableResetButton} label={label.reset} onclick={handleResetClick}
+                    class="slds-var-p-right_x-large" variant="brand-outline">
+                </lightning-button>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                <lightning-button disabled={disableSearchButton} variant="brand" label="Search"
+                    onclick={handleSearchClick} class="slds-var-p-right_x-large">
+                </lightning-button>
+            </div>
+            <template if:true={openExcelComponent}>
+                <c-csx_cmp_excelexport header-list={xlsHeader} filename={excelFileName}
+                    worksheet-name-list={workSheetNameList} sheet-data={xlsData} onlibraryloaded={excelLibraryLoaded}>
+                </c-csx_cmp_excelexport>
+            </template>
+            <template if:true={openExcelComponentDetail}>
+                <c-csx_cmp_excelexport header-list={xlsHeaderDetail} filename={label.LndReportDamages}
+                    worksheet-name-list={workSheetNameListDetail} sheet-data={xlsDataDetail}
+                    onlibraryloaded={excelLibraryLoadedDetail}>
+                </c-csx_cmp_excelexport>
+            </template>
+        </div>
+        <template if:true={showTableData}>
+            <div id="headerTableId" class="slds-box  slds-box_xx-small">
+                <div class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">
+                    Search Results</div>
+                <div class="slds-var-m-bottom_small">
+                    <lightning-button label="Export" title="Export" onclick={dowloadRecords} variant="brand"
+                        class="slds-float_right">
+                    </lightning-button>
+                </div>
+                <template if:false={searchResults}>
+                    <c-csx_cmp_pagination if:true={records} records={records} total-records={records.length}
+                        onpaginatorchange={handleLDRRecordsDisplay}>
+                    </c-csx_cmp_pagination>
+                </template>
+                <template if:true={searchResults}>
+                    <c-csx_cmp_pagination if:true={records} records={records} total-records={records.length}
+                        onpaginatorchange={handleLDRRecordsDisplay}>
+                    </c-csx_cmp_pagination>
+                </template>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_10-of-12">
+                        <lightning-datatable key-field="datatable" hide-checkbox-column="true" data={recordsToDisplay}
+                            columns={ldrColumns} sorted-by={sortByDetail} sorted-direction={sortDirection}
+                            onrowaction={handleRowLinkClickSelection} onsort={doSortingDetail} wrap-text-max-lines="1">
+                        </lightning-datatable>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-datatable key-field="datatable" hide-checkbox-column="true" data={recordsToDisplay}
+                            columns={ldrButtonColumns} sorted-by={sortByDetail} sorted-direction={sortDirection}
+                            onrowaction={handleRowLinkClickSelection} onsort={doSortingDetail}>
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={EquipmentPopup}>
+            <c-csx_cmp_information-popup is-modal-open={EquipmentPopup} information-data={equipListSelected}
+                ondetailchange={closeEquipmemtModal} information-coloumn={equipmentColoumns}
+                information-heading="Equipment Details">
+            </c-csx_cmp_information-popup>
+        </template>
+        <template if:true={shownoRecordError}>
+            <div class="slds-text-color_error slds-var-p-top_x-small">No records found</div>
+        </template>
+    </div>
+</template>

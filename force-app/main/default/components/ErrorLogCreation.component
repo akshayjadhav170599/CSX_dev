@@ -1,0 +1,55 @@
+<apex:component controller="ErrorLogCreation" access="global">
+    <apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!errorId}" access="global"/>
+    <html>
+        <body>
+               
+            <div>
+                Please check the error
+            </div>
+            <br/><br/>
+            <div>
+                Please find below the claim summary.
+                <div><span style="font-size: 18px;"><b>&nbsp;Claim Summary</b></span></div>
+                <table style="width: 30%;">
+                    <tr>
+                        <td> <b> Class Name :</b> </td>
+                        <td> {!claimWrapper.className} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Exception Type:</b> </td>
+                        <td> {!claimWrapper.exceptionType} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Execution Time:</b> </td>
+                        <td> {!claimWrapper.executionTime} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Message:</b> </td>
+                        <td>{!claimWrapper.message}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Method Name:</b> </td>
+                        <td> {!claimWrapper.methodName} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Object Name:</b> </td>
+                        <td> {!claimWrapper.objectName} </td>
+                    </tr><tr>
+                        <td> <b> Parameters :</b> </td>
+                        <td> {!claimWrapper.parameters} </td>
+                    </tr><tr>
+                        <td> <b> Stack Trace:</b> </td>
+                        <td> {!claimWrapper.stackTrace} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> User :</b> </td>
+                        <td> {!claimWrapper.user} </td>
+                    </tr>
+                </table> <br/><br/>
+            </div>
+            
+            <br/>            
+        </body>
+    </html> 
+</apex:component>

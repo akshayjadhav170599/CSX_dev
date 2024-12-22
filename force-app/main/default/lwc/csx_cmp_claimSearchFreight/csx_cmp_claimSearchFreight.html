@@ -1,0 +1,143 @@
+<template>
+    <div if:false={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" label="Equipment Initial" maxlength="4" onchange={handleInputChange}
+                onkeypress={handleEnter} name="equipmentInitial" value={claimData.equipmentInitial}
+                data-id="equipInitial">
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" maxlength="6" label="Equipment Number" name="equipmentNumber"
+                value={claimData.equipmentNumber} onchange={handleInputChange} onkeypress={handleEnter}
+                data-id="equipNumber">
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" label="VIN Number" name="vinNumber" value={claimData.vinNumber} maxlength="17"
+                minlength="8" data-id="vinNumber" onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" maxlength="9" label="Netting Claim #" name="nettingClaimNumber"
+                value={claimData.nettingClaimNumber} onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" maxlength="9" label="Service Period" name="servicePeriod"
+                value={claimData.servicePeriod} onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" maxlength="8" label="L&D Report #" name="lDRNumber" value={claimData.lDRNumber}
+                onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+    </div>
+    <div class="slds-grid slds-wrap slds-gutters slds-text-align_center slds-var-p-vertical_medium ">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+            <lightning-button label="Reset" onclick={handleResetClick} variant="brand-outline"
+                class="slds-var-m-left_x-small" disabled={disableResetButton}>
+            </lightning-button>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12 slds-m-left_x-large">
+            <lightning-button variant="brand" label="Search" onclick={handleSearchClaim} class="slds-var-m-left_x-small"
+                disabled={disableSearchButton}>
+            </lightning-button>
+        </div>
+        <template if:true={isSearchResultAvailable}>
+            <template if:true={displayCreateClaimButton}>
+                <div class="slds-col_bump-left slds-size_1-of-1 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+                    <lightning-button label="Create Recharge" onclick={handleRecharge} class="slds-var-m-left_x-small"
+                        disabled={disableRechargeButton}>
+                    </lightning-button>
+                </div>
+            </template>
+        </template>
+        <template if:true={openExcelComponent}>
+            <c-csx_cmp_excelexport header-list={xlsHeader} filename={excelFileName}
+                worksheet-name-list={workSheetNameList} sheet-data={xlsData}
+                onlibraryloaded={excelLibraryLoaded}></c-csx_cmp_excelexport>
+        </template>
+    </div>
+    <template if:true={showTable}>
+        <div class=" slds-box  slds-box_xx-small" id="headerTableId">
+            <div class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">Search
+                Results</div>
+            <div class="slds-var-m-bottom_small">
+                <lightning-button variant="brand" label="Export" title="Export Data" onclick={downloadClaimData}
+                    class="slds-var-m-right_x-small slds-float_right" disabled={disableExportButton}>
+                </lightning-button>
+            </div>
+            <template if:false={searchResults}>
+                <c-csx_cmp_pagination records={records} total-records={records.length}
+                    onpaginatorchange={handleClaimRecordsDisplay}> </c-csx_cmp_pagination>
+            </template>
+            <template if:true={searchResults}>
+                <c-csx_cmp_pagination records={records} total-records={records.length}
+                    onpaginatorchange={handleClaimRecordsDisplay} onpagesize={handlePageSize}> </c-csx_cmp_pagination>
+            </template>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_11-of-12">
+                    <lightning-datatable key-field="Id" data={recordsToDisplay} columns={columns}
+                        onrowaction={handleRowLinkClickSelection} onrowselection={handleSelectedRows}
+                        sorted-by={sortByDetail} sorted-direction={sortDirection} onsort={doSortingDetail}>
+                    </lightning-datatable>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning-datatable key-field="Id" hide-checkbox-column="true" data={recordsToDisplay}
+                        columns={buttonColumns} onrowaction={handleRowLinkClickSelection}
+                        onrowselection={handleSelectedRows} sorted-by={sortByDetail} sorted-direction={sortDirection}
+                        onsort={doSortingDetail}>
+                    </lightning-datatable>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={displayRechargeCommentPopup}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close">
+                        <lightning-icon size="small" icon-name="utility:close" variant="inverse" onclick={closeModal}>
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Recharge Claim Creation</h1>
+                </div>
+                <div class="slds-modal__content" id="modal-content-id-1">
+                    <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                            <label for="rechargeReason" class="slds-text-title_bold slds-text-heading_small">Recharge
+                                Reason</label>
+                            <lightning-textarea id="rechargeReason" name="rechargeReason" label="Recharge Reason"
+                                value={rechargeReason} variant="label-hidden" required
+                                onchange={handleInputChange}></lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small">
+                        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+                            <lightning-button label="Submit" variant="brand" class="slds-var-p-right_large"
+                                onclick={createRechargeClaim}></lightning-button>
+                            <lightning-button label="Cancel" class="slds-var-p-left_large"
+                                onclick={closeModal}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+    <template if:true={shownoRecordError}>
+        <div
+            class="slds-text-color_error slds-var-p-top_x-small slds-m-top_x-small slds-p-left_small slds-text-heading_small fsm-bold-text">
+            No records found</div>
+    </template>
+</template>

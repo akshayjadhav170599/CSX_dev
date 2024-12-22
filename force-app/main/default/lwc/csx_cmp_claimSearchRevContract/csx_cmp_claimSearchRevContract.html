@@ -1,0 +1,77 @@
+<template>
+    <div if:false={isLoaded} class="slds-is-relative">
+        <lightning-spinner
+            alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" max-length="15" label="Contract #" onchange={handleInputChange}
+                    name="contractNumber" onkeypress={handleEnter}  value={revContract.contractNumber}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input formatter="decimal"  pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Invalid Value" label="National Account #" onchange={handleInputChange}
+                    name="nationalAccNum" onkeypress={handleEnter}  value={revContract.nationalAccNum}>
+                </lightning-input>
+            </div>  
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" label="Supplier/Claimant Site" onchange={handleInputChange} value={revContract.claimantSiteRevContract}
+                    name="supplierClaimantSite"  onkeypress={handleEnter} >
+                </lightning-input>
+            </div>
+        </div>
+    <div class="slds-grid slds-wrap slds-gutters slds-text-align_center slds-var-p-vertical_medium  ">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+            <lightning-button label="Reset" onclick={handleResetClick} variant="brand-outline"
+                class="slds-var-m-left_x-small" disabled={disableResetButton}>
+            </lightning-button>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12 slds-m-left_x-large">
+            <lightning-button variant="brand" label="Search" onclick={handleSearchClaim}
+                class="slds-var-m-left_x-small" disabled={disableSearchButton}>
+            </lightning-button>
+        </div>              
+        <template if:true={openExcelComponent}>
+            <c-csx_cmp_excelexport header-list={xlsHeader} filename={excelFileName}
+                worksheet-name-list={workSheetNameList} sheet-data={xlsData}
+                onlibraryloaded={excelLibraryLoaded}></c-csx_cmp_excelexport>
+        </template>
+    </div>
+    <template if:true={showTable}>           
+        <div class=" slds-box  slds-box_xx-small" id="headerTableId">
+            <div class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">Claim Results</div>
+                <div class="slds-var-m-bottom_small" >
+                    <lightning-button variant="brand" label="Export" title="Export Data" onclick={downloadClaimData}
+                    class="slds-var-m-right_x-small slds-float_right">
+                    </lightning-button>
+                </div>            
+                <template if:false={searchResults}>
+                    <c-csx_cmp_pagination records={records} total-records={records.length}
+                        onpaginatorchange={handleClaimRecordsDisplay}> 
+                    </c-csx_cmp_pagination>
+                </template>
+                <template if:true={searchResults}>
+                    <c-csx_cmp_pagination records={records} total-records={records.length}
+                        onpaginatorchange={handleClaimRecordsDisplay}> </c-csx_cmp_pagination>
+                </template>              
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_11-of-12">
+                    <lightning-datatable key-field="Id" data={recordsToDisplay} columns={columns}
+                    onrowaction={handleRowLinkClickSelection} onrowselection={handleSelectedRows} sorted-by={sortByDetail}
+                    sorted-direction={sortDirection} onsort={doSortingDetail}> 
+                    </lightning-datatable> 
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning-datatable key-field="Id" data={recordsToDisplay} columns={buttonColumns}
+                    onrowaction={handleRowLinkClickSelection} onrowselection={handleSelectedRows} sorted-by={sortByDetail}
+                    sorted-direction={sortDirection} hide-checkbox-column="true" onsort={doSortingDetail}> 
+                </lightning-datatable> 
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={shownoRecordError}>
+        <div class="slds-text-color_error slds-var-p-top_x-small slds-m-top_x-small slds-p-left_small slds-text-heading_small fsm-bold-text">No records found</div>   
+    </template>
+</template>

@@ -1,0 +1,132 @@
+<apex:page showHeader="false" sidebar="false" renderAs="pdf" controller="CSX_CMP_AbstractPDFController" showQuickActionVfHeader="false">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <style type="text/css">
+       @page {
+       size: A4;
+            margin:0 20mm;
+            padding-top: 10mm;
+    }
+     
+    </style>
+    <body>
+        <table style="width:100%">
+            <tr>
+                <td colspan="5" >
+                <!--    <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="100" height="40"/> -->
+                    <apex:image id="theImage"  width="120px" value="{!csxLogo}"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <span style="padding-left: 100px;"><b>712 – CSX TRANSPORTATION, INC -712</b></span>      
+                </td>
+                <td>
+                    <b> {!servicePeriod} </b>
+                </td>
+            </tr>                    
+            <tr>
+                <td colspan="5" style="text-align: center; padding-top:10px;">
+                    <apex:outputpanel rendered="{!type == 'Freight'}">
+                        <b>ABSTRACT OF LOSS AND DAMAGE DISTRIBUTION STATEMENTS</b>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!type == 'Revenue'}">
+                        <b>ABSTRACT OF DISTRIBUTION AND RE-CHARGE STATEMENTS-OVERCHARGES</b>
+                    </apex:outputpanel>
+                </td>
+            </tr>   
+            <tr>
+                <td style=" padding-top:10px;" colspan="5">
+                    <span><b>To:</b></span>&nbsp;&nbsp;&nbsp;
+                    <apex:outputText value="{!claimWrapperList[0].companyName}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style=" padding-top:15px; letter-spacing: 10px;">
+                        <apex:outputpanel rendered="{!type == 'Freight'}">
+                            <b>HEREWITH THE FOLLOWING CLAIM DISTRIBUTION STATEMENTS AND CLAIM PAPERS SHOWING AMOUNTS CHARGED YOUR COMPANY IN THE SETTLEMENTS OF SUCH FREIGHT CLAIMS</b>
+                        </apex:outputpanel>
+                        <apex:outputpanel rendered="{!type == 'Revenue'}">
+                            <b>HEREWITH THE FOLLOWING DISTRIBUTION AND RE-CHARGE STATEMENTS WITH CLAIM PAPERS IN SUPPORT THEREOF , AS PROVIDED IN AAR RULES ACCOUNTING DIVISION.</b>
+                        </apex:outputpanel>
+                    </td>
+            </tr>
+        </table>
+        <br/>
+        <table style="width: 100%;" border="0" cellspacing="0" cellpadding="0">
+            <tr >
+                <th style=" border-bottom: 2px solid #000000;">SR.</th>
+                <th style=" border-bottom: 2px solid #000000;">ROAD CODE </th>
+                <th style=" border-bottom: 2px solid #000000;">CSX CLAIM#</th>
+                <th style=" border-bottom: 2px solid #000000;">AMOUNT(USD)</th>
+                <th style=" border-bottom: 2px solid #000000;">FOR YOUR USE </th>
+            </tr>
+         
+            <apex:variable var="rowNumber" value="{!1}" />
+            <apex:repeat value="{!claimWrapperList}" var="claimWrapper">
+                
+                <tr>
+                    <td style="width:19%;">
+                       <span style="text-align: left;">{!rowNumber}</span> 
+                    </td>
+                    <td style="width:20%;">
+                        <span style="text-align: left;">{!claimWrapper.railCode}</span>
+                    </td>
+                    <td >
+                        <span style="text-align: left;">{!claimWrapper.rrClaimRefrence}</span>
+                    </td>
+                   <!-- <td >
+                        <apex:outputText value="{0, number,$}">
+                            <apex:param value="{!claimWrapper.amountPaid}" />
+                        </apex:outputText>
+                    </td>-->
+                    <td>
+                       <apex:outputText rendered="{!claimWrapper.amountPaid >= 0}" value=" {0, number,&nbsp $}" escape="false">
+                            <apex:param value="{!claimWrapper.amountPaid}" />   
+                        </apex:outputText>
+                        <apex:outputText rendered="{!claimWrapper.amountPaid < 0}" value="{0, number, $}">
+                            <apex:param value="{!claimWrapper.amountPaid}" />
+                        </apex:outputText>
+                    </td>
+                    
+                    <td >
+                        <Span style="text-align: left;"></Span>
+                    </td>
+                    
+                </tr>
+                
+                <apex:variable var="rowNumber" value="{!rowNumber + 1}" />
+            </apex:repeat>
+            <tr>
+                <td colspan="5">
+                    <hr style="border-bottom: initial;border-top:2px solid black"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                   <span><b>TOTAL COUNT:</b></span>
+                </td> 
+                <td style="text-align: left;">
+                    <span>{!IF(totalcaseCount != null, totalcaseCount, '')}</span> 
+                </td>
+                <td style="text-align: left;">
+                   <span><b>TOTAL AMOUNT:</b></span>
+                </td>
+                <td style="text-align: left;">
+                    <apex:outputText value="{0, number,$}">
+                        <apex:param value="{!totalAmountSum}" />
+                    </apex:outputText>
+                    <!-- <span>{!IF(totalAmountSum != null, totalAmountSum, '')} </span> -->
+                </td>
+            </tr>             
+        </table>   
+        <div style="letter-spacing: 25px; padding-top:20px;">        
+        <div style="line-height: 1.5">If payment is due to CSX, please remit to :</div>
+        <div style="line-height: 1.5"> CSX Transportation </div>
+        <div style="line-height: 1.5"> P.O. Box 530192</div>
+        <div style="line-height: 1.5">Atlanta, GA 30353-0192</div>
+        </div>
+    </body>
+</apex:page>

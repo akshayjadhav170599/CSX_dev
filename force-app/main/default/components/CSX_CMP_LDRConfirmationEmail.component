@@ -1,0 +1,214 @@
+<apex:component controller="CSX_CMP_LDREmailController" access="global">
+    <apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global" />
+    <html>
+        <style>
+            body, td, div, span, b {
+            font-size: 12px;
+            }         
+        </style>
+        
+        <body>
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <!--   <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50" />-->                       
+                     <!--   <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!$Label.CSX_CMP_CSX_Logo}"/> -->
+                        <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!csxLogo}"/>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+            <div>
+                This confirms receipt of your Loss And Damage report number {!ldrWrapper.reportNum}. Additional supporting documentation
+                and photos may be uploaded through ShipCSX.
+            </div>
+            <br/>
+            <div>
+                <div>
+                    <span style="font-size: 18px;">
+                        <b>&nbsp;Summary Below:</b>
+                    </span>
+                </div>
+                <table style="width: 50%;">
+                    <tr>
+                        <td>
+                            <b> Equipment Initial And Number: </b>
+                        </td>
+                        <td> {!ldrWrapper.equipmentInitial}{!ldrWrapper.equipmentNumber}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Date Shipped by Rail: </b>
+                        </td>
+                        <td> {!ldrWrapper.dateShipped} </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <b> Origin: </b>
+                        </td>
+                        <td>
+                            <apex:outputPanel rendered="{!NOT(ISBLANK(ldrWrapper.originCity) && ISBLANK(ldrWrapper.originState))}">
+                                {!ldrWrapper.originCity}
+                                <apex:outputText value="," rendered="{!NOT(ISBLANK(ldrWrapper.originCity) && ISBLANK(ldrWrapper.originState))}"
+                                                 />{!ldrWrapper.originState}
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <b> Destination: </b>
+                        </td>
+                        <td>
+                            <apex:outputPanel rendered="{!NOT(ISBLANK(ldrWrapper.destinationCity) && ISBLANK(ldrWrapper.destinationState))}">
+                                {!ldrWrapper.destinationCity}
+                                <apex:outputText value="," rendered="{!NOT(ISBLANK(ldrWrapper.destinationCity) && ISBLANK(ldrWrapper.destinationState))}"
+                                                 />{!ldrWrapper.destinationState}
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Incident Data: </b>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Reason for Report: </b>
+                        </td>
+                        <td> {!ldrWrapper.reason}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Product Condition: </b>
+                        </td>
+                        <td> {!ldrWrapper.productCondition} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Location of Damage: </b>
+                        </td>
+                        <td> {!ldrWrapper.locationDamage} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Bracing Method: </b>
+                        </td>
+                        <td> {!ldrWrapper.bracingMethod} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Cause of Damage: </b>
+                        </td>
+                        <td> {!ldrWrapper.causeDamage} </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <b> Visibly Damaged: </b>
+                        </td>
+                        <td>
+                            <apex:outputText value="{!IF(ldrWrapper.visiblyDamage, 'Yes', 'No')}" /> </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Can't Unload: </b>
+                        </td>
+                        <td>
+                            <apex:outputText value="{!IF(ldrWrapper.canNotUnload, 'Yes', 'No')}" /> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Unloading Exceeding 24 hrs: </b>
+                        </td>
+                        <td>
+                            <apex:outputText value="{!IF(ldrWrapper.unloadingExceed, 'Yes', 'No')}" /> </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Estimated Value of Damaged Product: </b>
+                        </td>
+                        <td> {!ldrWrapper.estimatedValue} </td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Commodity Information: </b>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Disposition of Commodity:</b>
+                        </td>
+                        <td> {!ldrWrapper.dispositionCommodity} </td>
+                    </tr>
+                </table>
+                <br/>
+                <br/>
+            </div>
+            
+            <div>
+                <b>Description of lost or damaged commodity (or commodities):</b>
+            </div>
+            
+            <table border="1" style="width: 50%;">
+                <tr>
+                    <th>Quantity Lost or Damaged:</th>
+                    <th>Packaging / Commodity Description</th>
+                </tr>
+                <apex:repeat value="{!ldrWrapper.ldrProducts}" var="ldr">
+                       <apex:outputPanel rendered="{!NOT(ISNULL(ldr.quantity) && ISNULL(ldr.description))}">
+                    <tr>
+                        <td style="text-align: center;">{!ldr.quantity}</td>
+                        <td style="text-align: center;">{!ldr.description}</td>
+                    </tr>
+                       </apex:outputPanel>
+                </apex:repeat>
+            </table>
+            <br/>
+            <div>
+                <td>If you need CSX to follow-up with you regarding this load.</td>
+            </div>
+            <div>
+                <td>Please
+                    <b>Reply All</b> us at the email below and include this report Number {!ldrWrapper.reportNum} in your subject
+                    line.</td>
+            </div>
+            <br/>
+            <br/>
+            <div>
+                <td>
+                    <b>CSX Load Engineering And Design Services</b>
+                </td>
+            </div>
+            <div>
+                <td>
+                    <b>E-mail:</b> Exceptions@csx.com</td>
+            </div>
+            
+        </body>
+        
+    </html>
+</apex:component>

@@ -1,0 +1,94 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_DeclineLetterController">
+    <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <body>
+            
+             
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                       </td>
+                </tr>
+            </table>
+            <br/><br/>
+            
+            <table style="width: 70%;">
+               
+                <tr>
+                    <td width="180">Date</td>
+                    <td>: {!claimWrapper.emailDate}</td>
+                </tr> <br/>
+                <tr>
+                   <td  width="180"><b>Contract Information</b></td>
+                     <td> </td>
+                </tr>
+                <tr>
+                    <td width="140">Contract Name</td>
+                    <td>: {!claimWrapper.contractName}</td>
+                </tr>
+                <tr>
+                <td width="140">Contract/Agreement</td>
+                    <td>: {!claimWrapper.contractNumber}</td>
+                </tr>
+                <tr>
+                <td width="140">Effective Date</td>
+                    <td>: {!claimWrapper.contractStartDate} - {!claimWrapper.contractEndDate}</td>
+                    
+                </tr>
+                </table><br/><br/>
+                <table style="width: 70%;">
+                 <tr>
+                     <td width="140"><b>Claim Information</b></td>
+                    <td></td>
+                </tr>
+                 <tr>
+                <td width="180">Claim Number</td>
+                    <td>: {!claimWrapper.csxClaimNumber}</td>
+                </tr>
+                <tr>
+                <td width="140">Submission Date</td>
+                    <td>: {!claimWrapper.submissionDate}</td>
+                </tr>
+                <tr>
+                <td width="140">Refund Period</td>
+                    <td>: {!claimWrapper.claimBegin} - {!claimWrapper.claimEnd}</td>
+                </tr>
+                <tr>
+                    <td width="140">Claim Amount</td>
+                     <td>:&nbsp; <apex:outputText value="{0, number, currency}">
+                             <apex:param value="{!claimWrapper.claimAmount}"/>
+                             </apex:outputText>
+                        </td>
+                </tr>    
+            </table>  <br/><br/>
+        <div>
+            Dear Claimant,
+        </div><br/>
+        <div>
+           The claim Number referenced above has been Declined. Please review the comments below
+        </div><br/>
+         <div>
+            {!claimWrapper.declineEmailMessage}
+        </div><br/>
+           
+        <div>
+            Comment:{!claimWrapper.declineNotes}
+        </div> <br/>
+        <br/><br/>
+        <div>
+            Sincerely,
+        </div>
+        <div>
+            {!claimWrapper.owner}
+       </div>
+        <div>
+            Contract Refunds
+        </div>
+        <div>
+            <apex:outputText value="{!$Label.CSX_CMP_Contract_Email_Address}" escape="false" />
+        </div>
+
+    </body>    
+</apex:page>

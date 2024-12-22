@@ -1,0 +1,24 @@
+<template>
+    <lightning-quick-action-panel header="Select Document Type">
+        <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1 slds-align_absolute-center">
+                    <lightning-radio-group name="radioGroup" label="" value={selectedOption} type="radio"
+                    options={claimType} onchange={handleRadioChange}></lightning-radio-group>
+                </div>   
+        </div>
+            <div class="slds-col">
+                <div if:true={optionSelected} class="slds-text-color_error">Please select an option to proceed</div>
+            </div>
+    <div slot="footer">
+        <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small">
+            <div class="slds-col slds-var-p-bottom_small slds-float_left">
+                <lightning-button label="Attach to Claim" variant="brand" class="slds-var-p-right_large"
+                    onclick={createDocument} disabled={viewButton} ></lightning-button>
+                <lightning-button label="View" class="slds-var-p-left_large"
+                    onclick={viewDocument}></lightning-button>
+            </div>
+        </div>
+    </div>
+
+</lightning-quick-action-panel>
+</template>

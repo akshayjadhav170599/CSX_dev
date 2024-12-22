@@ -1,0 +1,273 @@
+<template>
+    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-text-heading_medium slds-var-m-left_xxx-small slds-var-p-bottom_small">New Claim
+            Submission
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-record-edit-form object-api-name="Case">
+                <label for="companyFilingClaimLabel" class="slds-form-element__label"><span style="color: red;">*
+                    </span>Claimant Company Name</label>
+                <lightning-input-field id="companyFilingClaimLabel" field-name="CSX_CMP_Customer__c"
+                    value={claimCreationRevContract.companyFilingClaim} name="companyFilingClaim"
+                    title="Claimant Company Name" onchange={handlecompanyFilingClaimChange} record-type-id={recordType}
+                    variant="label-hidden" required>
+                </lightning-input-field>
+            </lightning-record-edit-form>
+            <div class="slds-col">
+                <div if:true={noContracts} class="slds-text-color_error">No contracts for selected Customer</div>
+            </div>
+        </div>
+
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-var-p-top_xx-large">
+            <lightning-input name="noActiveSupplierAvailable" label="No Active Supplier Available"
+                value={noActiveSupplierAvailable} type="checkbox" onchange={handleInputChange}></lightning-input>
+        </div>
+    </div>
+
+    <div if:true={hideSupplierSiteSearch}>
+        <div class="slds-grid slds-gutters slds-var-p-bottom_small">
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-3 slds-large-size_3-of-3">
+                <c-csx_cmp_supplier-site-search onsendsupplierid={handleSupplierId}></c-csx_cmp_supplier-site-search>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">
+            Contact Information
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-4 slds-large-size_3-of-4">
+            <c-csx_cmp_contact-details contact-label="Contact Name" phone-label="Phone Number"
+                emails-label="Emails(enter emails separated by semicolon)" is-name-required="true"
+                is-email-required="true" is-email-text-area="true" error-message={errorMessage} is-error={isError}
+                ondatachange={handleContactDetailChange}></c-csx_cmp_contact-details>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-text-heading_xx-small fsm-bold-text">
+            Claim Information
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <template if:true={companyFilingClaimEntered}>
+                <lightning-combobox name="contractNumber" label="Contract Number" data-id="contract"
+                    value={claimCreationRevContract.contractNumber} placeholder="Select an Option"
+                    options={contractOptions} onchange={handleInputChange} key-field="value"
+                    required></lightning-combobox>
+            </template>
+            <template if:false={companyFilingClaimEntered}>
+                <lightning-combobox name="contractNumber" label="Contract Number"
+                    value={claimCreationRevContract.contractNumber} placeholder="Select an Option"
+                    options={contractOptions} onchange={handleInputChange} disabled required>
+                </lightning-combobox>
+            </template>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-input name="customerClaimDate" label="Customer Claim Date" disabled
+                value={claimCreationRevContract.customerClaimDate} type="date" date-style="short"
+                placeholder="MM/DD/YYYY" onchange={handleInputChange}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-input label="Claim Period Begin" name="claimPeriodBeginDate" type="date" data-id="beginDate"
+                placeholder="MM/DD/YYYY" value={claimCreationRevContract.claimPeriodBeginDate}
+                message-when-range-overflow="Value cannot be in future" max={maximumDate} date-style="short"
+                onchange={handleInputChange} required></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+            <lightning-input label="Claim Period End" name="claimPeriodEndDate" type="date" date-style="short"
+                data-id="endDate" placeholder="MM/DD/YYYY" value={claimCreationRevContract.claimPeriodEndDate}
+                onchange={handleInputChange} required></lightning-input>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-4 slds-large-size_3-of-4">
+            <lightning-textarea name="notes" label="Claim Description" value={claimCreationRevContract.notes}
+                onchange={handleInputChange} required></lightning-textarea>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-4 slds-large-size_3-of-4">
+            <div class="slds-box">
+                <div class="slds-grid slds-gutters slds-var-p-bottom_small">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-4 slds-large-size_2-of-4">
+                        <div class="slds-col slds-text-heading_x-small fsm-bold-text">Refund
+                            Amount
+                        </div>
+                        <div class="slds-col">
+                            <div if:true={noRows} class="slds-text-color_error">{label.oneRowRequiredErrorMessage}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+                    <thead>
+                        <tr>
+                            <template for:each={headers} for:item="item">
+                                <th key={item}>
+
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-align_absolute-center">
+                                        <span style="color: red;">* </span>{item}
+                                    </div>
+                                </th>
+                            </template>
+                            <th>
+                                <div class="slds-grid slds-grid_vertical-align-center slds-align_absolute-center">
+                                    Action
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr for:each={records} for:item="record" key={record.rowNumber}>
+                            <td>
+                                <template if:false={record.isRowDisabled}>
+                                    <lightning-combobox class="slds-align_absolute-center" name="unitType"
+                                        placeholder="Select an Option" options={unitTypeOptions}
+                                        data-id={record.rowNumber} value={record.unitType}
+                                        onchange={handleInputChangeForTable} required
+                                        variant="label-hidden"></lightning-combobox>
+                                </template>
+                            </td>
+
+                            <td>
+                                <template if:false={record.isRowDisabled}>
+                                    <lightning-input class="slds-align_absolute-center" name="carsOrWeight"
+                                        type="number" data-id={record.rowNumber} value={record.carsOrWeight}
+                                        onchange={handleInputChangeForTable} variant="label-hidden"
+                                        required></lightning-input>
+                                </template>
+                            </td>
+
+                            <td>
+                                <template if:false={record.isRowDisabled}>
+                                    <lightning-input class="slds-align_absolute-center" name="refundUnitRate"
+                                        type="number" data-id={record.rowNumber} value={record.refundUnitRate}
+                                        formatter="currency" step="0.001" onchange={handleInputChangeForTable} required
+                                        variant="label-hidden"></lightning-input>
+                                </template>
+                            </td>
+
+                            <td>
+                                <template if:false={record.isRowDisabled}>
+                                    <div class=" slds-align_absolute-center">
+                                        <lightning-formatted-number value={record.refundAmount} format-style="currency"
+                                            currency-code="USD">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </template>
+                            </td>
+
+                            <td>
+                                <div class="slds-align_absolute-center">
+                                    <lightning-button-icon class="slds-p-horizontal_x-small" icon-name="utility:delete"
+                                        onclick={handleRemoveRow} value={record.rowNumber}
+                                        size="small"></lightning-button-icon>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="slds-grid slds-size_1-of-1  slds-medium-size_8-of-8 slds-large-size_8-of-8 
+                    slds-var-m-left_x-small slds-var-p-vertical_small">
+                    <div class="slds-col slds-size_3-of-8">
+                        <a onclick={handleAddRow}>Add more lines</a>
+                    </div>
+                    <div class="slds-col slds-size_3-of-8" if:true={totalClaimAmount}>
+                        <div class="slds-grid slds-grid_align-start slds-size_1-of-1  slds-medium-size_8-of-8 slds-large-size_8-of-8 
+                    slds-var-m-left_x-small slds-var-p-vertical_small">
+                            <div class="slds-col slds-size_6-of-8 slds-text-heading_x-small fsm-bold-text">
+                                Total Claim Amount :
+                            </div>
+                            <div class="slds-col slds-size_1-of-8">
+                                <lightning-formatted-number value={totalClaimAmount} format-style="currency"
+                                    currency-code="USD">
+                                </lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-vertical_small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div class="slds-form-element__control">
+                <div class="slds-checkbox">
+                    <input type="checkbox" name="sendEmail" id="sendEmail" checked={sendEmailCheck}
+                        onchange={handleInputChange} />
+                    <label class="slds-checkbox__label" for="sendEmail">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-form-element__label fsm-bold-text slds-var-m-left_x-small"> Send email
+                            confirmation to Contact
+                            email address</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+            <lightning-button label={label.submitClaim} variant="brand" onclick={submitClaim}
+                class="slds-var-p-left_large"></lightning-button>
+            <lightning-spinner if:true={isSubmitting}></lightning-spinner>
+        </div>
+        <div class="slds-col slds-var-p-bottom_small slds-float_right">
+            <lightning-button label={label.reset} onclick={reset} class="slds-var-p-right_large"></lightning-button>
+        </div>
+    </div>
+
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-backdrop">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Duplicate Check</h2>
+                </header>
+
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-align_absolute-center slds-text-body_regular slds-p-bottom_x-small">
+                        {label.duplicatesFound}
+                    </div>
+                    <div class="slds-align_absolute-left">
+                        <ul>
+                            <template for:each={duplicateClaimNum} for:item="Claim">
+                                <li key={Claim}>
+                                    <a onclick={redirectToCase} data-claim-number={Claim}>{Claim}</a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <div class="slds-align_absolute-center">
+                        <lightning-button label="Cancel" onclick={closeModal}
+                            class="slds-var-p-right_x-large slds-button_neutral">
+                        </lightning-button>
+                        <lightning-button variant="brand" label="Proceed" onclick={createClaim}
+                            class="slds-var-p-right_x-large">
+                        </lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </template>
+</template>

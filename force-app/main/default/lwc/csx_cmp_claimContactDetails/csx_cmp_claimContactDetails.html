@@ -1,0 +1,34 @@
+<template>
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div if:true={isNameRequired}>
+                <lightning-input label={contactLabel} type="text" value={contactName} onchange={handleNameChange}
+                    required pattern="[a-zA-Z ]+" message-when-pattern-mismatch="Numbers are not allowed"></lightning-input>
+            </div>
+            <div if:false={isNameRequired}>
+                <lightning-input label={contactLabel} type="text" value={contactName} onchange={handleNameChange} pattern="[a-zA-Z ]+" message-when-pattern-mismatch="Numbers are not allowed">
+                </lightning-input>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div if:true={isPhoneRequired}>
+                <lightning-input label={phoneLabel} type="tel" value={phone} required onchange={handlePhoneChange}
+                    pattern="[0-9]{10}"></lightning-input>
+            </div>
+            <div if:false={isPhoneRequired}>
+                <lightning-input label={phoneLabel} type="tel" value={phone} pattern="[0-9]{10}"
+                    onchange={handlePhoneChange}></lightning-input>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div if:true={isEmailRequired}>
+                <lightning-input label={emailLabel} type="email" value={email} onchange={handleEmailChange}
+                    required></lightning-input>
+            </div>
+            <div if:false={isEmailRequired}>
+                <lightning-input label={emailLabel} type="email" value={email} onchange={handleEmailChange}>
+                </lightning-input>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,100 @@
+<template>
+    <lightning-card>
+        <template if:true={isRecordPage}>
+            <div class="slds-p-horizontal_small">
+                <div class="slds-box slds-box_xx-small">
+                    <div class="slds-grid slds-p-horizontal_small slds-p-top_x-small">
+                        <div class="slds-col">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container" title="account">
+                                        <lightning-icon class="slds-m-right_x-small" icon-name="custom:custom20"
+                                            title="Claim Summary" size="small"></lightning-icon>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <span>
+                                        <ul>
+                                            <li>
+                                                <div class="slds-text-heading_small slds-text-title_bold">
+                                                    Available Case ({count})
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </div>
+                            </header>
+                        </div>
+
+                        <div class="slds-col slds-col_bump-left slds-text-align_right">
+                            <lightning-button variant="brand" label="Link To Claim" title="Link To Claim"
+                                onclick={handleLinkClaim} disabled={disableLinkButton}></lightning-button>
+                        </div>
+
+                    </div>
+                    <div class="slds-var-p-vertical_small"><!--slds-scrollable_x-->
+                        <lightning-spinner if:true={isSpinner}></lightning-spinner>
+
+                        <template if:true={claimRecordList}>
+                            <lightning-datatable data={data} columns={caseColumn} key-field="caseNumber"
+                                onrowselection={handleRowSelection} onsort={doSortingCaseNumber} sorted-by={sortByName}
+                                sorted-direction={sortDirection}>
+                            </lightning-datatable>
+                        </template>
+                    </div>
+                    <div class="slds-align_absolute-center slds-p-bottom_x-small">
+                        <a onclick={openRelatedList}>View All</a>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
+        <template if:false={isRecordPage}>
+            <div class="slds-grid slds-gutters slds-p-horizontal_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container" title="account">
+                                <lightning-icon class="slds-m-right_x-small" icon-name="custom:custom20"
+                                    title="Claim Summary" size="small"></lightning-icon>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <span>
+                                <ul>
+                                    <li>
+                                        <div class="slds-text-heading_x-small">
+                                            <a title="Case" onclick={openCaseHomepage}>Case</a> >
+                                            <a title={caseNumber} onclick={openCaseRecord}>{caseNo}</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="slds-text-heading_small slds-text-title_bold">
+                                            Case Summary
+                                        </div>
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                    </header>
+                </div>
+
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3 slds-col_bump-left slds-text-align_right">
+                    <lightning-button-group>
+                        <lightning-button variant="brand" label="Link To Claim" title="Link To Claim"
+                            onclick={handleLinkClaim} disabled={disableLinkButton}></lightning-button>
+
+                    </lightning-button-group>
+                </div>
+            </div>
+            <div class="slds-scrollable_x slds-var-p-vertical_small">
+                <lightning-datatable data={data} columns={caseColumnForRelatedList} key-field="caseNumber"
+                    onrowselection={handleRowSelection} onsort={doSortingCaseNumber} sorted-by={sortByName}
+                    sorted-direction={sortDirection}>
+                </lightning-datatable>
+            </div>
+        </template>
+    </lightning-card>
+</template>

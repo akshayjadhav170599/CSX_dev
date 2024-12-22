@@ -1,0 +1,196 @@
+<apex:page standardController="CSX_CMP_AR_Settlement__c" renderAs="PDF" showHeader="true" sidebar="true" showQuickActionVfHeader="false" extensions="CSX_CMP_ARInvoiceReport" >
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<head>
+</head>
+
+<body>
+
+<div style="margin:5px;font-size:small">
+    <table style="width: 100%;" padding="50px;">
+
+        <td style="width:55%">
+        <!--    <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50" /> -->        
+             <apex:image id="theImage"  width="120px" value="{!csxLogo}"/>
+            <br/>
+        </td>
+
+    </table>
+    <br/>
+    <br/>
+
+    <div class="row1-col-1">&nbsp;&nbsp;
+        <b>CSX Federal ID No: &nbsp;
+            <apex:outputText style="font-size:small" value="{!$Label.CSX_CMP_CSXFederalId_Static}" escape="false"></apex:outputText>
+        </b>
+    </div>
+
+    <div class="row" style="text-align: Left;padding-left: 400px">
+        <table>
+            <tr>
+                <td>
+                    <b>Invoice</b>
+                </td>
+                <td>:</td>
+                <td>{!arWrapper.invoiceNumber}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Claim No </b>
+                </td>
+                <td>:</td>
+                <td>{!arWrapper.claimNumber}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Bill Date</b>
+                </td>
+                <td>:</td>
+                <td>{!arWrapper.billDate}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Customer No</b>
+                </td>
+                <td>:</td>
+                <td>{!arWrapper.customerNumber}</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Claim Type</b>
+                </td>
+                <td>:</td>
+                <td>{!arWrapper.claimType}</td>
+            </tr>
+        </table>
+
+    </div>   
+
+    <div style="text-align: left;width:45% ">      
+        <apex:outputText style="font-size:small" value="{!arWrapper.customerName}" escape="false"></apex:outputText>
+        <br/>
+        <apex:outputText style="font-size:small" value="{!arWrapper.customerAddress}" escape="false"></apex:outputText> 
+    </div>
+    <br/>
+
+    <div>
+        <hr style="border: none;border-top: 1px solid #000;" />
+    </div>
+    <br/>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <th style="padding: 8px; text-align: left;">Item Description</th>
+            <th style="padding: 8px; text-align: left;">Item Qty</th>
+            <th style="padding: 8px; text-align: left;">Item Price</th>
+            <th style="padding: 8px; text-align: left;">Amount</th>
+        </tr>
+        <apex:outputPanel rendered="{!(arWrapper.claimType == 'Railroad Netting REV Claim' || arWrapper.claimType =='Railroad Netting FC Claim') }">
+        <tr>
+            <td style="padding-right:8px; text-align: left;">Service Period : {!arWrapper.servicePeriod}</td>
+            <td style="padding-left:110px; text-align: left;">{!arWrapper.itemQuantity}</td>
+            <td style="padding-left:120px; text-align: left;">{!arWrapper.itemPrice}</td>
+            <td style="padding-left:130px; text-align: left;">{!arWrapper.amount}</td>
+        </tr>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!(arWrapper.claimType != 'Railroad Netting REV Claim' && arWrapper.claimType != 'Railroad Netting FC Claim')  }">
+        <tr>
+            <td style="padding-left:9px; text-align: left;">Equipment : {!arWrapper.equipment}</td>
+            <td style="padding-left:30px;  text-align: left;">{!arWrapper.itemQuantity}</td>
+            <td style="padding-left:120px; text-align: left;">{!arWrapper.itemPrice}</td>
+            <td style="padding-left:130px; text-align: left;">{!arWrapper.amount}</td>
+        </tr>
+        <tr>
+            <td style="padding:2px 8px; text-align: left;">Waybill : {!arWrapper.wayBillNumber} {!arWrapper.wayBillDate}</td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+        </tr>
+        <tr>
+            <td style="padding:2px 8px; text-align: left;">Orig : {!arWrapper.originCity},{!arWrapper.originState}</td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+        </tr>
+        <tr>
+            <td style="padding:2px 8px; text-align: left;">Dest : {!arWrapper.destinationCity},{!arWrapper.destinationState}</td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+        </tr>
+        <tr>
+            <td style="padding:2px 8px; text-align: left;">Incident Location : {!arWrapper.incidentLocation}</td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+        </tr>
+        <tr>
+            <td style="padding:2px 8px; text-align: left;">VIN # : {!arWrapper.vinNumber}</td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+            <td style="padding:5px 8px; text-align: left;"></td>
+        </tr>
+    </apex:outputPanel>
+    </table>
+    <br/>
+    <div>
+        <hr style="border: none;border-top: 1px solid #000;" />
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <th style="padding: 8px; text-align: left;width: 30%"></th>
+            <th style="padding: 8px; text-align: left;width: 30%"></th>
+            <th style="padding-right: 60px; text-align: right;width: 20%">Invoice Total:</th>
+            <th style="padding-right: 60px; text-align: center;width: 20%">{!arWrapper.amount}</th>
+        </tr>
+    </table>
+    <br/>
+    <br/>
+    
+    <div>
+        <hr style="border: none;border-top: 1px solid #000;" />
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 0;">
+
+                <div style="float: left;width:45%; padding: 0;">                           
+                    <apex:outputText style="font-size:small; padding: 0;" value="{!$Label.CSX_CMP_ARInvoiceReport_RemitStatic}" escape="false"></apex:outputText>
+                </div>
+            </td>
+            <td style="padding: 0;">
+                <div style="float: right;width:80%; padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="width:40%;">
+                                <b>Amount Due </b>
+                            </td>
+                            <td >:</td>
+                            <td style="width:33%;"> {!arWrapper.amountDue}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Due Date</b>
+                            </td>
+                            <td>:</td>
+                            <td style="width:33%;"> {!arWrapper.dueDate}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Payment Terms</b>
+                            </td>
+                            <td>:</td>
+                            <td style="width:33%;"> {!arWrapper.paymentTerms}</td>
+                        </tr>
+                    </table>
+                </div>                
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</apex:page>

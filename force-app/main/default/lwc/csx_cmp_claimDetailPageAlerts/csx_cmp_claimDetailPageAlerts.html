@@ -1,0 +1,70 @@
+<template>
+    <lightning-card>
+        <div
+            class="slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_small slds-var-p-bottom_small slds-border_bottom">
+            Claim Alerts</div>
+        <lightning-record-view-form record-id={recordId} object-api-name="Case">
+            <div class="slds-grid slds-var-p-left_small">
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                    <lightning-output-field field-name="CSX_CMP_Unread_Email_Status__c"></lightning-output-field>
+                    <!-- <lightning-output-field field-name="CSX_CMP_Supplier_Claimant_Status__c"></lightning-output-field> -->
+                    <lightning-output-field field-name="CSX_CMP_Unread_Documents__c"></lightning-output-field><br />
+                    <lightning-output-field field-name="CSX_CMP_Potential_Duplicate__c"></lightning-output-field>
+
+                    <template if:true={ediOrigin}>
+                        <br />
+                        <lightning-output-field field-name="CSX_CMP_Refiled__c"></lightning-output-field>
+                    </template>
+                    <template if:true={ediOrigin}>
+                        <br />
+                        <lightning-output-field field-name="CSX_CMP_Refiled_Version__c"></lightning-output-field>
+                    </template>
+                    <template if:true={freightRecType}>
+                        <template if:true={displayTotalCost}>
+                            <br />
+                            <label style="margin-left:2px;" class="slds-form-element__label" for="input-01">Total Cost
+                                of Claim</label><br>
+                            <lightning-button style="margin-left:2px;" class="slds-form-element__control" id="input-01"
+                                label={amount.displayValue} onclick={handleOpenPopup} variant="base"></lightning-button>
+                        </template>
+                    </template>
+                    <template if:true={rrRectype}>
+                        <!-- <template if:true={reviewFlagShow}> -->
+                        <br /><label class="slds-form-element__label slds-p-left_xxx-small">Review</label><br />
+                        <lightning-icon icon-name="utility:priority" class="slds-p-left_xx-small" size="XX-Small"
+                            style={flagColor}></lightning-icon>
+                        <!-- </template> -->
+                    </template>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                    <lightning-output-field field-name="CSX_CMP_Supplier_Claimant_Status__c"></lightning-output-field>
+                    <!-- <lightning-output-field field-name="CSX_CMP_Unread_Documents__c"></lightning-output-field> -->
+                    <br />
+
+                    <lightning-output-field
+                        field-name="CSX_CMP_Supplier_Claimant_Site_Status__c"></lightning-output-field><br />
+                    <template if:true={freightRecType}>
+                        <lightning-output-field field-name="CSX_CMP_Case_Available__c"></lightning-output-field><br />
+                    </template>
+
+                    <lightning-output-field field-name="CSX_CMP_Age__c"></lightning-output-field>
+
+                    <!-- <template if:true={ediOrigin}>
+                        <br/>
+                        <lightning-output-field field-name="CSX_CMP_Refiled_Version__c"></lightning-output-field>
+                    </template> -->
+                    <!-- <template if:true={rrRectype}>
+                        <label class="slds-form-element__label slds-p-left_xxx-small">Review</label><br>
+                        <lightning-icon icon-name="utility:priority" class="slds-p-left_xx-small" size="XX-Small"
+                            style={flagColor}></lightning-icon>
+                    </template> -->
+                </div>
+            </div>
+        </lightning-record-view-form>
+    </lightning-card>
+    <template if:true={showPopup}>
+        <c-csx_cmp_claim-transactions record-id={recordId} show-popup={showPopup}
+            onclosemodal={closeModal}></c-csx_cmp_claim-transactions>
+    </template>
+</template>

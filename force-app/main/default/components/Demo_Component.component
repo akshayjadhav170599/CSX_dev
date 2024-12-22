@@ -1,0 +1,61 @@
+<apex:component >
+<messaging:htmlEmailBody >
+    <html>
+    <body>
+        <htmlEmailBody>
+        <table width="100%" id="table1" style="font-size:10px; text-align:right">
+        
+        <tr> Date : </tr><br/>
+        <tr> Amount : </tr><br/>
+        <tr> CSX Claim # : </tr><br/>
+        <tr> Commodity : </tr><br/>
+        <tr> VIN#: </tr><br/>
+        <tr> Shipper : </tr><br/>
+        <tr> Consignee : </tr><br/>
+        <tr> Destination : </tr><br/>
+        <tr> Equipment : </tr><br/>
+        <tr> Route : </tr><br/>
+        <tr> Dated : </tr><br/>
+      
+         <apex:repeat var="case">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr> 
+        </apex:repeat>
+        </table>
+
+            <p>Dear Claimant,</p>
+            
+            
+            <p>In reference to the shipment above, please furnish the requested information.</p>
+
+            <p style="color:DodgerBlue;">
+            {   1. Claim information, including claim number, amount and disposition if filed with you.<br/>
+                2. Complete movement records, advising any rough or unusual handling or derailment.<br/>
+                3. Contractual limits of liability, including limited liability provision if applicable.<br/>
+                4. Copy of any exceptions, reports and photos noted at origin, interchange or destination. }</p>
+
+
+            <p>Please reference the above subject line in all correspondence related to this request.</p>
+            <p>Your cooperation in furnishing this information as quickly as possible via email or fax is most appreciated.</p>
+
+            <p style="margin-bottom: 0px;">CSX Freight Claims<br/>
+               Phone: 1-800-327-9715<br/>
+               FAX:  904-245-4151</p>
+            <p style="color:DodgerBlue;margin: 0px;border: 0px;padding: 0px;">E-mail: FLRO_Messages@csx.com</p>
+        </htmlEmailBody>
+   </body>
+   </html>
+</messaging:htmlEmailBody>
+</apex:component>

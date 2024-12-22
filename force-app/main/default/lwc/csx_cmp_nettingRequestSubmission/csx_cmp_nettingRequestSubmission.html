@@ -1,0 +1,124 @@
+<template>
+    <lightning-card title="">
+        <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+            <div
+                class="slds-col slds-text-heading_medium slds-var-m-left_xxx-small slds-var-p-bottom_small slds-text-heading_small">
+                Netting Request Submission
+            </div>
+        </div>
+
+        <div if:true={showSpinner}>
+            <lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+            </lightning-spinner>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <div class="slds-text-align_left slds-m-around_x-small slds-p-left_xx-small">
+                    <span class="slds-text-title_bold">Claim Category</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_2-of-6 slds-large-size_2-of-6 ">
+                <div class="slds-text-align_left slds-m-around_x-small">
+                    <template if:true={Options} for:each={Options} for:item="itemClaim">
+                        <fieldset key={itemClaim.value} style="display: block; float: left;">
+                            <div class="slds-form-element__control">
+                                <span class="slds-radio">
+                                    <template if:true={otherProfile}>
+                                        <input class="slds-input" type="radio" id={itemClaim.value} name="radioClaim"
+                                            value={itemClaim.value} onchange={handleInputChange} checked={defaultSelectedvalue} />
+                                        <label class="slds-radio__label" for={itemClaim.value}>
+                                            <span class="slds-radio_faux"></span>
+                                            <span class="slds-form-element__label">{itemClaim.label}</span>
+                                        </label>
+                                    </template>
+                                    <template if:false={otherProfile}>
+                                        <input class="slds-input" type="radio" id={itemClaim.value} name="radioClaim"
+                                            value={itemClaim.value} onchange={handleInputChange} />
+                                        <label class="slds-radio__label" for={itemClaim.value}>
+                                            <span class="slds-radio_faux"></span>
+                                            <span class="slds-form-element__label">{itemClaim.label}</span>
+                                        </label>
+                                    </template>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </template>
+                </div>
+                
+                </div>
+        </div>
+        <!--/////////////-->
+        <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6">
+                <div class="slds-text-align_left slds-m-around_x-small slds-p-left_xx-small">
+                    <span class="slds-text-title_bold">Service Period</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <div class="slds-text-align_left slds-m-left_x-small">
+                    <lightning-input type="text" max-length="9" variant="label-hidden" placeholder="PER-M-YY"
+                        value={servicePeriod} onchange={handleChange}>
+                    </lightning-input>
+                    <div if:true={servicePeriodError} class="slds-text-color_error">{servicePeriodError}</div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--////////////////////////////////////////-->
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <div class="slds-text-align_left slds-m-around_x-small slds-p-left_xx-small">
+                    <span class="slds-text-title_bold">Run Type</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_2-of-6 slds-large-size_2-of-6 ">
+                <div class="slds-text-align_left slds-m-around_x-small">
+                    <template for:each={optionRunType} for:item="itemRun">
+                        <fieldset key={itemRun.value} style="display: block; float: left;margin-right:20px;">
+                            <div class="slds-form-element__control">
+                                <span class="slds-radio">
+                                    <input class="slds-input" type="radio" id={itemRun.value} name="radioRun" value={itemRun.value}
+                                        onchange={handleInputChange} />
+                                    <label class="slds-radio__label" for={itemRun.value}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{itemRun.label}</span>
+                                    </label>
+            
+                                </span>
+                            </div>
+                        </fieldset>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <div class="slds-text-align_left slds-m-around_x-small slds-p-left_xx-small">
+                </div>
+            </div>
+            <template if:true={isButtonShow}>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                    <div class="">
+                        <lightning-button variant="brand" label={labelValue} title="Execute" onclick={handleClick}
+                            disabled={isButtonDisable} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <template if:true={claimRecords.length}>
+            <c-csx_cmp_netting-claim-list claim-record-list={claimRecords} netting-label={nettingListLabel}></c-csx_cmp_netting-claim-list>
+        </template>
+        <template if:false={isClaimAvailable}>
+            <span class="slds-text-color_error">{label.notFound}</span>
+        </template>
+    </lightning-card>
+</template>

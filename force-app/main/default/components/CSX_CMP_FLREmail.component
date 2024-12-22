@@ -1,0 +1,121 @@
+<apex:component controller="CSX_CMP_FLREmailController" access="global">
+    <apex:attribute name="originRod" type="string" description="Origin Road" assignTo="{!originRoad}" access="global"/>
+    <apex:attribute name="destinationRod" type="string" description="Destination Road" assignTo="{!destinationRoad}" access="global"/>
+    <!--<apex:attribute name="bothRod" type="string" description="Both Road" assignTo="{!bothRoad}" access="global"/>-->
+    <apex:attribute name="claimId" type="string" description="Id of the account" assignTo="{!caseId}" access="global"/>
+    <apex:attribute name="otherRoad" type="string" description="Other Road" assignTo="{!otherRoadValue}" access="global"/>  
+    
+    <html>
+        <style>
+            body, td, div, span, b {
+            font-size: 12px;
+            }         
+        </style>
+        <body>
+            <table style="width: 100%;">
+                <tr> 
+                    <td>
+                        <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                    </td>
+                   <td style="text-align: right !important; vertical-align: top; padding-left: 500px;">
+    					<apex:outputText value="{!$Label.CSX_CMP_FLR_Email_Address}" escape="false"></apex:outputText>
+				   </td>
+                </tr>
+            </table>
+            <br/><br/>
+            
+            <table style="width: 50%;">
+                <tr>
+                    <td>Date:</td>
+                    <td>
+                      <apex:outputText value="{0, date, dd/MM/yyyy}"> 
+                            <apex:param value="{!objCaseWrapper.claimDate}" />
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Amount:</td>
+                    <td>   
+                       <!-- <apex:outputText value="{0, number, #,##0.00}">
+                            <apex:param value="{!objCaseWrapper.claimAmount}"/>
+                        </apex:outputText> -->
+                        <apex:outputText value="{!formattedClaimAmount}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CSX Claim#:</td>
+                    <td> {!objCaseWrapper.CaseNumber}</td>
+                </tr>
+                <tr>
+                    <td>Commodity:</td>
+                    <td> {!objCaseWrapper.commodity}</td>
+                </tr>
+                <tr>
+                    <td>VIN #:</td>
+                    <td> {!objCaseWrapper.vin}</td>
+                </tr>
+                <tr>
+                    <td>Shipper:</td>
+                    <td> {!objCaseWrapper.shipper}</td>
+                </tr>
+                
+                <tr>
+                    <td>Consignee:</td>
+                    <td> {!objCaseWrapper.consignee}</td>
+                </tr>
+                
+                <tr>
+                    <td>Origin:</td>
+                    <td> {!objCaseWrapper.origin}</td>
+                </tr>
+                
+                <tr>
+                    <td>Destination:</td>
+                    <td> {!objCaseWrapper.destination}</td>
+                </tr>
+                
+                <tr>
+                    <td>Equipment:</td>
+                    <td> {!objCaseWrapper.equipment}</td>
+                </tr>
+                
+                <tr>
+                    <td>Route:</td>
+                    <td> {!objCaseWrapper.route}</td>
+                </tr>
+                
+                <tr>
+                    <td>Waybill Date:</td>
+                    <td> 
+                       <apex:outputText value="{0,date,MM/dd/yyyy}">
+                            <apex:param value="{!objCaseWrapper.waybillDate}"/>
+                        </apex:outputText> 
+                       <!-- {!objCaseWrapper.waybillDate}-->
+                    </td>
+                </tr>
+            </table>
+            <br/><br/>
+            <div> Dear Claimant, <br/><br/>In reference to the shipment above, please furnish the requested information.</div><br/><br/>    
+            <div>
+                <table rendered="{!objCaseWrapper.lstQuestion != null}" style="width: 100%;">
+                    <apex:variable var="rowNum" value="{!0}" /> 
+                    <apex:repeat value="{!objCaseWrapper.lstQuestion}" var="Question">
+                        <apex:variable var="rowNum" value="{!rowNum+1}"/>
+                        <tr>
+                            <td> <apex:outputText value="{!rowNum}."/> </td>
+                            <td style="padding-left: 10px;"> {!Question} </td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+                
+            </div><br/>
+            <div> 
+                Please reference the above subject line in all correspondence related to this request.<br/>
+                Your cooperation in furnishing this information as quickly as possible via email or fax is most appreciated.
+            </div><br/>
+            <div>   
+                CSX Freight Claims
+            </div> 
+        </body>
+    </html> 
+</apex:component>

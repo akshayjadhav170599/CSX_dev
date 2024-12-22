@@ -1,0 +1,528 @@
+<apex:page showHeader="true" sidebar="true" controller="CSX_CMP_DistributionPDFController" showQuickActionVfHeader="false" renderAs="PDF">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    
+    <head>
+    </head>
+    <style>
+        .table-15 {
+        page-break-inside: avoid; 
+        page-break-before: always; 
+        }
+        
+    </style>
+    <apex:variable var="rowNum" value="{!0}" /> 
+    <apex:repeat value="{!lstclaimWrapper}" var="claimWrapper" id="claimRepeater">
+          <apex:variable var="rowNum" value="{!rowNum+1}"/>
+        <body>
+                <div style="margin:5px;font-size:small">
+                    <table style="width: 100%;" padding="50px;">
+                        <tr>
+                            <td style="width:55%">
+                            <!--  <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50" /> -->
+                                <apex:image id="theImage"  width="120px" value="{!csxLogo}"/>
+                                <br/>
+                            </td>
+                            
+                            <td style="text-align: right;vertical-align: top; width:45% ">
+                                <apex:outputText style="font-size:small" value="{!$Label.CSX_CMP_Distribution_Summary_Report_Static}" escape="false"></apex:outputText>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="table-1" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;width:100%;border-collapse: collapse">
+                        <tr class="row1">
+                            <td class="row1-col-1" style ="width:70%">
+                                
+                            </td>
+                            <td class="row1-col-2" style ="width:20%">
+                                
+                            </td>
+                            <td class="row1-col-4" style="border: 2px solid black;vertical-align: top;padding-left:10px; width:30%;font-size:80%">
+                                TO ROAD
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.roadNum}                           
+                                </div> 
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-2"  style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            <td rowspan="3" class="row2-col-1" style="border-right: 2px solid black;border-left: 2px solid black;border-top: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                CLAIMANT
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.companyName}<br/>
+                                    {!claimWrapper.supplierAddress}<br/>
+                                    {!claimWrapper.supplierCity}
+                                </div>
+                            </td>
+                            
+                            <td class="row2-col-2" style="border-right: 2px solid black;border-top: 2px solid black; vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                CARRIER CLAIM NUMBER
+                                <br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.claimNumber}<br/>
+                                </div>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;border-top: 2px solid black;padding-left:10px; width:20%;font-size:90%">
+                                CLAIMANT NUMBER
+                                <br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.claimantNumber}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="border: 2px solid black;vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                AMOUNT PAID
+                                <br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.paidAmount}</div>
+                            </td>
+                        </tr>
+                        <tr class="row2">
+                            
+                            <td class="row2-col-2" style="border: 2px solid black; vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                DATE OF DELIVERY
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.customerClaimDate}</div>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                AMOUNT CLAIMED
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.originalAmount}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="border: 2px solid black;vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                VOUCHER NUMBER
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.voucherCode}</div>
+                            </td>
+
+                            <td class="row2-col-3" style="border: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                Previous Claim Number
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.previousClaimNumber}</div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="row2">
+                            
+                            <td class="row2-col-2" style="border: 2px solid black; vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                DATE PRESENTED
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.customerClaimDate}</div>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                DATE PAID
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.paymentDate}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="border: 2px solid black;vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                DISTRIBUTION DATE
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.claimDate}</div>
+                            </td>
+                        </tr>
+                        
+                    </table>
+                    <table class="table-2" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                1-4 SUBMITTING ROAD<br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    0712</div>
+                                
+                            </td>
+                            
+                            <td class="row2-col-2" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                5-13 AMOUNT PAID<br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.paidAmount}</div>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                14-20 COMMODITY S.T.C.C<br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.stcc}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                SHIPMENT B/L DESCRIPTION<br/>
+                                <div style="font-size:100%;font-weight:600;vertical-align: top">
+                                    {!claimWrapper.stccDescription}
+                                </div> 
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-3" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row3">
+                            <td class="row3-col-1" style="border-right: 2px solid black;width:25%;padding-left:10px;vertical-align: top;font-size:90%">
+                                21-27 SALVAGE PROCEEDS<br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!IF(ISNULL(claimWrapper.salvageAmount), 0, claimWrapper.salvageAmount)}
+                                </div>
+                            </td>
+                            
+                            <td class="row3-col-2" style="border-right: 2px solid black;padding-left:10px; vertical-align: top;font-size:90%">
+                                28 SALVAGE
+                                <br/> 
+                                <span style="text-align: left; font-weight: 600">
+                                    {!IF(ISNULL(claimWrapper.salvageCode), '02', claimWrapper.salvageCode)}
+                                </span><br/>
+                                <span  style="text-align: right;padding-left:50px">01 - ACTUAL PROCEEDS<br/>	</span>
+                                <span  style="text-align: right;padding-left:50px">02 - NO PROCEEDS AVAILABLE</span><br/>		
+                                <span  style="text-align: right;padding-left:50px">03 - SALVAGE ALLOWANCE</span>
+                                
+                            </td>
+                            <td class="row3-col-3" style="vertical-align: top;padding-left:10px;  width:30%;font-size:90%">
+                                29-30 FCD CAUSE
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.fcdCauseCode}</div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-4" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                31-39 SHIPPER CODE<br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.shipperCode}</div>
+                            </td>
+                            
+                            <td class="row2-col-2" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                
+                                
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                41-49 CONSIGNEE CODE<br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.consigneeCode}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                {!claimWrapper.claimantType}<br/> 
+                                
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-5" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                51-54 ORIGIN ROAD
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.originRoad}</div>
+                            </td>
+                            
+                            <td class="row2-col-2" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                55-58 DESTINATION ROAD
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.distRoadNumber}</div>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                59-60 PP NUMBER
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">PP no.</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                61-77 MOTOR VEHICLE INDENTIFICATION NO.
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.vin}</div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-6" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                78-85 WAYBILL FROM
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.originRoad}</div>
+                            </td>
+                            
+                            <td class="row2-col-2" style="text-align: center;border-right: 2px solid black;padding-left:10px; vertical-align: top;width:25%;font-weight:600">
+                                <apex:outputPanel rendered="{!NOT(ISBLANK(claimWrapper.originCity) && ISBLANK(claimWrapper.originState))}">
+                                    {!claimWrapper.originCity}<apex:outputText value="," rendered="{!NOT(ISBLANK(claimWrapper.originCity) && ISBLANK(claimWrapper.originState))}" />{!claimWrapper.originState}
+                                </apex:outputPanel>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                86-93 WAYBILL TO
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.distRoadNumber}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="text-align: center;padding-left:10px;vertical-align: top; width:30%;font-weight:600"><apex:outputPanel rendered="{!NOT(ISBLANK(claimWrapper.destinationCity) && ISBLANK(claimWrapper.destinationState))}">
+                                {!claimWrapper.destinationCity}<apex:outputText value="," rendered="{!NOT(ISBLANK(claimWrapper.destinationCity) && ISBLANK(claimWrapper.destinationState))}" />{!claimWrapper.destinationState}
+                                </apex:outputPanel>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-7" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                94-99 WAYBILL NO.
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.waybillNo}</div>
+                            </td>
+                            
+                            <td class="row2-col-2" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                100-105 WAYBILL DATE
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.waybillDate}</div>
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                106-109 INITIAL
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.equipInitial}</div>
+                            </td>
+                            
+                            <td class="row2-col-4" style="vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                110-115 CAR/TRAILER NO.
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.equipmentNum}</div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-8" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                116-123 WAYBILL FROM
+                                <br/> 
+                                
+                            </td>
+                            
+                            <td class="row2-col-2" style="text-align: center;border-right: 2px solid black;padding-left:10px; vertical-align: top;width:25%;font-size:90%">
+                                
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                124-131 WAYBILL TO
+                                <br/> 
+                                
+                            </td>
+                            
+                            <td class="row2-col-4" style="text-align: center;padding-left:10px;vertical-align: top;width:30%;font-size:90%">
+                                
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-9" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                132-137 WAYBILL NO.
+                                <br/> 
+                                
+                            </td>
+                            
+                            <td class="row2-col-2" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                138-143 WAYBILL DATE 
+                                <br/> 
+                                
+                            </td>
+                            
+                            <td class="row2-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                144-147 INITIAL 
+                                <br/> 
+                                
+                            </td>
+                            
+                            <td class="row2-col-4" style="vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                148-153 CAR/TRAILER NO.
+                                <br/> 
+                                
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-10" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row2">
+                            
+                            <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:25%;font-size:90%">
+                                154-159 PACKAGE CODE
+                            </td>
+                        <td class="row2-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:65%;font-size:90%">
+                                REMARKS <br/><br/>
+                                <apex:outputText value="{!claimWrapper.remark} "/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/><br/>
+                    <table class="table-12" border="2px" style="border-right: 2px solid black;padding-left:10px;width:100%;padding-left:10px;border-collapse: collapse">
+                        <tr class="row9">
+                            <th style="text-align: center;">DISTRIBUTION</th>
+                        </tr>
+                    </table>
+                    
+                    <table class="table-13" border="2px" style="border-right: 2px solid black;border-bottom: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse">
+                        <tr class="row7">
+                            <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;padding-left:10px;text-align: left;font-size:90%">
+                                FROM<br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(claimWrapper.originCity) && ISBLANK(claimWrapper.originState))}">
+                                        {!claimWrapper.originCity}<apex:outputText value="," rendered="{!NOT(ISBLANK(claimWrapper.originCity) && ISBLANK(claimWrapper.originState))}" />{!claimWrapper.originState}
+                                    </apex:outputPanel>
+                                </div>
+                            </td>
+                            <td class="looprow-col" style="border-right: 2px solid black;padding-left:10px;border-bottom: 2px solid black;text-align: left;font-size:90%">
+                                To<br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(claimWrapper.destinationCity) && ISBLANK(claimWrapper.destinationState))}">
+                                        {!claimWrapper.destinationCity}<apex:outputText value="," rendered="{!NOT(ISBLANK(claimWrapper.destinationCity) && ISBLANK(claimWrapper.destinationState))}" />{!claimWrapper.destinationState}
+                                    </apex:outputPanel>
+                                </div>
+                            </td>
+                            <td class="looprow-col" style="border-right: 2px solid black;vertical-align: top;border-bottom: 2px solid black;padding-left:10px;text-align: left;font-size:90%">
+                                VIA
+                            </td>
+                            <td class="looprow-col" style="border-right: 2px solid black;vertical-align: top;border-bottom: 2px solid black;padding-left:10px;text-align: left;font-size:90%">
+                                ROUTE
+                            </td>
+                            
+                        </tr>
+                        
+                    </table>
+                    
+                    <table class="table-14 avoid-page-break" border="2px" style="border-right: 2px solid black;border-bottom: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse;page-break-inside: avoid;">
+                        <tr class="row7 avoid-break">
+                            <td class="row7-col-1" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">ROAD NUMBER </td>
+                            <td class="row7-col-2" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">CARRIER </td>
+                            <td class="row7-col-3" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">JUNCTION</td>
+                            <td class="row7-col-4" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">MILEAGE</td>
+                            <td class="row7-col-5" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">SALVAGE FOR OTHER </td>
+                            <td class="row7-col-6" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">RECHARGE AMOUNT </td>
+                            <td class="row7-col-6" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">PREVIOUS CHARGE </td>
+                            <td class="row7-col-6" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">CORRECT CHARGE </td>
+                            <td class="row7-col-6" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;vertical-align: top;padding-left:10px;font-size:80%">TOTAL AMOUNT CHARGED </td>
+                            
+                        </tr>
+                        
+                        <apex:repeat value="{!claimWrapper.relatedDistributions}" var="dist">
+                            
+                            <tr class="row7">
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    <apex:outputField value="{!dist.CSX_CMP_Road__c}" />
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    <apex:outputText value="{!dist.CSX_CMP_Code__c}" />
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    <apex:outputField value="{!dist.CSX_CMP_Junction__c}" />
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    <apex:outputText value="{!IF(dist.CSX_CMP_Miles__c == null, dist.CSX_CMP_Adj_Miles__c, dist.CSX_CMP_Miles__c)}"/>
+                                </td>
+                                
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    {!IF(ISNULL(claimWrapper.salvageAmount), 0, claimWrapper.salvageAmount)}
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    0
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    0
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    <apex:outputText value="{!IF(dist.CSX_CMP_Manual_Adj_Amt__c == null, dist.CSX_CMP_Calculated_Amount__c, dist.CSX_CMP_Manual_Adj_Amt__c)}"/>
+                                </td>
+                                <td class="looprow-col" style="border-right: 2px solid black;border-bottom: 2px solid black;text-align: left;padding-left:10px;font-size:80%">
+                                    <apex:outputText value="{!IF(dist.CSX_CMP_Manual_Adj_Amt__c == null, dist.CSX_CMP_Calculated_Amount__c, dist.CSX_CMP_Manual_Adj_Amt__c)}"/>
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                    <br/>
+                    
+                    <table class="table-15" border="1px solid black;" style="border-top: 2px solid black;border-right: 2px solid black;border-left: 2px solid black;padding-left:10px;width:100%;border-collapse: collapse; page-break-inside: avoid;">
+                        
+                        <tr class="row8">
+                            
+                            <td class="row8-col-1" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:30%;font-size:90%">
+                                SUSPENSE <br/>
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.suspense}</div>
+                            </td>
+                            
+                            <td class="row8-col-2" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                INVESTIGATOR
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.claimOwner}</div>
+                            </td>
+                            
+                            <td class="row8-col-3" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                DESK
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.desk}</div>
+                            </td>
+                            
+                            <td class="row8-col-4" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                APPORTIONED UNDER A.A.R.
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.fcdCauseCode}</div>
+                            </td>
+                            
+                            <td class="row8-col-5" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                PAPERS SENT TO
+                                <br/> 
+                                <div style="font-weight:600;font-size:100%">
+                                    {!claimWrapper.roadNum}    </div>
+                            </td>
+                            
+                            <td class="row8-col-6" style="border-right: 2px solid black; vertical-align: top;padding-left:10px; width:20%;font-size:90%">
+                                DIRECTOR-FREIGHT CLAIM SERVICES
+                                <br/> 
+                                
+                            </td>
+                        </tr>
+                    </table>
+                    
+                </div>
+        </body>
+        <apex:outputPanel rendered="{!lstclaimWrapper.size > 1 && rowNum < lstclaimWrapper.size}">  
+            <div style="page-break-after: always; "></div>
+        </apex:outputPanel>
+        
+    </apex:repeat>
+</apex:page>

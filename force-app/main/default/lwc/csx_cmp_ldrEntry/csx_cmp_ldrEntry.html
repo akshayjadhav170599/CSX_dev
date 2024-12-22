@@ -1,0 +1,16 @@
+<template>
+    <lightning-card>
+        <div class="slds-var-p-horizontal_medium">
+            <div class="slds-col">
+                <template if:true={displaySearch}>
+                    <c-csx_cmp_ldr-search onopenmodal={openModal}></c-csx_cmp_ldr-search>
+                </template>
+            </div>
+
+            <template if:true={displayModal}>
+                <c-csx_cmp_ldr-type-selection onclosesearch={overlapSearch} display-search={displaySearch}></c-csx_cmp_ldr-type-selection> 
+                    
+            </template>
+        </div>
+    </lightning-card>
+</template>

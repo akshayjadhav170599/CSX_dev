@@ -1,0 +1,21 @@
+<template>
+    
+    <lightning-quick-action-panel header="Upload to ECM">
+        <div class="slds-grid slds-gutters slds-var-m-around_x-small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1 slds-align_absolute-center">
+                Are you sure you want to upload the Document/Email to ECM?
+            </div>   
+        </div>
+        <div slot="footer">
+            <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small">
+                <div class="slds-col slds-var-p-bottom_small slds-float_left">
+                    <lightning-button label="Upload" variant="brand" class="slds-var-p-right_large"
+                        onclick={uploadDocumentToECM} ></lightning-button>
+                    <lightning-button label="Cancel" class="slds-var-p-left_large"
+                        onclick={CloseModal}></lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-quick-action-panel>
+
+</template>

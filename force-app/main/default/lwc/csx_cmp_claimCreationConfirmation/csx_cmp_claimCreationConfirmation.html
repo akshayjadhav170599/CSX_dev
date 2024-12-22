@@ -1,0 +1,44 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+            <div class="slds-col slds-text-heading_medium slds-var-m-left_xxx-small slds-var-p-bottom_large">New
+                Claim Submission Confirmation
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                {label.confirmation} <a onclick={redirectToCase}>{claimNo}</a>.
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                {label.ecmRedirection} <span style="color: blue; cursor:pointer" onclick={redirectToECM}>Upload
+                    Supporting Documents</span>.
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+            <div class="slds-col slds-var-p-bottom_small">
+                {label.navigateBack} <a href="">Claim Search</a>.
+            </div>
+        </div>
+        <template if:true={decReason}>
+
+            <div class="slds-grid slds-gutters slds-var-m-left_x-large slds-var-p-bottom_small">
+                <div class="slds-col slds-var-p-bottom_small slds-text-color_error">
+                    <!-- {decReason} -->
+                    <lightning-formatted-text value={decReason}></lightning-formatted-text>
+
+                    <br /><br />
+                    <div class="slds-text-color_error slds-var-p-bottom_large">
+                        Click button to decline Claim.
+                    </div>
+                    <lightning-button variant="brand" label="Decline" onclick={handleDecline}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={decReasonee}>
+            <c-csx_cmp_document-upload-view record-id={claimId}></c-csx_cmp_document-upload-view>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,105 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_DeclineLetterController">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <body>
+            
+             
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                       </td>
+                   
+                </tr>
+            </table>
+            <br/><br/>
+            
+            <table style="width: 70%;">
+               
+                <tr>
+                    <td width="140">Date</td>
+                    <td>: {!claimWrapper.emailDate}</td>
+                </tr> <br/><br/>
+                
+                <tr>
+                    <td width="140">CSX Claim #</td>
+                    <td>: {!claimWrapper.csxClaimNumber}</td>
+                </tr>
+                <tr>
+                <td width="140">Claimant Name</td>
+                    <td>: {!claimWrapper.claimantName}</td>
+                    
+                </tr>
+                <tr>
+                <td width="140">Claimant #</td>
+                    <td>: {!claimWrapper.claimantNumber}</td>
+                    
+                </tr>
+                
+               
+                <tr>
+                    <td width="140">Claim Amount</td>
+                     <td>:&nbsp; <apex:outputText value="{0, number, currency}">
+                             <apex:param value="{!claimWrapper.claimAmount}"/>
+                             </apex:outputText>
+                        </td>
+                </tr>
+                <tr>
+                    <td width="140">Equipment #</td>
+                    <td>: {!claimWrapper.equipmentNumber}</td>
+                </tr>
+                
+                
+                 <tr>
+                    <td width="140" style="vertical-align: top;">Waybill #</td>
+                    <td>: {!claimWrapper.wayBillNumber}</td>
+                </tr>
+               
+                <tr>
+                    <td width="140">Waybill Date</td>
+                    <td>: {!claimWrapper.wayBillDate}</td>  
+                </tr>
+                                
+            </table>  <br/><br/>
+        <div>
+            Dear Claimant,
+        </div><br/>
+        <div>
+            We have completed the investigation concerning the above referenced claim and shipment
+        </div><br/>
+        <div>
+            We are unable to recommend the above referenced claim for payment as {!claimWrapper.declineEmailMessage}.
+        </div><br/>
+     <!--   <div>
+            {!claimWrapper.declineEmailMessage}
+        </div><br/> -->
+       <!-- <div>
+            <apex:repeat value="{!noteWrappers}" var="approvalNote">
+                         {!approvalNote.comment}<br/> 
+                    </apex:repeat>
+        </div><br/> -->
+        <apex:outputPanel rendered="{!NOT(ISBLANK(claimWrapper.declineNotes))}">
+        <div>
+           Comment:{!claimWrapper.declineNotes}
+        </div> <br/>
+        </apex:outputPanel>
+        <div>
+            In view of the above, we must respectfully disallow this claim in its entirety.
+        </div><br/><br/>
+       <div>
+            Sincerely,
+        </div>
+        <div>
+            {!claimWrapper.owner}
+       </div>
+        <div>
+            {!claimWrapper.title}
+           
+        </div>
+        <div>
+             {!claimWrapper.email}
+        </div>
+        
+    </body>
+</apex:page>

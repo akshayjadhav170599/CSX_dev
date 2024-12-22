@@ -1,0 +1,92 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_DeclineLetterController">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <body>
+
+
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                   </td>
+
+            </tr>
+        </table>
+        <br/>
+        <br/>
+
+        <table style="width: 100%;">
+
+            <tr>
+                <td width="140">Date</td>
+                <td>: {!claimWrapper.emailDate}</td>
+            </tr>
+        </table>
+        <br/>
+        <br/>
+        <table style="width: 100%;">
+            <tr>
+                <td width="140">CSX Claim #</td>
+                <td style="vertical-align: top;">: {!claimWrapper.csxClaimNumber}</td>
+            </tr>
+            <!-- <tr>
+                    <td width="140">Recharged Original Claim Number</td>
+                    <td style="vertical-align: top;">: {!claimWrapper.previousClaimNumber}</td>
+                </tr> -->
+            <tr>
+                <td width="140">{!claimWrapper.carrierAlphaCode} Claim #</td>
+                <td>: {!claimWrapper.claimantClaimNumber}</td>
+
+            </tr>
+            <tr>
+                <td width="140">Claim Declined Date</td>
+                <td>: {!claimWrapper.declineDate}</td>
+            </tr>
+            <tr>
+                <td width="140">Claimant</td>
+                <td>: {!claimWrapper.claimantName}</td>
+            </tr>
+
+        </table>
+        <br/>
+        <br/>
+        <div>
+            Dear Claimant,
+        </div>
+        <br/>
+        <div>
+            We have completed the investigation concerning the above-referenced claim and shipment.
+        </div>
+        <br/>
+        <div>
+            The claim number referenced above has been Declined. Please review the comments below
+            <br/> and if you feel this claim was declined in error, resubmit within 60 days from {!claimWrapper.declineDate}.
+        </div>
+        <br/>
+        <div>
+            {!claimWrapper.declineEmailMessage}
+        </div>
+        <br/>
+        <div>
+            Comment: {!claimWrapper.declineNotes}
+        </div>
+        <br/>
+
+        <div>
+            Sincerely,
+        </div>
+        <div>
+            {!claimWrapper.owner}
+        </div>
+        <div>
+            {!claimWrapper.title}
+        </div>
+        <div>
+            <apex:outputText value="{!$Label.CSX_CMP_Revenue_Railroad_Mail_Address}" escape="false" />
+        </div>
+
+
+    </body>
+</apex:page>

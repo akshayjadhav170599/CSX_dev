@@ -1,0 +1,138 @@
+<template>
+    <div if:false={isLoaded} class="slds-is-relative">
+        <lightning-spinner
+            alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="number" formatter="currency" step="0.01" label="Claimant Amount From" value={claimData.claimantAmountFrom} name="claimantAmountFrom" onchange={handleInputChange} data-id="claimantAmountFrom" onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="number" formatter="currency" step="0.01" label="Claimant Amount To" value={claimData.claimantAmountTo} name="claimantAmountTo" onchange={handleInputChange} data-id="claimantAmountTo"  onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" label="Supplier/Claimant Site" value={claimData.supplierClaimantSite} name="supplierClaimantSite" onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" label="Customer/ Railroad Site" value={claimData.customerSite} name="customerSite" onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+            <lightning-input type="text" label="RR SCAC" value={claimData.rrSCAC} name="rrSCAC" onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-8 slds-large-size_1-of-6  ">
+            <lightning-combobox label="Claim Reason" placeholder="Select an Option" options={claimReasonOptions}
+                value={claimData.claimReason} name="claimReason" onchange={handleInputChange} onkeypress={handleEnter}>
+            </lightning-combobox>
+        </div> 
+    </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" label="Equipment Initial" maxlength="4"
+                    onchange={handleInputChange} onkeypress={handleEnter} value={claimData.equipmentInitial} name="equipmentInitial" data-id="equipInitial" pattern="[a-zA-Z]*" 
+                    message-when-pattern-mismatch="Only alphabet characters are allowed.">
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="number" label="Equipment #" maxlength="6" value={claimData.equipmentNumber}
+                    onchange={handleInputChange} onkeypress={handleEnter} name="equipmentNumber" data-id="equipNumber">
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Invalid Value" label="Waybill #" value={claimData.waybill} name="waybill" onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="date" name="waybillfromDate" value={claimData.waybillfromDate}
+                    label="Waybill Date From" date-style="short" placeholder="MM/DD/YYYY"
+                    onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="date" name="waybilltoDate" value={claimData.waybilltoDate} label="Waybill Date To"
+                    date-style="short" placeholder="MM/DD/YYYY" onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-var-p-horizontal_medium slds-var-p-vertical_x-small">
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Invalid Value" label="URRWIN#" value={claimData.urrwin} name="urrwin" onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-8 slds-large-size_1-of-6  ">
+                <lightning-input type="text" label="Freight bill #" pattern="^(0|[1-9][0-9]*)$" message-when-pattern-mismatch="Invalid Value" name="freightBillNumber" value={claimData.freightBillNumber} onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input> 
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" maxlength="7" label="STCC" value={claimData.stcc} onchange={handleInputChange} name="stcc" onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" label="Netting Claim #" name="nettingClaimNumber" value={claimData.nettingRef} onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1   slds-medium-size_1-of-6 slds-large-size_1-of-6 ">
+                <lightning-input type="text" label="Service Period" value={claimData.servicePeriod} name="servicePeriod" onchange={handleInputChange} onkeypress={handleEnter}>
+                </lightning-input>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-text-align_center slds-var-p-vertical_medium  ">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                <lightning-button label="Reset" onclick={handleResetClick} variant="brand-outline"
+                    class="slds-var-m-left_x-small" disabled={disableResetButton}>
+                </lightning-button>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12 slds-m-left_x-large">
+                <lightning-button variant="brand" label="Search" onclick={handleSearchClaim}
+                    class="slds-var-m-left_x-small" disabled={disableSearchButton}>
+                </lightning-button>
+            </div>              
+            <template if:true={openExcelComponent}>
+                <c-csx_cmp_excelexport header-list={xlsHeader} filename={excelFileName}
+                    worksheet-name-list={workSheetNameList} sheet-data={xlsData}
+                    onlibraryloaded={excelLibraryLoaded}></c-csx_cmp_excelexport>
+            </template> 
+        </div>
+        <template if:true={showTable}>           
+            <div class=" slds-box  slds-box_xx-small" id="headerTableId">
+                <div class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">Claim Results</div>
+                    <div class="slds-var-m-bottom_small" >
+                        <lightning-button variant="brand" label="Export" title="Export Data" onclick={downloadClaimData}
+                        class="slds-var-m-right_x-small slds-float_right">
+                        </lightning-button>
+                    </div>            
+                    <template if:false={searchResults}>
+                        <c-csx_cmp_pagination records={records} total-records={records.length}
+                            onpaginatorchange={handleClaimRecordsDisplay}> 
+                        </c-csx_cmp_pagination>
+                    </template>
+                    <template if:true={searchResults}>
+                        <c-csx_cmp_pagination records={records} total-records={records.length}
+                            onpaginatorchange={handleClaimRecordsDisplay}> </c-csx_cmp_pagination>
+                    </template>              
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_11-of-12">
+                        <lightning-datatable key-field="Id" data={recordsToDisplay} columns={columns}
+                        onrowaction={handleRowLinkClickSelection} onrowselection={handleSelectedRows} sorted-by={sortByDetail}
+                        sorted-direction={sortDirection} onsort={doSortingDetail}> 
+                        </lightning-datatable> 
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-datatable key-field="Id" data={recordsToDisplay} columns={buttonColumns}
+                        onrowaction={handleRowLinkClickSelection} onrowselection={handleSelectedRows} sorted-by={sortByDetail}
+                        sorted-direction={sortDirection} hide-checkbox-column="true" onsort={doSortingDetail}> 
+                    </lightning-datatable> 
+                    </div>
+                </div>
+            </div>
+        </template>
+    <template if:true={shownoRecordError}>
+        <div class="slds-text-color_error slds-var-p-top_x-small slds-m-top_x-small slds-p-left_small slds-text-heading_small fsm-bold-text">No records found</div>   
+    </template>
+</template>

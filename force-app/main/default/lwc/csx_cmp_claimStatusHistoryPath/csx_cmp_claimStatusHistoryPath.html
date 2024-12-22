@@ -1,0 +1,19 @@
+<template>
+    <div class="slds-grid" style="overflow-x: scroll; scrollbar-width : none; display: flex;
+        flex-direction: row;">
+        <div class="slds-col">
+            <ul aria-orientation="horizontal" class="slds-path__nav ulClass slds-p-vertical_xxx-small" id="ulList">
+                <template if:true={claimStatusHistoryValues}>
+                    <template for:each={claimStatusHistoryValues} for:item="claimStatusHistoryValue">
+                        <li key={claimStatusHistoryValue.id} class={claimStatusHistoryValue.class}>
+                            <a id={claimStatusHistoryValue.id} class="slds-path__link"
+                                tabindex={claimStatusHistoryValue.tabIndex}>
+                                <span class="slds-path__title">{claimStatusHistoryValue.label}</span>
+                            </a>
+                        </li>
+                    </template>
+                </template>
+            </ul>
+        </div>
+    </div>
+</template>

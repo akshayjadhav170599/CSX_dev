@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-size_1-of-2">
+            <div if:true={isStateRequired}>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                    <lightning-combobox label={stateLabel} value={selectedState} options={stateOptions}
+                        onchange={handleStateChange} required></lightning-combobox>
+                </div>
+            </div>
+            <div if:false={isStateRequired}>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                    <lightning-combobox label={stateLabel} value={selectedState} options={stateOptions}
+                        onchange={handleStateChange}></lightning-combobox>
+                </div>
+            </div>
+        </div>
+        <div class="slds-size_1-of-2">
+            <div if:true={isCityRequired}>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                    <lightning-combobox label={cityLabel} value={selectedCity} options={cityOptions}
+                        disabled={cityDisabled} onchange={handleCityChange} required></lightning-combobox>
+                </div>
+            </div>
+            <div if:false={isCityRequired}>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                    <lightning-combobox label={cityLabel} value={selectedCity} options={cityOptions}
+                        disabled={cityDisabled} onchange={handleCityChange}></lightning-combobox>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>

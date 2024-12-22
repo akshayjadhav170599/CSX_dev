@@ -1,0 +1,27 @@
+<template>
+    <lightning-card>
+        <div class="slds-var-p-horizontal_medium">
+            <c-csx_cmp_claim-rec-type-selection-popup is-modal-open={isModelOpen} onclosemodal={closeModal}
+                onmodalapply={openFreight}></c-csx_cmp_claim-rec-type-selection-popup>
+            <template if:true={isFreightCreation}>
+                <c-csx_cmp_claim-creation-freight record-type={selectedOpt} record-type-name={selectedOption}
+                    onsendclaim={sendClaimtoConfirmation}></c-csx_cmp_claim-creation-freight><!--onbacktosearch={displaySearch}-->
+            </template>
+            <template if:true={isRevRRCreation}>
+                <c-csx_cmp_claim-creation-rev-r-r record-type={selectedOpt}
+                    onsendclaim={sendClaimtoConfirmation}></c-csx_cmp_claim-creation-rev-r-r><!--onbacktosearch={displaySearch}-->
+            </template>
+            <template if:true={isRevContractCreation}>
+                <c-csx_cmp_claim-creation-rev-contract record-type={selectedOpt}
+                    onsendclaim={sendClaimtoConfirmation}></c-csx_cmp_claim-creation-rev-contract><!--onbacktosearch={displaySearch}-->
+            </template>
+            <template if:true={claimNumber}>
+                <c-csx_cmp_claim-creation-confirmation claim-no={claimNumber} ecm-link={ecmLink} claim-id={claimId}
+                    dec-reason={declineRes}></c-csx_cmp_claim-creation-confirmation>
+            </template>
+            <!-- <c-csx_cmp_claim-creation-confirmation claim-no={claimNumber} ecm-link={ecmLink} claim-id={claimId}
+                dec-reason={declineRes}></c-csx_cmp_claim-creation-confirmation> -->
+        </div>
+
+    </lightning-card>
+</template>

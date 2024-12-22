@@ -1,0 +1,171 @@
+<apex:component controller="CSX_CMP_ClaimSummaryEmailController" access="global">
+    <apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global"/>
+    <html>
+         <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <!-- <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50"/> -->
+                     <!--  <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!$Label.CSX_CMP_CSX_Logo}"/> -->
+                          <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin:auto;" value="{!csxLogo}"/>
+                    </td>
+                </tr>
+            </table>
+            <br/><br/>
+            <table style="width: 70%;">
+                <tr>
+                    <td width="140">Date</td>
+                    <td>: {!claimWrapper.emailDate}</td>
+                </tr>
+                <tr>
+                    <td width="140"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td width="140"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td width="140">CSX Claim # </td>
+                    <td>: {!claimWrapper.claimNumber}</td>
+                </tr>
+                
+                <tr>
+                    <td width="140">Claimant Name </td>
+                    <td>: {!claimWrapper.claimantName}</td>
+                </tr>
+                
+                <tr>
+                    <td width="140">Claimant #</td>
+                    <td>: {!claimWrapper.claimantNumber}</td>
+                </tr>
+                <tr>
+                    <td width="140">Claim Amount</td>
+                    <td>:&nbsp; <apex:outputText value="{0, number, currency}">
+                        <apex:param value="{!claimWrapper.claimAmount}"/>
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="140">Submission Date</td>
+                    <td>: {!claimWrapper.submissionDate}</td>
+                </tr>
+                
+                
+                <tr>
+                    <td width="140">Company Filing Claim </td>
+                    <td>: {!claimWrapper.companyFilingClaim}</td>
+                </tr>
+                
+            </table>  <br/>
+            <div>
+                Dear Claimant,
+            </div><br/>
+            <div>
+                We have completed a review of your claim. Outlined below are the payment details.
+            </div><br/>
+            <table style="width: 100%;">
+                <tr>
+                    <td width="140">Payment Amount</td>
+                    <td>:&nbsp; <apex:outputText value="{0, number, currency}">
+                        <apex:param value="{!claimWrapper.paymentAmount}"/>
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="140">Company Name</td>
+                    <td>: {!claimWrapper.companyName}</td>
+                </tr>
+                
+                <tr>
+                    <td width="140" style="vertical-align: top;">Payment Address</td>
+                    <td>:&nbsp;
+                        <apex:outputText value="{!claimWrapper.paymentAddress}" escape="false"/>
+                    </td>
+                </tr>                 
+                <tr>
+                    <td width="140">Payment Method</td>
+                    <td>: {!claimWrapper.paymentMethod}</td>  
+                </tr>
+            </table>  <br/>
+            
+            <table border="1" style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th>Invoice #</th>
+                    <th>Invoice Date</th>
+                    <th># of Cars</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Commodity</th>
+                    <th>Lead Equipment</th>
+                    <th>Waybill #</th>
+                    <th>Waybill Date</th>
+                    <th>BOL #</th>
+                    <th>BOL Date</th>
+                    <th>Amount Paid</th>
+                    <th>Correct Amount</th>
+                    <th>Claim Amount</th>
+                </tr>
+                <apex:repeat value="{!claimWrapper.claimLines}" var="claimLine"> 
+                    <tr>
+                        <td style="text-align: center;">{!claimLine.invoice}</td>
+                        <td style="text-align: center;">{!claimLine.invoiceDate}</td>
+                        <td style="text-align: center;">{!claimLine.cars}</td>
+                        <td style="text-align: center;"><apex:outputPanel rendered="{!NOT(ISBLANK(claimLine.origin) && ISBLANK(claimLine.originState))}">
+                            {!claimLine.origin}<apex:outputText value="," rendered="{!NOT(ISBLANK(claimLine.origin) && ISBLANK(claimLine.originState))}" />{!claimLine.originState}
+                            </apex:outputPanel>
+                        </td>
+                        <td style="text-align: center;"><apex:outputPanel rendered="{!NOT(ISBLANK(claimLine.destination) && ISBLANK(claimLine.destinationState))}">
+                            {!claimLine.destination}<apex:outputText value="," rendered="{!NOT(ISBLANK(claimLine.destination) && ISBLANK(claimLine.destinationState))}" />{!claimLine.destinationState}
+                            </apex:outputPanel>
+                        </td>
+                        <td style="text-align: center;">{!claimLine.commodity}</td>   
+                        <td style="text-align: center;">{!claimLine.equipmentInitial} {!claimLine.equipmentNumber}</td>
+                        <td style="text-align: center;">{!claimLine.wayBillNumber}</td>
+                        <td style="text-align: center;">{!claimLine.wayBillDate}</td>
+                        <td style="text-align: center;">{!claimLine.bol}</td>
+                        <td style="text-align: center;">{!claimLine.bolDate}</td>
+                        
+                        <td style="text-align: center;"><apex:outputText value="{0, number, currency}">
+                            <apex:param value="{!claimLine.amountPaid}"/>
+                            </apex:outputText>
+                        </td>
+                        
+                        <td style="text-align: center;"><apex:outputText value="{0, number, currency}">
+                            <apex:param value="{!claimLine.correctAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        
+                        <td style="text-align: center;"><apex:outputText value="{0, number, currency}">
+                            <apex:param value="{!claimLine.claimAmounts}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table><br/>
+            <div>
+                CSX Explanation:<br/>
+                <apex:repeat value="{!claimNotesWrappers}" var="claimNote">
+                    <tr>
+                        <td style="padding-right:5px; ">{!TEXT(MONTH(DATEVALUE(claimNote.creationDate))) & '/' & TEXT(DAY(DATEVALUE(claimNote.creationDate)))
+                            & '/' & TEXT(YEAR(DATEVALUE(claimNote.creationDate)))}</td>
+                        <td  style="padding-left:10px;width:100%; ">
+                            {!claimNote.comment}
+                        </td><br/> 
+                        
+                    </tr>     
+                </apex:repeat>
+            </div><br/>
+            
+            <div>
+                <td>You may <b>Reply All</b> to this email for any future correspondence regarding this claim.</td>
+            </div>
+            
+        </body>
+    </html>
+</apex:component>

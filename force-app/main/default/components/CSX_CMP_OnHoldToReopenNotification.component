@@ -1,0 +1,38 @@
+<apex:component controller="CSX_CMP_OnHoldToReopenController" access="global">
+<apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global"/>
+    <html>
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <div>Dear {!claimWrapper.ownerName},</div><br/><br/>
+            <div>This is to notify that <a href="{!claimWrapper.claimInformation} " target="_blank " style="text-decoration: none; ">{!claimWrapper.claimNumber}</a> has been moved from On Hold to Open due to changes in Freight Bill
+                Details.Kindly review the claim and correct the claim line amounts to submit again for approval.
+            </div><br/>
+            <div>
+                Please review the below details:
+            </div><br/>
+             <table border="1" style="width: 50%; border-collapse: collapse;">
+                <tr>
+                    <th>Freight Bill#</th>
+                    <th>Claim Amount</th>
+                    <th>Balance Due</th>
+                </tr>
+                <apex:repeat value="{!claimWrapper.claimLines}" var="claim"> 
+                    <tr>
+                        <td style="text-align: center;">{!claim.freightBillNum}</td>
+                        <td style="text-align: center;">
+                            <apex:outputText value="{0, number, currency}">
+                            <apex:param value="{!claim.claimAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td style="text-align: center;">{!claim.balanceDue}</td>
+                       
+                    </tr>
+                </apex:repeat>
+            </table>
+        </body>
+    </html>
+</apex:component>

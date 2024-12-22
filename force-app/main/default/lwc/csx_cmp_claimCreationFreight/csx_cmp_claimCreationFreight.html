@@ -1,0 +1,213 @@
+<template>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-text-heading_medium slds-var-m-left_xxx-small slds-var-p-bottom_small">New Claim
+            Submission
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-bottom_small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox label="Claim Type" placeholder="Select Claim Type..." options={claimTypeOptionsData}
+                name="claimType" value={freightClaim.claimType} onchange={handleClaimTypeChange} required>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-var-p-top_xx-large">
+            <lightning-input type="checkbox" label="No Waybill" onchange={handleCheckboxChange}>
+            </lightning-input>
+        </div>
+    </div>
+
+    <template if:true={showShipmentSearch}>
+        <c-csx_cmp_shipment-search onsendshipments={handleShipmentsReceived} claim-type-applicable=true
+            onresetshipment={resetShipment}></c-csx_cmp_shipment-search>
+    </template>
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-top_small">
+        <div class="slds-col slds-var-p-left_x-small slds-text-heading_x-small fsm-bold-text">
+            Claim Information
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <template if:true={showVinPicklist}>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input label="Equipment ID" type="Text" maxlength="10" value={equipNo} disabled
+                    required></lightning-input>
+            </div>
+            <template if:true={vinSelectionApplicable}>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                    <lightning-combobox label="VIN" placeholder="Select an Option" options={vinOptions}
+                        value={selectedVin} onchange={handleVinChange} required>
+                    </lightning-combobox>
+                </div>
+            </template>
+        </template>
+        <template if:true={showVinText}>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input class="EquipErr" label="Equipment ID" type="Text" maxlength="11" minlength="3"
+                    autocomplete="off" name="equipId" value={freightClaim.equipId} onchange={handleInputChange}
+                    data-id="equipNo"></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input class="VinErr" label="VIN" type="Text" maxlength="17" name="vin"
+                    value={freightClaim.vin} minlength="17" onchange={handleInputChange}
+                    data-id="vin"></lightning-input>
+            </div>
+        </template>
+        <!-- <template if:true={showVinText}>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input class="EquipErr" label="Equipment ID" type="Text" maxlength="10" minlength="10"
+                    name="equipId" value={freightClaim.equipId} onchange={handleInputChange}></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input class="VinErr" label="VIN" type="Text" maxlength="17" name="vin"
+                    value={freightClaim.vin} minlength="17" onchange={handleInputChange}></lightning-input>
+            </div>
+        </template> -->
+        <template if:true={noVinValues}>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4">
+                <lightning-input label="Equipment ID" type="Text" maxlength="10" value={equipNo} disabled
+                    required></lightning-input>
+            </div>
+        </template>
+        <template if:true={showDerailment}>
+            <div
+                class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 slds-var-p-top_xx-large">
+                <lightning-input type="checkbox" label="Derailment" onchange={handleInputChange} name="derailment"
+                    value={freightClaim.derailment} checked> </lightning-input>
+            </div>
+        </template>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-combobox label="Claim Reason" placeholder="Select Reason" options={reasonOptions}
+                name="claimReason" value={freightClaim.claimReason} onchange={handleInputChange}
+                required></lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-input label="Claim Amount $" name="claimAmount" value={freightClaim.claimAmount} type="Number"
+                formatter="Currency" step="any" onchange={handleInputChange} required></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-input type="date" label="Customer Claim Date" name="customerClaimDate" date-style="short"
+                placeholder="MM/DD/YYYY" max={maximumDate} value={freightClaim.customerClaimDate}
+                onchange={handleInputChange} required></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+            <lightning-input label="Customer Reference Number" name="claimantReferenceNumber"
+                value={freightClaim.claimantReferenceNumber} onchange={handleInputChange}></lightning-input>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_2-of-4 slds-large-size_2-of-4 ">
+            <lightning-textarea label="Claim Description" name="notes" value={freightClaim.notes}
+                onchange={handleInputChange}></lightning-textarea>
+        </div>
+        <template if:true={isRR}>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox label="FCD Cause" placeholder="Select Cause" options={fcdCauseOptions}
+                    name="causeCode" value={freightClaim.causeCode} onchange={handleInputChange} required>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox label="FCD Rule" placeholder="Select Rule" options={fcdRuleOptions} name="ruleCode"
+                    value={freightClaim.ruleCode} onchange={handleInputChange} required>
+                </lightning-combobox>
+            </div>
+        </template>
+        <template if:true={isTransflo}>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-4 slds-large-size_1-of-4 ">
+                <lightning-combobox label="Terminal" placeholder="Select Terminal" options={terminalOptions}
+                    name="terminal" value={freightClaim.terminal} onchange={handleInputChange} required>
+                </lightning-combobox>
+            </div>
+        </template>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small slds-var-m-left_x-small">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-4 slds-large-size_3-of-4">
+            <c-csx_cmp_contact-details contact-label="Contact Name" phone-label="Phone Number"
+                email-label="Email Address" is-name-required=true is-email-required=true
+                ondatachange={handleContactDetailChange}></c-csx_cmp_contact-details>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small ">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-4 slds-large-size_4-of-4">
+            <c-csx_cmp_supplier-site-search claim-type={claimTypeValue} record-type={recordTypeName}
+                onsendsupplierid={handleSupplierId}></c-csx_cmp_supplier-site-search>
+        </div>
+    </div>
+
+
+    <div class="slds-grid slds-gutters slds-var-m-left_x-small slds-var-p-vertical_small">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3">
+            <div class="slds-form-element__control">
+                <div class="slds-checkbox">
+                    <input type="checkbox" name="sendEmail" id="sendEmail" value={freightClaim.sendEmail}
+                        onchange={handleInputChange} checked={freightClaim.sendEmail} />
+                    <label class="slds-checkbox__label" for="sendEmail">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-form-element__label fsm-bold-text slds-var-m-left_x-small"> Send email
+                            confirmation to Contact
+                            email address</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-p-top_small slds-grid_align-spread">
+        <div class="slds-col slds-var-p-bottom_small slds-float_left">
+            <lightning-button label={label.submitClaim} variant="brand" onclick={submitClaim} disabled={isSubmitting}
+                class="slds-var-p-left_large"></lightning-button>
+            <lightning-spinner if:true={isSubmitting}></lightning-spinner>
+        </div>
+        <div class="slds-col slds-var-p-bottom_small slds-float_right">
+            <lightning-button label={label.reset} onclick={resetPage} type="reset"
+                class="slds-var-p-right_large"></lightning-button>
+        </div>
+    </div>
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-backdrop">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Duplicate Check</h2>
+                </header>
+
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-align_absolute-center slds-text-body_regular slds-p-bottom_x-small">
+                        {label.duplicatesFound}
+                    </div>
+                    <div class="slds-align_absolute-left">
+                        <ul>
+                            <template for:each={duplicateClaimNum} for:item="Claim">
+                                <li key={Claim}>
+                                    <a onclick={redirectToCase} data-claim-number={Claim}>{Claim}</a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <div class="slds-align_absolute-right">
+                        <lightning-button label="Cancel" onclick={closeModal}
+                            class="slds-var-p-right_x-large slds-button_neutral">
+                        </lightning-button>
+                        <lightning-button variant="brand" label="Proceed" onclick={createClaim}
+                            class="slds-var-p-right_x-large">
+                        </lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </template>
+</template>

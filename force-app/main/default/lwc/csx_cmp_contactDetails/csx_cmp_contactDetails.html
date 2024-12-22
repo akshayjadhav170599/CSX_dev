@@ -1,0 +1,56 @@
+<template>
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div if:true={isNameRequired}>
+                <lightning-input label={contactLabel} type="text" value={contactName} onchange={handleNameChange}
+                    required></lightning-input>
+            </div>
+            <div if:false={isNameRequired}>
+                <lightning-input label={contactLabel} type="text" value={contactName} onchange={handleNameChange}>
+                </lightning-input>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div if:true={isPhoneRequired}>
+                <!-- <lightning-input label={phoneLabel} type="tel" value={phone} placeholder={placeHolder}
+                    onkeydown={onPhoneChange} maxlength={formatLength} data-id="phoneNumberValue"
+                    onchange={handlePhoneChange} required autocomplete="off"></lightning-input> -->
+                <lightning-input label={phoneLabel} type="tel" value={phone} placeholder={placeHolder}
+                    maxlength={formatLength} data-id="phoneNumberValue" onchange={handlePhoneChange} required
+                    autocomplete="off"></lightning-input>
+            </div>
+            <div if:false={isPhoneRequired}>
+                <!-- <lightning-input label={phoneLabel} type="tel" value={phone} placeholder={placeHolder}
+                    onkeydown={onPhoneChange} maxlength={formatLength} data-id="phoneNumberValue"
+                    onchange={handlePhoneChange} autocomplete="off"></lightning-input> -->
+                <lightning-input label={phoneLabel} type="tel" value={phone} placeholder={placeHolder}
+                    maxlength={formatLength} data-id="phoneNumberValue" onchange={handlePhoneChange}
+                    autocomplete="off"></lightning-input>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-3 slds-large-size_1-of-3 ">
+            <div if:false={isEmailTextArea}>
+                <div if:true={isEmailRequired}>
+                    <lightning-input label={emailLabel} type="email" value={email} data-id="txtEmailAddress"
+                        onchange={handleEmailValidation} required></lightning-input>
+                </div>
+                <div if:false={isEmailRequired}>
+                    <lightning-input label={emailLabel} type="email" value={email} data-id="txtEmailAddress"
+                        onchange={handleEmailValidation}></lightning-input>
+                </div>
+            </div>
+            <div if:true={isEmailTextArea}>
+                <div if:true={isEmailRequired}>
+                    <lightning-textarea label={emailsLabel} value={emailIds} data-id="txtAreaEmailAddress"
+                        onchange={handleEmailChange} required>
+                    </lightning-textarea>
+                </div>
+                <div if:false={isEmailRequired}>
+                    <lightning-textarea label={emailsLabel} value={emailIds} data-id="txtAreaEmailAddress"
+                        onchange={handleEmailChange}>
+                    </lightning-textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

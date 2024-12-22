@@ -1,0 +1,466 @@
+<template>
+    <template if:true={freight}>
+        <lightning-card>
+            <div class='form-container'>
+                <table>
+                    <tr class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 slds-form">
+                        <td>
+                            <label class="slds-form-element__label">Claim Number</label>
+                        </td>
+                        <td>
+                            <label class="slds-form-element__label">Equipment ID</label>
+                        </td>
+                        <template if:false={isClaimType}>
+                            <td>
+                                <label class="slds-form-element__label">VIN</label>
+                            </td>
+                        </template>
+                        <td>
+                            <label class="slds-form-element__label">Waybill Date</label>
+                        </td>
+                    </tr>
+                    <tr class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 slds-form">
+                        <td>
+                            <label class="slds-form-element__label"> {strNumber} </label>
+                        </td>
+                        <td>
+                            <label class="slds-form-element__label"> {strEquipmentName} </label>
+                        </td>
+                        <template if:false={isClaimType}>
+                            <td>
+                                <label class="slds-form-element__label"> {strVin} </label>
+                            </td>
+                        </template>
+                        <td>
+                            <label class="slds-form-element__label"> {strWayBillDate} </label>
+                        </td>
+                    </tr>
+                    <tr class="slds-col slds-size_1-of-1  slds-medium-size_1-of-6 slds-large-size_1-of-6 slds-form">
+                        <td>
+                            <lightning-textarea label="Comments" value={strComments}
+                                onchange={handleCommentsChange}></lightning-textarea>
+                        </td>
+                        <td>
+                            <lightning-input type="checkbox" label="Internal Only" checked={isInternalOnly}
+                                onchange={InternalOnlyCheckboxChange}>
+                            </lightning-input>
+                        </td>
+                        <td>
+                            <lightning-input type="checkbox" label="Upload to ECM?" checked={isUploadToECM}
+                                onchange={UploadOnlyCheckboxChange}>
+                            </lightning-input>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="attachFilesCss">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading" size="medium"
+                            class="spinnerClass"></lightning-spinner>
+                    </template>
+
+                    <lightning-input type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf" label="Attachment"
+                        onchange={onfileUpload} multiple="true"></lightning-input>
+
+                    <input type="file" onchange={onfileUpload} style="display:none">
+
+                    <div class="form-group">
+                        <a href="#" class="ecm-link" onclick={handleECMLinkClick}>View in ECM</a>
+                    </div>
+                </div>
+                <div class="uploaded-documents">
+                    <label class="slds-form-element__label"> Uploaded Documents </label>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Doc Id</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>VIN</th>
+                                    <th>Equipment ID</th>
+                                    <th>Upload Date</th>
+                                    <th>Updated By</th>
+                                    <th>Comments</th>
+                                    <th>ECM ID</th>
+                                    <th>Internal Only</th>
+                                    <th>Upload to ECM</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={uploadedDocuments} for:item="doc">
+                                    <tr key={doc.Id}>
+                                        <td>{doc.Name}</td>
+                                        <td>{doc.CSX_CMP_File_Name__c}</td>
+                                        <td>{doc.CSX_CMP_Document_Type__c}</td>
+                                        <td>{strVin}</td>
+                                        <td>{strEquipmentName}</td>
+                                        <td>{doc.uploadDate}</td>
+                                        <td>{doc.LastModifiedBy.Name}</td>
+                                        <td>{doc.CSX_CMP_File_Description__c}</td>
+                                        <td>
+                                            <template if:true={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                <lightning-formatted-rich-text value={doc.CSX_CMP_ECM_Document_Link__c}>
+                                                </lightning-formatted-rich-text>
+                                            </template>
+                                            <template if:false={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                NA
+                                            </template>
+
+                                        </td>
+                                        <td><input type="checkbox" checked={doc.CSX_CMP_Internal_Only__c} disabled>
+                                        </td>
+                                        <td><input type="checkbox" checked={doc.CSX_CMP_UploadToECM__c} disabled>
+                                        </td>
+                                        <template if:true={doc.CSX_CMP_Salesforce_license__c}>
+                                            <td>
+                                                <template if:true={doc.CSX_CMP_isUserDocument__c}>
+                                                    <div style="display: flex;">
+                                                        <div class="deleteicon-container">
+                                                            <lightning-icon class="slds-m-right_medium"
+                                                                icon-name="action:delete" alternative-text="Delete"
+                                                                variant="error" size="x-small" onclick={handleDelete}
+                                                                data-id={doc.Id}
+                                                                style="background-color:rgb(143, 39, 39); cursor: pointer">
+                                                            </lightning-icon>
+                                                            <span class="showDeleteHelpText">Delete</span>
+                                                        </div>
+                                                        <div class="reuploadicon-container">
+                                                            <template if:true={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                                <div class="icon-container">
+                                                                    <lightning-icon onclick={onClickReUpload}
+                                                                        icon-name="action:upload"
+                                                                        alternative-text="Re-Upload"
+                                                                        style="background-color:rgb(41, 95, 44); cursor: pointer;"
+                                                                        size="x-small"
+                                                                        data-id={doc.CSX_CMP_File_Name__c}
+                                                                        data-cdid={doc.CSX_CMP_Content_Document_ID__c}
+                                                                        data-docid={doc.Id}
+                                                                        data-uploadecm={doc.CSX_CMP_UploadToECM__c}
+                                                                        data-cvid={doc.CSX_CMP_ContentVersionID__c}>
+                                                                    </lightning-icon>
+                                                                    <span class="showReuploadHelpText">Re-Upload</span>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                        <div class="uploadicon-container">
+                                                            <template if:false={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                                <div class="icon-container">
+                                                                    <lightning-icon onclick={onClickUpload}
+                                                                        icon-name="action:upload"
+                                                                        alternative-text="Upload" size="xx-small"
+                                                                        style="cursor: pointer"
+                                                                        data-id={doc.CSX_CMP_File_Name__c}
+                                                                        data-cdid={doc.CSX_CMP_Content_Document_ID__c}
+                                                                        data-docid={doc.Id}
+                                                                        data-uploadecm={doc.CSX_CMP_UploadToECM__c}
+                                                                        data-cvid={doc.CSX_CMP_ContentVersionID__c}>
+                                                                    </lightning-icon>
+                                                                    <span class="showUploadHelpText">Upload</span>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+    <template if:true={revenue}>
+        <lightning-card>
+            <div class='form-container'>
+                <table>
+                    <tr>
+                        <td>
+                            <label class="slds-form-element__label"> Claim Number </label>
+                        </td>
+                        <td>
+                            <lightning-input type="checkbox" label="Internal Only" checked={isInternalOnly}
+                                onchange={InternalOnlyCheckboxChange}>
+                            </lightning-input>
+                        </td>
+                        <td>
+                            <lightning-input type="checkbox" label="Upload to ECM?" checked={isUploadToECM}
+                                onchange={UploadOnlyCheckboxChange}>
+                            </lightning-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <label class="slds-form-element__label"> {strNumber} </label></td>
+                    </tr>
+                </table>
+
+                <template if:true={strContractNumber}>
+                <table>
+                    <tr>
+                        <td>
+                            <label class="slds-form-element__label"> Contract Number </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <label class="slds-form-element__label"> {strContractNumber} </label> </td>
+                    </tr>
+                </table>
+                </template>
+
+                <div class="attachFilesCss">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading" size="medium"
+                            class="spinnerClass"></lightning-spinner>
+                    </template>
+                    <lightning-input type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf" label="Attachment"
+                        onchange={onfileUpload} multiple="true"></lightning-input>
+
+                    <input type="file" onchange={onfileUpload} style="display:none">
+                </div>
+                <div class="uploaded-documents">
+                    <label class="slds-form-element__label"> Uploaded Documents </label>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Doc Id</th>
+                                    <th>Title</th>
+                                    <th>Document</th>
+                                    <th>Upload Date</th>
+                                    <th>Updated By</th>
+                                    <th>Comments</th>
+                                    <th>ECM ID</th>
+                                    <th>Internal Only</th>
+                                    <th>Upload to ECM</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={uploadedDocuments} for:item="doc">
+                                    <tr key={doc.Id}>
+                                        <td>{doc.Name}</td>
+                                        <td>{doc.CSX_CMP_File_Name__c}</td>
+                                        <td>{doc.CSX_CMP_Document_Type__c}</td>
+                                        <td>{doc.uploadDate}</td>
+                                        <td>{doc.LastModifiedBy.Name}</td>
+                                        <td>{doc.CSX_CMP_File_Description__c}</td>
+                                        <td>
+                                            <template if:true={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                <lightning-formatted-rich-text value={doc.CSX_CMP_ECM_Document_Link__c}>
+                                                </lightning-formatted-rich-text>
+                                            </template>
+                                            <template if:false={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                NA
+                                            </template>
+                                        </td>
+                                        <td><input type="checkbox" checked={doc.CSX_CMP_Internal_Only__c} disabled>
+                                        </td>
+                                        <td><input type="checkbox" checked={doc.CSX_CMP_UploadToECM__c} disabled>
+                                        </td>
+                                        <template if:true={doc.CSX_CMP_Salesforce_license__c}>
+                                            <td>
+                                                <template if:true={doc.CSX_CMP_isUserDocument__c}>
+                                                    <div style="display: flex;">
+                                                        <div class="deleteicon-container">
+                                                            <lightning-icon class="slds-m-right_medium"
+                                                                icon-name="action:delete" alternative-text="Delete"
+                                                                variant="error" size="x-small" onclick={handleDelete}
+                                                                data-id={doc.Id}
+                                                                style="background-color:rgb(143, 39, 39); cursor: pointer">
+                                                            </lightning-icon>
+                                                            <span class="showDeleteHelpText">Delete</span>
+                                                        </div>
+                                                        <div class="reuploadicon-container">
+                                                            <template if:true={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                                <lightning-icon onclick={onClickReUpload}
+                                                                    icon-name="action:upload"
+                                                                    alternative-text="Re-Upload"
+                                                                    style="background-color:rgb(41, 95, 44); cursor: pointer;"
+                                                                    size="x-small" data-id={doc.CSX_CMP_File_Name__c}
+                                                                    data-cdid={doc.CSX_CMP_Content_Document_ID__c}
+                                                                    data-docid={doc.Id}
+                                                                    data-uploadecm={CSX_CMP_UploadToECM__c}>
+                                                                </lightning-icon>
+                                                                <span class="showReuploadHelpText">Re-Upload</span>
+                                                            </template>
+                                                        </div>
+                                                        <div class="uploadicon-container">
+                                                            <template if:false={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                                <lightning-icon onclick={onClickUpload}
+                                                                    icon-name="action:upload" alternative-text="Upload"
+                                                                    size="xx-small" style="cursor: pointer"
+                                                                    data-id={doc.CSX_CMP_File_Name__c}
+                                                                    data-cdid={doc.CSX_CMP_Content_Document_ID__c}
+                                                                    data-docid={doc.Id}
+                                                                    data-uploadecm={doc.CSX_CMP_UploadToECM__c}>
+                                                                </lightning-icon>
+                                                                <span class="showUploadHelpText">Upload</span>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+    <template if:true={ldReport}>
+        <lightning-card>
+            <div class='form-container'>
+                <table class='table-container-ld'>
+                    <tr>
+                        <td>
+                            <label class="slds-form-element__label">L&D Report#</label>
+                        </td>
+                        <td>
+                            <label class="slds-form-element__label">Waybill Date</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <label class="slds-form-element__label"> {strNumber} </label> </td>
+                        <td> <label class="slds-form-element__label"> {strWayBillDate} </label> </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>
+                            <lightning-textarea label="Comments" value={strComments}
+                                onchange={handleCommentsChange}></lightning-textarea>
+                        </td>
+                        <td>
+                            <lightning-input type="checkbox" label="Internal Only" checked={isInternalOnly}
+                                onchange={InternalOnlyCheckboxChange}>
+                            </lightning-input>
+                        </td>
+                        <td>
+                            <lightning-input type="checkbox" label="Upload to ECM?" checked={isUploadToECM}
+                                onchange={UploadOnlyCheckboxChange}>
+                            </lightning-input>
+                        </td>
+                        <th></th>
+                    </tr>
+                </table>
+
+                <div class="attachFilesCss">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading" size="medium"
+                            class="spinnerClass"></lightning-spinner>
+                    </template>
+                    <lightning-input type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf" label="Attachment"
+                        onchange={onfileUpload} multiple="true"></lightning-input>
+
+                    <input type="file" onchange={onfileUpload} style="display:none">
+
+                    <div class="form-group">
+                        <a href="#" class="ecm-link" onclick={handleECMLinkClick}>View in ECM</a>
+                    </div>
+                </div>
+                <div class="uploaded-documents">
+                    <label class="slds-form-element__label"> Uploaded Documents </label>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Doc Id</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Upload Date</th>
+                                    <th>Updated By</th>
+                                    <th>Comments</th>
+                                    <th>ECM ID</th>
+                                    <th>Internal Only</th>
+                                    <th>Upload to ECM</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={uploadedDocuments} for:item="doc">
+                                    <tr key={doc.Id}>
+                                        <td>{doc.Name}</td>
+                                        <td>{doc.CSX_CMP_File_Name__c}</td>
+                                        <td>{doc.CSX_CMP_Document_Type__c}</td>
+                                        <td>{doc.uploadDate}</td>
+                                        <td>{doc.LastModifiedBy.Name}</td>
+                                        <td>{doc.CSX_CMP_File_Description__c}</td>
+                                        <td>
+                                            <template if:true={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                <lightning-formatted-rich-text value={doc.CSX_CMP_ECM_Document_Link__c}>
+                                                </lightning-formatted-rich-text>
+                                            </template>
+                                            <template if:false={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                NA
+                                            </template>
+                                        </td>
+                                        <td><input type="checkbox" checked={doc.CSX_CMP_Internal_Only__c} disabled>
+                                        </td>
+                                        <td><input type="checkbox" checked={doc.CSX_CMP_UploadToECM__c} disabled>
+                                        </td>
+                                        <template if:true={doc.CSX_CMP_Salesforce_license__c}>
+                                            <td>
+                                                <template if:true={doc.CSX_CMP_isUserDocument__c}>
+                                                    <div style="display: flex;">
+                                                        <div class="deleteicon-container">
+                                                            <lightning-icon class="slds-m-right_medium"
+                                                                icon-name="action:delete" alternative-text="Delete"
+                                                                variant="error" size="x-small" onclick={handleDelete}
+                                                                data-id={doc.Id}
+                                                                style="background-color:rgb(143, 39, 39); cursor: pointer">
+                                                            </lightning-icon>
+                                                            <span class="showDeleteHelpText">Delete</span>
+                                                        </div>
+                                                        <div class="reuploadicon-container">
+                                                            <template if:true={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                                <div class="icon-container">
+                                                                    <lightning-icon onclick={onClickUpload}
+                                                                        icon-name="action:upload"
+                                                                        alternative-text="Re-Upload"
+                                                                        style="background-color:rgb(41, 95, 44); cursor: pointer;"
+                                                                        size="x-small" data-id={doc.Id}>
+                                                                    </lightning-icon>
+                                                                    <span class="showReuploadHelpText">Re-Upload</span>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                        <div class="uploadicon-container">
+                                                            <template if:false={doc.CSX_CMP_ECM_Document_ID__c}>
+                                                                <div class="icon-container">
+                                                                    <lightning-icon onclick={onClickUpload}
+                                                                        icon-name="action:upload"
+                                                                        alternative-text="Upload" size="xx-small"
+                                                                        style="cursor: pointer" data-id={doc.Id}>
+                                                                    </lightning-icon>
+                                                                    <span class="showUploadHelpText">Upload</span>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+</template>

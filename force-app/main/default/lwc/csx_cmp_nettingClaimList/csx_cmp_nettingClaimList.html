@@ -1,0 +1,54 @@
+<template>
+    <div if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+        </lightning-spinner>
+    </div>
+    <template if:true={openExcelComponent}>
+        <c-csx_cmp_excelexport header-list={xlsHeader} filename={excelFileName} worksheet-name-list={workSheetNameList}
+            sheet-data={xlsData} onlibraryloaded={excelLibraryLoaded}></c-csx_cmp_excelexport>
+    </template>
+    <div class="slds-p-horizontal_small">
+        <div class="slds-grid slds-gutters slds-var-p-vertical_small">
+            <div class="slds-col slds-size_5-of-8 slds-size_medium_5-of-8 slds-size_large_5-of-8">
+                <div class="slds-box">
+
+                    <template if:true={data}>
+                        <template if:true={claimRecordList.length}>
+
+                            <lightning-button variant="brand" label="Export" title="Export Data"
+                                onclick={downloadClaimData} class="slds-var-m-right_x-small slds-float_right"
+                                disabled={disableExportButton}>
+                            </lightning-button>
+
+
+                            <c-csx_cmp_pagination if:true={claimRecordList.length} table-title={nettingLabel}
+                                records={claimRecordList} total-records={claimRecordList.length}
+                                onpaginatorchange={handleClaimRecordsDisplay}>
+                            </c-csx_cmp_pagination>
+
+
+                            <div class="slds-grid slds-gutters slds-var-p-vertical_small">
+                                <div class="slds-col slds-size_1-of-1 slds-size_medium_1-of-1 slds-size_large_1-of-1">
+                                    <lightning-datatable max-row-selection="1"
+                                        class="slds-table_bordered slds-table_col-bordered" key-field="railRoadUniqueId"
+                                        data={data} columns={nettingClaimResultColumns}
+                                        selected-rows={selectedRecordIds} onrowselection={handleRowSelection}
+                                        onsort={doSortingRailroad} sorted-by={sortByName}
+                                        sorted-direction={sortDirection}>
+                                    </lightning-datatable>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+            <div class="slds-col slds-size_3-of-8 slds-size_medium_3-of-8 slds-size_large_3-of-8">
+                <template if:true={displayComponent}>
+                    <c-csx_cmp_netting-claim-summary if:true={claimRecordWrapper} claim-record-wrapper={claimRecordWrapper}
+                        inb-claim={inbClaim} out-claim={outClaim}></c-csx_cmp_netting-claim-summary>
+                </template>
+            </div>
+        </div>
+    </div>
+    
+</template>

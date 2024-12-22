@@ -1,0 +1,75 @@
+<apex:page controller="CSX_CMP_RechargeLetterController" name="recordId" renderAs="PDF" showHeader="false" standardStylesheets="false" sidebar="false"  docType="html-5.0">
+    
+    <html>
+        <head>
+            <style>
+                @page{
+                size: A4 landscape;
+                }            
+            </style>
+        </head>
+    <html>
+        <body>
+            <table style="width: 100%;" padding="50px;">
+                <tr>
+                    <td>
+                   <!--     <apex:image url="{!URLFOR($Resource.CSX_CMP_CSXTheme, 'images/CSX_Blue.jpg')}" width="120" height="50"/> -->
+                         <apex:image id="theImage"  width="120px" value="{!csxLogo}"/>
+                    </td>
+                    <td style="width:50%;">
+                    </td>
+                    <td style="text-align: right;vertical-align: top;  font-size: 10pt;">
+                        <apex:outputText value="{!$Label.CSX_CMP_Recharge_Letter}" escape="false"></apex:outputText>
+                    </td>
+                </tr>
+            </table> <br/><br/>
+            
+            <div style="margin-left: 180px;">
+                <tr>
+    				<td style="padding-left: 50px;"> <b>RECHARGE DEBIT STATEMENT</b> </td>
+				</tr>
+            </div> <br/>
+            <div style="margin-left: 240px;">
+                <table style="width: 60%;">
+                    <tr>
+                        <td>Date:</td>
+                        <td> {!objCaseWrapper.claimDate}</td>
+                    </tr>
+                    <tr>
+                        <td>Our Claim:</td>
+                        <td>{!objCaseWrapper.caseNumber}</td>
+                    </tr>
+                    <tr>
+                        <td>Your Claim:</td>
+                        <td>{!objCaseWrapper.foreignCustClaimNo}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount of Debit:</td>
+                        <td> <apex:outputText value="{0, number, currency}">
+                            <apex:param value="{!objCaseWrapper.claimAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Amount of Recharge:</td>
+                        <td> <apex:outputText value="{0, number, currency}">
+                            <apex:param value="{!objCaseWrapper.claimAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </table>
+            </div><br/><br/>
+            <div>
+                ATTN: {!objCaseWrapper.supplier}
+            </div><br/><br/>
+            <apex:outputText value="{!$Label.CSX_CMP_RechargeLetter_Static}" escape="false"></apex:outputText>  
+            <div>
+            {!objCaseWrapper.reason}
+            </div><br/><br/>
+            <div>
+                <p>Thank you <br/>CSX Interline Settlement</p>
+            </div>
+        </body>
+    </html>   
+    </html>
+</apex:page>

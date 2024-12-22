@@ -1,0 +1,47 @@
+<template>
+    <div class="slds-grid slds-grid_align-center slds-gutters 
+        slds-grid_align-spread slds-var-p-horizontal_none slds-grid_vertical-align-center slds-grid_align-spread">
+        <div class="slds-col slds-size_3-of-8 slds-medium-size_3-of-8 slds-large-size_3-of-8">
+            <div class="slds-float_left slds-text-heading_small fsm-bold-text">{tableTitle}
+            </div><!--slds-var-p-left_xx-small-->
+        </div>
+
+        <!--RECORDS PER PAGE-->
+        <div class="slds-col slds-size_2-of-8 slds-medium-size_2-of-8 slds-large-size_2-of-8 slds-float_left">
+            <div class="slds-list_inline ">
+                <label class="slds-text-color_weak slds-m-right_xxx-small slds-p-horizontal-small slds-var-m-top_small"
+                    for="recordsPerPage">Records/page</label><!--slds-var-p-horizontal_small -->
+                <div class="slds-select_container">
+                    <select class="slds-select" id="recordsPerPage" name="selectRecordsPerPage"
+                        onchange={handleRecordsPerPage}>
+                        <template for:each={pageSizeOptions} for:item="option">
+                            <option key={option} value={option}>{option}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!--PAGE NAVIGATION-->
+        <div class="slds-col slds-size_3-of-8 customSelect slds-medium-size_3-of-8 slds-large-size_3-of-8
+             slds-grid_vertical-align-center slds-text-align_right">
+            <span>
+                <lightning-button-icon icon-name="utility:left" variant="bare" size="medium"
+                    alternative-text="Previous Page" onclick={previousPage}
+                    data-id="Green_Button"></lightning-button-icon>
+            </span>
+
+            <span class="slds-var-p-around_x-small">
+                <label class="slds-text-color_weak " for="pageNum">Show</label>
+                <lightning-formatted-number value={pageNumber} class="fsm-bold-text"></lightning-formatted-number>
+                <span>&nbsp;of&nbsp;<b id="totalPages">{totalPages}</b></span>
+            </span>
+
+            <span>
+                <lightning-button-icon icon-name="utility:right" variant="bare" size="medium"
+                    alternative-text="Next Page" onclick={nextPage}
+                    class="slds-var-p-horizontal_x-small"></lightning-button-icon>
+            </span>
+        </div>
+    </div>
+</template>

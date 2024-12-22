@@ -1,0 +1,41 @@
+<aura:component implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId">
+   
+<aura:html tag="style">
+   
+        .cuf-content {
+
+            padding: 0 0rem !important;
+
+        }
+
+        .slds-p-around--medium {
+
+            padding: 0rem !important;
+
+        }       
+
+        .slds-modal__content{
+
+            overflow-y:hidden !important;
+
+            height:unset !important;
+
+            max-height:unset !important;
+
+        }
+
+    </aura:html>
+
+
+<aura:attribute name="record" type="Object" />
+    <force:recordData
+            aura:id="recordLoader"
+            recordId="{!v.recordId}"
+            targetFields="{!v.record}"
+            fields="CSX_CMP_Content_Document_ID__c,CSX_CMP_ContentVersionID__c"
+            mode="VIEW"/>
+        <c:csx_cmp_uploadToECM  recordId="{!v.recordId}" record="{!v.record}" onclose="{!c.closeQA}"/>
+        <!-- <c:uploadECMduplicate recordId="{!v.recordId}" record="{!v.record}" onclose="{!c.closeQA}"/> -->
+
+
+    </aura:component>

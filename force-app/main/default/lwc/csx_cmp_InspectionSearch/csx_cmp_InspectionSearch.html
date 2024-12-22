@@ -1,0 +1,332 @@
+<template>
+	<lightning-card>
+		<div class="slds-var-p-horizontal_medium">
+			<div class="slds-grid">
+				<div class="slds-col slds-text-heading_medium slds-var-p-bottom_medium">Inspection Search</div>
+			</div>
+			<div class="slds-p-left_small slds-box">
+				<div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_small">
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-combobox
+							name="source"
+							label="Source"
+							value={inspectionData.source}
+							options={sourcePicklistValues}
+							onchange={handleInputChange}
+							onkeypress={handleEnter}
+						>
+						</lightning-combobox>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input value={inspectionData.vinNumber} minlength="8"
+							maxlength="17" label="VIN" data-id="vinNumber" type="text" name="vinNumber" onchange={handleInputChange} onkeypress={handleEnter}>
+						</lightning-input>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-combobox
+							name="inspectionRoad"
+							label="Inspection Company"
+							value={inspectionData.inspectionRoad}
+							options={insepctionRoadPicklistValues}
+							onchange={handleInputChange}
+						>
+						</lightning-combobox>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-combobox
+							name="inspectionType"
+							label="Inspection Type"
+							value={inspectionData.inspectionType}
+							options={insepctionTypePicklistValues}
+							onchange={handleInputChange}
+						>
+						</lightning-combobox>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input
+							value={inspectionData.equipmentInitial}
+							label="Equipment Initial" name="equipmentInitial"
+							type="text"
+							maxlength="4"
+							onchange={handleInputChange}
+							onkeypress={handleEnter}
+						>
+						</lightning-input>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input
+							value={inspectionData.equipmentNumber}
+							label="Equipment Number" name="equipmentNumber"
+							type="text"
+							maxlength="6"
+							onchange={handleInputChange}
+							onkeypress={handleEnter}
+						>
+						</lightning-input>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_small">
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input
+							type="date"
+							name="startDate"
+							label="Inspection Date From"
+							placeholder="MM/DD/YYY"
+							class="highlight"
+							onchange={handleInputChange}
+							value={inspectionData.startDate}
+							date-style="short"
+							data-id="Start_Date"
+							onkeypress={handleEnter}>
+						</lightning-input>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input
+							type="date" class="highlight" label="Inspection Date To"
+							name="endDate" placeholder="MM/DD/YYYY"
+							onchange={handleInputChange}
+							value={inspectionData.endDate} date-style="short" data-id="End_Date" onkeypress={handleEnter}>
+						</lightning-input><!--value={currentDate}-->
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input
+							value={inspectionData.rampId}
+							label="Ramp ID" name="rampId"
+							type="text"
+							onchange={handleInputChange}
+							onkeypress={handleEnter}>
+						</lightning-input>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-combobox
+							name="damageArea"
+							label="Damage Area"
+							value={inspectionData.damageArea}
+							options={damageAreaPicklistValues}
+							onchange={handleInputChange}
+						>
+						</lightning-combobox>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-combobox
+							name="damageType"
+							label="Damage Type"
+							value={inspectionData.damageType}
+							options={damageTypePicklistValues}
+							onchange={handleInputChange}>
+						</lightning-combobox>
+					</div>
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-combobox
+							name="damageSeverity"
+							label="Damage Severity"
+							value={inspectionData.damageSeverity}
+							options={damageSeverityPicklistValues}
+							onchange={handleInputChange}>
+						</lightning-combobox>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-gutters slds-var-p-bottom_medium">
+					<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-6 slds-large-size_1-of-6">
+						<lightning-input
+							id="cleanExceptionID"
+							value={exCleanException}
+							label="Exclude Clean Inspection"
+							checked={exCleanException}
+							type="checkbox"
+							onchange={handleExCleanInsepction}
+							onkeypress={handleEnter}
+						>
+						</lightning-input>
+					</div>
+				</div>
+				<div if:false={isLoaded} class="slds-is-relative">
+					<lightning-spinner class="slds-align_absolute-center" alternative-text="Loading..." variant="brand">
+					</lightning-spinner>
+				</div>
+			</div>
+
+			<div class="slds-grid slds-wrap slds-gutters slds-text-align_center slds-var-p-vertical_large">
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+					<lightning-button
+						disabled={buttonDisable}
+						label="Reset"
+						onclick={handleResetClick}
+						class="slds-var-p-right_x-large"
+						variant="brand-outline"
+					>
+					</lightning-button>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+					<lightning-button
+						disabled={buttonDisable}
+						variant="brand"
+						label="Search"
+						onclick={handleSearchClick}
+						class="slds-var-p-right_x-large"
+					>
+					</lightning-button>
+				</div>
+				<template if:true={openExcelComponent}>
+					<c-csx_cmp_excelexport
+						header-list={xlsHeader}
+						filename={label.InspectionDetails}
+						worksheet-name-list={workSheetNameList}
+						sheet-data={xlsData}
+						onlibraryloaded={excelLibraryLoaded}
+					>
+					</c-csx_cmp_excelexport>
+				</template>
+				<template if:true={openExcelComponentDetail}>
+					<c-csx_cmp_excelexport
+						header-list={xlsHeaderDetail}
+						filename={label.InspectionDamages}
+						worksheet-name-list={workSheetNameListDetail}
+						sheet-data={xlsDataDetail}
+						onlibraryloaded={excelLibraryLoadedDetail}
+					></c-csx_cmp_excelexport>
+				</template>
+			</div>
+			<template if:true={showTableData}>
+				<div
+					id="headerTableId"
+					class="slds-box fsm-slds-theme_backgroundColor-lightblue fsm-rounded fsm-slds-box slds-box_xx-small"
+				>
+					<div
+						class="slds-float_left slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small"
+					>
+						Inspection Header
+					</div>
+					<div class="slds-var-m-bottom_small">
+						<lightning-button
+							label="Export"
+							title="Export"
+							onclick={dowloadRecords}
+							variant="brand"
+							class="slds-float_right"
+						>
+						</lightning-button>
+					</div>
+					<div class="slds-var-p-bottom_x-small">
+						<template if:false={searchResult}>
+							<c-csx_cmp_pagination
+								if:true={recordsToDisplay}
+								records={recordsToDisplay}
+								total-records={recordsToDisplay.length}
+								pagination-type="Inspection"
+								onpaginatorchange={handleHeaderRecordsDisplay}
+							>
+							</c-csx_cmp_pagination>
+						</template>
+						<template if:true={searchResult}>
+							<c-csx_cmp_pagination
+								if:true={recordsToDisplay}
+								pagination-type="Inspection"
+								records={recordsToDisplay}
+								total-records={recordsToDisplay.length}
+								onpaginatorchange={handleHeaderRecordsDisplay}
+							>
+							</c-csx_cmp_pagination>
+						</template>
+					</div>
+					<lightning-datatable
+						key-field="Name"
+						data={paginatorRecords}
+						columns={inspectionHeaderColumns}
+						sorted-by={sortBy}
+						sorted-direction={sortDirection}
+						onsort={doSorting}
+					></lightning-datatable
+					>
+				</div>
+			</template>
+				<div class="total-count-label slds-var-p-top_x-small">
+					<div class="slds-grid slds-text-align_center slds-var-p-vertical_large">
+						<template if:true={showDetailButton}>
+							<div
+								class="
+									slds-p-bottom_small
+									slds-col
+									slds-size_1-of-1
+									slds-medium-size_2-of-12
+									slds-large-size_2-of-12
+								"
+							>
+								<lightning-button
+									class="slds-float_left"
+									variant="brand"
+									label="View Damages"
+									onclick={displayDamageDetails}
+								></lightning-button>
+							</div>
+						</template>
+					</div>
+				</div>
+				<template if:true={showInspectionDetail}>
+					<div
+						class="
+							slds-box
+							fsm-slds-theme_backgroundColor-lightblue
+							fsm-rounded fsm-slds-box
+							slds-box_xx-small
+						"
+					>
+						<div
+							class="
+								slds-float_left
+								slds-col
+								slds-text-heading_small
+								fsm-bold-text
+								slds-var-p-left_xx-small
+							"
+						>
+							Inspection Details
+						</div>
+						<div class="slds-var-m-bottom_small">
+							<lightning-button
+								label="Export"
+								title="Export"
+								onclick={donwnloadDetailRecord}
+								variant="brand"
+								class="slds-float_right"
+							>
+							</lightning-button>
+						</div>
+						<div class="slds-var-p-bottom_x-small">
+							<template if:false={searchResultDetail}>
+								<c-csx_cmp_pagination
+									if:true={detailRecordToDisplay}
+									records={detailRecordToDisplay}
+									total-records={detailRecordToDisplay.length}
+									onpaginatorchange={handleDetailRecordsDisplay}
+								>
+								</c-csx_cmp_pagination>
+							</template>
+							<template if:true={searchResultDetail}>
+								<c-csx_cmp_pagination
+									if:true={detailRecordToDisplay}
+									records={detailRecordToDisplay}
+									total-records={detailRecordToDisplay.length}
+									onpaginatorchange={handleDetailRecordsDisplay}
+								>
+								</c-csx_cmp_pagination>
+							</template>
+						</div>
+						<lightning-datatable
+							hide-checkbox-column="true"
+							key-field="inspectionDetailId"
+							data={detailPaginatorRecords}
+							columns={inspectionDetailColumns}
+							sorted-by={sortByDetail}
+							sorted-direction={sortDirection}
+							onsort={doSortingDetail}
+						>
+						</lightning-datatable>
+					</div>
+				</template>
+			<template if:true={shownoRecordError}>
+				<div class="slds-text-color_error slds-var-p-top_x-small">No records found</div>
+			</template>
+		</div>
+	</lightning-card>
+</template>

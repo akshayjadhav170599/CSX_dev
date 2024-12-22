@@ -1,0 +1,92 @@
+<template>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_4-of-4 slds-size_medium_4-of-4 slds-size_large_4-of-4">
+                <div class="slds-box">
+                    <div
+                        class="slds-grid slds-gutters slds-grid_align-spread">
+                        <div
+                            class="slds-float_left  slds-col slds-text-heading_small fsm-bold-text slds-var-p-left_xx-small">
+                            Netting
+                            Claim Summary
+                        </div><!--slds-col slds-text-heading_x-small fsm-bold-text slds-var-p-bottom_small-->
+                    </div>
+
+                    <div class="slds-m-vertical_xxx-small">
+                        <div if:true={showSpinner}>
+                            <lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+                            </lightning-spinner>
+                        </div>
+                        <template if:true={claimRecordWrapper}>
+                            <div class="tableHeight slds-scrollable_y slds-var-p-bottom_small slds-m-top_x-small">
+                                <span class="fsm-bold-text" style="color: #003462;">{claimRecordWrapper.railRoadName}</span>
+                            </div>
+
+                            <div class="slds-grid slds-wrap">
+                                <div
+                                    class="slds-size_1-of-2 slds-size_medium_1-of-1 slds-size_large_1-of-1 csx-cmp-border-right-top">
+                                    <div class="slds-text-align_center fsm-bold-text slds-p-vertical_xx-small" style="border-bottom: 1px solid lightgray;">Inbound
+                                        Claims
+                                        ({claimRecordWrapper.inboundClaimCount})</div>
+                                    <div class="slds-scrollable_y" style="height:14rem">
+                                        <lightning-datatable hide-table-header={hideTableHeader} key-field="Id"
+                                            data={inbClaim} hide-checkbox-column="true" columns={summaryColumn}
+                                            class="slds-table_bordered slds-table_col-bordered">
+                                        </lightning-datatable>
+                                    </div>
+                                    <table
+                                        class="slds-table slds-table_bordered slds-table_col-bordered slds-no-row-hover slds-table_fixed-layout slds-table_resizable-cols">
+                                        <tbody>
+                                            <td class="">
+                                                <span class="fsm-bold-text"> Total</span>
+                                            </td>
+                                            <td class="slds-text-align_right">
+                                                
+                                                <lightning-formatted-number class="fsm-bold-text slds-text-color_success" value={claimRecordWrapper.inboundClaimSumCount} format-style="currency" currency-code="USD" ></lightning-formatted-number></p>
+                                            </td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div
+                                    class="slds-size_1-of-2 slds-size_medium_1-of-1 slds-size_large_1-of-1 csx-cmp-border-right">
+                                    <div class="slds-text-align_center fsm-bold-text slds-p-vertical_xx-small" style="border-bottom: 1px solid lightgray;">Outbound
+                                        Claims
+                                        ({claimRecordWrapper.outboundClaimCount})</div>
+                                    <div class="slds-scrollable_y" style="height: 14rem">
+                                        <lightning-datatable hide-table-header={hideTableHeader}
+                                            hide-checkbox-column="true" key-field="Id" data={outClaim}
+                                            columns={summaryColumn} class="slds-table_bordered slds-table_col-bordered">
+                                        </lightning-datatable>
+                                    </div>
+                                    <table
+                                        class="slds-table slds-table_bordered slds-table_col-bordered slds-no-row-hover slds-table_fixed-layout slds-table_resizable-cols">
+                                        <tbody>
+                                            <td class="slds-is-resizable csx-cmp-border-left">
+                                                <span class="fsm-bold-text"> Total</span>
+                                            </td>
+                                            <td class="slds-is-resizable slds-text-align_right">
+                                                <lightning-formatted-number class="fsm-bold-text slds-text-color_error" value={claimRecordWrapper.outboundClaimSumCount} format-style="currency" currency-code="USD" ></lightning-formatted-number>
+                                            </td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size_2-of-2">
+                                    <div class="slds-text-align_right slds-p-top_xxx-small slds-m-around_xxx-small fsm-bold-text">Grand Total
+                                        :&nbsp;&nbsp;&nbsp;
+                                        <template if:true={claimRecordWrapper.isColor}>
+                                            <lightning-formatted-number class="fsm-bold-text slds-text-color_error" value={claimRecordWrapper.sumOfAmount} format-style="currency" currency-code="USD" ></lightning-formatted-number>
+                                        </template>
+                                        <template if:false={claimRecordWrapper.isColor}>
+                                            <lightning-formatted-number class="fsm-bold-text slds-text-color_success" value={claimRecordWrapper.sumOfAmount} format-style="currency" currency-code="USD" ></lightning-formatted-number>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</template>

@@ -1,0 +1,131 @@
+<apex:component controller="CSX_CMP_ClaimSummaryEmailController" access="global" >
+    <apex:attribute name="claimId" type="Id" description="Id of the account" assignTo="{!caseId}" access="global"/>
+    <html>
+        <style>
+            body, td, div, span, b {
+                font-size: 12px;
+            }         
+        </style>
+        <body>
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                           <apex:image id="theImage" width="130" style="max-width:130px; display:block; margin-left:0;" value="{!csxLogo}"/>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                Your {!claimWrapper.recordType} claim request has been successfully submitted.
+            </div>
+            <div>
+                Your CSX claim number is {!claimWrapper.claimNumber} Please reference this claim number on your future correspondence.
+            </div> 
+            <br/><br/>
+            <div>
+                Please find below the claim summary.
+                <div><span ><b style="font-size: 14px;">&nbsp;Claim Summary</b></span></div>
+                <table style="width: 50%;">
+                    <tr>
+                        <td> <b> Claimant Number:</b> </td>
+                        <td width="140"> {!claimWrapper.claimantNumber} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Claimant Name:</b> </td>
+                        <td width="140"> {!claimWrapper.claimantName} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Submission Date:</b> </td>
+                        <td width="140"> {!claimWrapper.claimDate} </td>
+                    </tr>
+                    <tr>
+                        <td> <b> Claim Amount:</b> </td>
+                        <td width="140"> <apex:outputText value="{0, number, currency}">
+                             <apex:param value="{!claimWrapper.claimAmount}"/>
+                             </apex:outputText>
+                        </td>
+                    </tr>
+                 <!--   <tr>
+                        <td> <b> Claim Description:</b> </td>
+                        <td> {!claimWrapper.comment} </td>
+                    </tr> -->
+
+                    <tr>
+                        <td>
+                            <b> Claim Description:</b>
+                        </td>
+                        <td width="140"> <apex:repeat value="{!claimNotesWrappers}" var="claimNote">
+                          {!claimNote.note}
+                        </apex:repeat>
+                    </td>
+                    </tr>
+                </table> <br/><br/>
+            </div>
+            <table border="1" style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th>Invoice #</th>
+                    <th>Invoice Date</th>
+                    <th># of Cars</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>STCC Code</th>
+                    <th>Lead Equipment</th>
+                    <th>Waybill #</th>
+                    <th>Waybill Date</th>
+                    <th>BOL #</th>
+                    <th>BOL Date</th>
+                    <th>Amount Paid</th>
+                    <th>Correct Amount</th>
+                    <th>Claim Amount</th>
+                </tr>
+                <apex:repeat value="{!claimWrapper.claimLines}" var="claim"> 
+                    <tr>
+                        <td style="text-align: center;">{!claim.invoice}</td>
+                        <td style="text-align: center;">{!claim.invoiceDate}</td>
+                        <td style="text-align: center;">{!claim.cars}</td>
+                        <td style="text-align: center;"><apex:outputPanel rendered="{!NOT(ISBLANK(claim.origin) && ISBLANK(claim.originState))}">
+                            {!claim.origin}<apex:outputText value="," rendered="{!NOT(ISBLANK(claim.origin) && ISBLANK(claim.originState))}" />{!claim.originState}
+                            </apex:outputPanel>
+                        </td>
+                        <td style="text-align: center;"><apex:outputPanel rendered="{!NOT(ISBLANK(claim.destination) && ISBLANK(claim.destinationState))}">
+                            {!claim.destination}<apex:outputText value="," rendered="{!NOT(ISBLANK(claim.destination) && ISBLANK(claim.destinationState))}" />{!claim.destinationState}
+                            </apex:outputPanel>
+                        </td>
+                        <td style="text-align: center;">{!claim.stcc}</td>
+                        <td style="text-align: center;">{!claim.equipmentInitial} {!claim.equipmentNumber}</td>
+                        <td style="text-align: center;">{!claim.wayBillNumber}</td>
+                        <td style="text-align: center;">{!claim.wayBillDate}</td>
+                        <td style="text-align: center;">{!claim.bol}</td>
+                        <td style="text-align: center;">{!claim.bolDate}</td>
+                        
+                        <td style="text-align: center;"><apex:outputText value="{0, number, currency}">
+                                                        <apex:param value="{!claim.amountPaid}"/>
+                                                        </apex:outputText>
+                        </td>
+                         
+                        <td style="text-align: center;"><apex:outputText value="{0, number, currency}">
+                                                        <apex:param value="{!claim.correctAmount}"/>
+                                                        </apex:outputText>
+                        </td>
+                       
+                        <td style="text-align: center;"><apex:outputText value="{0, number, currency}">
+                                                        <apex:param value="{!claim.claimAmounts}"/>
+                                                        </apex:outputText>
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+            <br/>
+            <div>
+                <td>Once validated, your claim may be placed on hold if your undisputed AR account balance with CSX is in delinquent status. Please visit <a href="http://www.ShipCSX.com" target="_blank">www.ShipCSX.com</a> to view your account balance.</td>
+            </div><br/>
+            <div>
+                <td>Questions regarding your AR account balance should be directed to your CSX Accounts Receivable Specialist.</td>
+            </div>
+            <br/>
+            <div>
+                <td>Please visit <a href="http://www.ShipCSX.com" target="_blank">www.ShipCSX.com</a> to check the latest status of your claim.</td><br/>
+                <td>You may <b>Reply All</b> to this email for any future correspondence regarding this claim.</td>
+            </div>
+        </body>
+    </html> 
+</apex:component>

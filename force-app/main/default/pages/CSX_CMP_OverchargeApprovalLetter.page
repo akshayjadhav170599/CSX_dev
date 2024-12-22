@@ -1,0 +1,83 @@
+<apex:page renderAs="PDF" controller="CSX_CMP_ApprovalLetterController" showHeader="false" standardStylesheets="false" sidebar="false"
+    docType="html-5.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <body>
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <apex:image id="theImage" width="130px" style="display:block; margin-left:auto; margin-right:auto;" value="{!csxLogo}" />
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <br/>
+        <hr/>
+        <table style="width: 100%;">
+            <tr>
+                <td>Date : {!objClaimWrapper.claimDate} </td>
+                <td style="text-align: right;"> Claim Approved Date: {!objClaimWrapper.claimApprovalDate}</td>
+            </tr>
+            <br/>
+            <tr>
+                <td colspan="2">Manager Overcharge Claims, {!objClaimWrapper.supplierName}</td>
+            </tr>
+            <br/>
+            <tr>
+                <td colspan="2">Receiving Railroads : {!objClaimWrapper.customerName}</td>
+            </tr>
+            <br/>
+            <tr>
+                <td colspan="2">UP Claim No : {!objClaimWrapper.claimentRefrenceNumber}</td>
+            </tr>
+            <br/>
+            <tr>
+                <td colspan="2">
+                    <span>CSXT Claim No :</span>
+                    <span>&nbsp;{!objClaimWrapper.claimNo}</span>
+                </td>
+
+            </tr>
+            <br/>
+            <!-- <tr>
+               <td colspan="2"> <span>Recharged Original Claim Number :</span><span>&nbsp;{!objClaimWrapper.previousClaimNumber}</span></td>
+
+            </tr> -->
+            <br/>
+            <br/>
+            <tr>
+                <td colspan="2">
+                    <apex:outputText value="{0, number, $}">
+                        The claim number referenced above has been APPROVED. Please use this as authority to debit CSX Transportation in the amount
+                        of
+                        <apex:param value="{!objClaimWrapper.claimAmount}" />
+                    </apex:outputText>.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <B>Comments:</B> {!objClaimWrapper.comments}</td>
+            </tr>
+            <br/>
+            <br/>
+            <br/>
+            <tr>
+                <td colspan="2">
+                    <p>
+                        Sincerely,
+                        <br/>
+                        <br/> Manager Overcharge Claims
+                        <br/>
+                        <apex:outputText value="{!$Label.CSX_CMP_Abstract_Distribution_Email}" escape="false" />
+                        <br/> CSX TRANSPORTATION
+                        <br/> Manager Overcharge Claims
+                        <br/> 6735 Southpoint Drive South
+                        <br/> Jacksonville, FL 32216
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</apex:page>
